@@ -1,7 +1,4 @@
-﻿using System.Numerics;
-using ImGuiNET;
-using WLO;
-using WLO.Interface;
+﻿using WLO;
 using WLO.Math;
 using WLO.Render.Hardware;
 
@@ -13,15 +10,6 @@ Render.Viewport = Window.Size;
 
 Render.Start();
 
-
-
-ImGui.CreateContext();
-var IO = ImGui.GetIO();
-IO.DisplaySize = new Vector2(800, 600);
-
-IO.Fonts.AddFontDefault();
-IO.Fonts.Build();
-
 int i = 0;
 DeltaTimeInfo? DTI = null;
 while(!Window.IsClosed){
@@ -31,24 +19,10 @@ while(!Window.IsClosed){
         i++;
         Window.Title = "NEW TITLE " + i + " | FPS: " + DTI.Value.FPS;
         
-        
-        IO.DeltaTime = (float)DTI.Value.DT;
-        ImGui.NewFrame();
-        
-        ImGui.Begin("Woowz Editor");
-        ImGui.Text("vulkan test proreorwer");
-        if(ImGui.Button("click syka")){ WL.Logger.Info("hello!!!"); }
-        ImGui.End();
-        
-        ImGui.Render();
-        
-        
-        
         Render.FrameStart();
-        Render.RENDER_BEGIN(new Color4B((byte)Random.Shared.Next(256), (byte)Random.Shared.Next(256), (byte)Random.Shared.Next(256)));
         
+        Render.Clear(new Color4B((byte)Random.Shared.Next(256), (byte)Random.Shared.Next(256), (byte)Random.Shared.Next(256)));
         
-        Render.RENDER_END();
         Render.FrameStop();
     
         Render.DrawFrameBuffer(Frame);

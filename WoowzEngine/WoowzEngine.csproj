@@ -11,7 +11,6 @@
         <ProjectReference Include="..\..\WoowzLib\WoowzLib\WoowzLib.Window.GLFW\WoowzLib.Window.GLFW.csproj" />
         <ProjectReference Include="..\..\WoowzLib\WoowzLib\WoowzLib.Logger\WoowzLib.Logger.csproj" />
         <ProjectReference Include="..\..\WoowzLib\WoowzLib\WoowzLib.Render.Vulkan\WoowzLib.Render.Vulkan.csproj" />
-        <ProjectReference Include="..\..\WoowzLib\WoowzLib\WoowzLib.Interface.ImGUI\WoowzLib.Interface.ImGUI.csproj" />
     </ItemGroup>
 
 </Project>
