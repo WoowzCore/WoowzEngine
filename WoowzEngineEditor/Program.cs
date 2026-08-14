@@ -1,15 +1,27 @@
-﻿using WLO.Math;
+﻿using WLO;
+using WLO.Math;
 using WLO.Render.Hardware;
 
 WLO.Window.GLFW Window = new WLO.Window.GLFW(new Vector2I(800, 600), "WOOWZ ENGINE EDITOR");
 
 Vulkan Render = new WLO.Render.Hardware.Vulkan();
+FrameBuffer Frame = new FrameBuffer(Window.Size);
+Render.Viewport = Window.Size;
+
 Render.Start();
 
 while(!Window.IsClosed){
     Window.PollEvents();
     
+    Render.FrameStart();
+
+    Render.Clear(new Color4B((byte)Random.Shared.Next(256), (byte)Random.Shared.Next(256), (byte)Random.Shared.Next(256)));
     
+    Render.FrameStop();
+    
+    Render.DrawFrameBuffer(Frame);
+    
+    Window.Present(Frame);
 }
 
 Render.Stop();
