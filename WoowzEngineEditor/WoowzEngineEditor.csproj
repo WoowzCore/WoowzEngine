@@ -1,15 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <Platforms>AnyCPU</Platforms>
     </PropertyGroup>
-    
+
     <ItemGroup>
-        <ProjectReference Include="..\..\WoowzLib\WoowzLib\WoowzLib.Window.GLFW\WoowzLib.Window.GLFW.csproj" />
-        <ProjectReference Include="..\..\WoowzLib\WoowzLib\WoowzLib.Logger\WoowzLib.Logger.csproj" />
+        <ProjectReference Include="..\WoowzEngine\WoowzEngine.csproj" />
     </ItemGroup>
 
 </Project>
