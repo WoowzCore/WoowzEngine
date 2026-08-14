@@ -10,18 +10,25 @@ Render.Viewport = Window.Size;
 
 Render.Start();
 
+int i = 0;
+DeltaTimeInfo? DTI = null;
 while(!Window.IsClosed){
     Window.PollEvents();
     
-    Render.FrameStart();
+    if(WL.Thread.LimitByFPS(1200, ref DTI)){
+        i++;
+        Window.Title = "NEW TITLE " + i + " | FPS: " + DTI.Value.FPS;
+    
+        Render.FrameStart();
 
-    Render.Clear(new Color4B((byte)Random.Shared.Next(256), (byte)Random.Shared.Next(256), (byte)Random.Shared.Next(256)));
+        Render.Clear(new Color4B((byte)Random.Shared.Next(256), (byte)Random.Shared.Next(256), (byte)Random.Shared.Next(256)));
     
-    Render.FrameStop();
+        Render.FrameStop();
     
-    Render.DrawFrameBuffer(Frame);
+        Render.DrawFrameBuffer(Frame);
     
-    Window.Present(Frame);
+        Window.Present(Frame);
+    }
 }
 
 Render.Stop();
