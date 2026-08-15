@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <Platforms>AnyCPU</Platforms>
+        
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+    
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\WoowzLib\WoowzLib\WoowzLib.Window.GLFW\WoowzLib.Window.GLFW.csproj" />
+        <ProjectReference Include="..\..\..\WoowzLib\WoowzLib\WoowzLib.Logger\WoowzLib.Logger.csproj" />
+        <ProjectReference Include="..\WoowzEngineRender\WoowzEngineRender.csproj" />
+    </ItemGroup>
+
+</Project>
