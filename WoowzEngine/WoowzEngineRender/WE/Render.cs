@@ -37,7 +37,7 @@ public static class Render{
             // Запуск Vulkan
             Vulkan = new Vulkan(new Vulkan.StartParameters{
                 UseThisLogger = CurrentLogger, // FIX THAT LATER, TODO, я не должен тут указывать логгер, почему-то он не видит оригинал
-                DebugLogger = true 
+                DebugLogger = true
             }, true);
             
             IsStarted = true;

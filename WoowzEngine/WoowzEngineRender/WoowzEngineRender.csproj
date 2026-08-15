@@ -14,8 +14,4 @@
         <ProjectReference Include="..\..\..\WoowzLib\WoowzLib\WoowzLib.Render.Vulkan\WoowzLib.Render.Vulkan.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <PackageReference Include="Silk.NET.Vulkan.Extensions.KHR" Version="2.23.0" />
-    </ItemGroup>
-
 </Project>
