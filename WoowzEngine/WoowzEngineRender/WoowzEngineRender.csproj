@@ -11,7 +11,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\..\WoowzLib\WoowzLib\WoowzLib.Logger\WoowzLib.Logger.csproj" />
-        <ProjectReference Include="..\..\..\WoowzLib\WoowzLib\WoowzLib.Render.Vulkan\WoowzLib.Render.Vulkan.csproj" />
+        <ProjectReference Include="..\..\..\WoowzLib\WoowzLib\WoowzLib.Render.OpenGL\WoowzLib.Render.OpenGL.csproj" />
     </ItemGroup>
 
 </Project>

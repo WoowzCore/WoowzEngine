@@ -1,5 +1,4 @@
-﻿using Silk.NET.Vulkan;
-using WLI;
+﻿using WLI;
 using WLO;
 using WLO.Render.Hardware;
 
@@ -21,7 +20,8 @@ public static class Render{
     }
     
     public struct StartProperties{
-        public Logger? UseThisLogger; // todo, remake, look vulkan reference
+        public Logger?              UseThisLogger; // todo, remake, look vulkan reference
+        public Func<string, IntPtr> ProcLoader;
     }
     
     public static void Start(StartProperties? Properties = null){
@@ -33,12 +33,10 @@ public static class Render{
             CurrentLogger = Properties__.UseThisLogger ?? WL.Logger.CurrentLogger;
             
             Log(LogType_Initialization, $"Запуск WoowzEngineRender...\nПараметры: {Properties}");
+
+            __API = new OpenGL(Properties__.ProcLoader!);
             
-            // Запуск Vulkan
-            Vulkan = new Vulkan(new Vulkan.StartParameters{
-                UseThisLogger = CurrentLogger, // FIX THAT LATER, TODO, я не должен тут указывать логгер, почему-то он не видит оригинал
-                DebugLogger = true
-            }, true);
+            __API.Start();
             
             IsStarted = true;
         }catch(Exception e){
@@ -52,9 +50,7 @@ public static class Render{
             
             Log(LogType_Initialization, "Остановка WoowzEngineRender...");
 
-            if(Vulkan != null! && Vulkan.IsStarted){
-                Vulkan.Stop();
-            }
+            __API.Stop();
             
             IsStarted = false;
         }catch(Exception e){
@@ -62,5 +58,6 @@ public static class Render{
         }
     }
 
-    private static WLO.Render.Hardware.Vulkan Vulkan;
+    public  static OpenGL API => __API;
+    private static OpenGL        __API;
 }
