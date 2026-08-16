@@ -1,5 +1,4 @@
-﻿using Silk.NET.OpenGL;
-using WE;
+﻿using WE;
 using WLI_Render;
 using WLO;
 using WLO.GPU;
@@ -8,8 +7,8 @@ using WoowzLib.Render.WLO;
 
 WLO.Window.GLFW Window = new WLO.Window.GLFW(new Vector2I(800, 600), "WOOWZ ENGINE EDITOR");
 
-WE.Render.Start(new Render.StartProperties{
-    ProcLoader = Window.GetProcAddress
+WE.Render.Start(Window.GetProcAddress, new Render.StartParameters{
+    DebugLogger = true
 });
 
 

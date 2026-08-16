@@ -5,8 +5,6 @@ using WLO.Render.Hardware;
 namespace WE;
 
 public static class Render{
-    private const string Prefix = "WER";
-
     public static bool IsStarted{ get; private set; }
 
     public static Logger? CurrentLogger = WL.Logger.CurrentLogger;
@@ -14,29 +12,34 @@ public static class Render{
     public static uint LogType_Initialization = (uint)Logger.Type.Info;
 
     private static void Log(uint Type, object Message){
-        CurrentLogger?.PrefixPush(Prefix);
+        CurrentLogger?.PrefixPush("WER");
         CurrentLogger?.Log(Type, Message);
         CurrentLogger?.PrefixPop();
     }
     
-    public struct StartProperties{
-        public Logger?              UseThisLogger; // todo, remake, look vulkan reference
-        public Func<string, IntPtr> ProcLoader;
+    public struct StartParameters{
+        public Logger? UseThisLogger;
+        public bool?   DebugLogger;
     }
     
-    public static void Start(StartProperties? Properties = null){
+    public static void Start(Func<string, IntPtr> ProcessLoader, StartParameters? Parameters = null){
         try{
             if(IsStarted){ throw new ExceptionWL("Рендер уже запущен!"); }
 
-            StartProperties Properties__ = Properties ?? new StartProperties();
+            StartParameters Parameters__ = new StartParameters{
+                UseThisLogger = Parameters.HasValue && Parameters.Value.UseThisLogger != null ? Parameters.Value.UseThisLogger : WL.Logger.CurrentLogger,
+                DebugLogger = Parameters?.DebugLogger
+            };
 
-            CurrentLogger = Properties__.UseThisLogger ?? WL.Logger.CurrentLogger;
+            CurrentLogger = Parameters__.UseThisLogger;
             
-            Log(LogType_Initialization, $"Запуск WoowzEngineRender...\nПараметры: {Properties}");
+            Log(LogType_Initialization, "Запуск WoowzEngineRender...");
 
-            __API = new OpenGL(Properties__.ProcLoader!);
+            API = new OpenGL(ProcessLoader, new OpenGL.StartParameters{
+                DebugLogger = Parameters__.DebugLogger
+            }, true);
             
-            __API.Start();
+            Log(LogType_Initialization, "WoowzEngineRender запущен!");
             
             IsStarted = true;
         }catch(Exception e){
@@ -50,7 +53,9 @@ public static class Render{
             
             Log(LogType_Initialization, "Остановка WoowzEngineRender...");
 
-            __API.Stop();
+            API.Stop();
+            
+            Log(LogType_Initialization, "WoowzEngineRender остановлен!");
             
             IsStarted = false;
         }catch(Exception e){
@@ -58,6 +63,5 @@ public static class Render{
         }
     }
 
-    public  static OpenGL API => __API;
-    private static OpenGL        __API;
+    public static OpenGL API{ get; private set; } = null!;
 }
