@@ -1,4 +1,5 @@
 ﻿using WE;
+using WLI_Input;
 using WLI_Render;
 using WLI.GPU;
 using WLO;
@@ -19,10 +20,12 @@ string VertexSource = @"
 layout (location = 0) in vec2 aPos;
 layout (location = 1) in vec4 aColor;
 
+uniform mat4 uViewProjection;
+
 out vec4 vColor;
 
 void main() {
-    gl_Position = vec4(aPos, 0.0, 1.0);
+    gl_Position = uViewProjection * vec4(aPos, 0.0, 1.0);
     vColor = aColor;
 }";
 
@@ -46,6 +49,7 @@ GLShader FShader = (GLShader)WE.Render.API.CreateShader(WLI.GPU.Shader.Type.Frag
 
 GLProgram Program = (GLProgram)WE.Render.API.CreateProgram(VShader, FShader);
 int Uniform_Time = Program.GetUniform("uTime");
+int Uniform_ViewProjection = Program.GetUniform("uViewProjection");
 
 var Layout = new VertexLayout(
     new VertexAttribute("aPos", 2, VertexAttribute.AttributeType.Float),
@@ -61,7 +65,11 @@ Vertex[] Vertices = [
 GLMesh Triangle = (GLMesh)WE.Render.API.CreateMesh(Layout, Vertices);
 
 
+Vector3F Camera_Position = new Vector3F(0, 0, 3);
+Vector3F Camera_Rotation = new Vector3F(0, 0, 0);
 
+float Camera_Move_Speed = 3;
+float Camera_Rotate_Speed = 2;
 
 float Time = 0;
 int i = 0;
@@ -70,15 +78,56 @@ while(!Window.IsClosed){
     Window.PollEvents();
     
     if(WL.Thread.LimitByFPS(120, ref DTI)){
+        float DT = (float)DTI.Value.DT;
+        
         i++;
-        Time += (float)DTI.Value.DT;
+        Time += DT;
         Window.Title = "NEW TITLE " + i + " | FPS: " + DTI.Value.FPS;
+
+        void CameraControlls(){
+            if(Window.Keyboard.IsKeyDown(Keyboard.Key.Up))    Camera_Rotation -= new Vector3F(Camera_Rotate_Speed * DT, 0, 0);
+            if(Window.Keyboard.IsKeyDown(Keyboard.Key.Down))  Camera_Rotation += new Vector3F(Camera_Rotate_Speed * DT, 0, 0);
+            if(Window.Keyboard.IsKeyDown(Keyboard.Key.Left))  Camera_Rotation -= new Vector3F(0, Camera_Rotate_Speed * DT, 0);
+            if(Window.Keyboard.IsKeyDown(Keyboard.Key.Right)) Camera_Rotation += new Vector3F(0, Camera_Rotate_Speed * DT, 0);
+            
+            float pitch = Camera_Rotation.X;
+            float yaw   = Camera_Rotation.Y;
+            
+            Vector3F forward = new Vector3F(
+                (float)Math.Sin(yaw) * (float)Math.Cos(pitch),
+                -(float)Math.Sin(pitch),
+                -(float)Math.Cos(yaw) * (float)Math.Cos(pitch)
+            );
+            
+            Vector3F right = new Vector3F(
+                (float)Math.Cos(yaw),
+                0,
+                (float)Math.Sin(yaw)
+            );
+            
+            float speed = Camera_Move_Speed * DT;
+            if(Window.Keyboard.IsKeyDown(Keyboard.Key.W)) Camera_Position += forward * speed;
+            if(Window.Keyboard.IsKeyDown(Keyboard.Key.S)) Camera_Position -= forward * speed;
+            if(Window.Keyboard.IsKeyDown(Keyboard.Key.A)) Camera_Position -= right * speed;
+            if(Window.Keyboard.IsKeyDown(Keyboard.Key.D)) Camera_Position += right * speed;
+        }
+        CameraControlls();
         
         WE.Render.API.CRenderView.Viewport = Window.Size;
         
         WE.Render.API.FrameStart();
         
         WE.Render.API.Clear(new Color4B(200, 200, 200));
+
+
+        Matrix4F Projection = Matrix4F.CreatePerspective(1, Window.Aspect, 0.1f, 100f);
+        
+        Matrix4F View = Matrix4F.CreateRotationX(Camera_Rotation.X) *
+                        Matrix4F.CreateRotationY(Camera_Rotation.Y) *
+                        Matrix4F.CreateTranslation(-Camera_Position.X, -Camera_Position.Y, -Camera_Position.Z);
+        
+
+        Program.SetUniformM4F(Uniform_ViewProjection, Projection * View);
 
         Program.SetUniformF(Uniform_Time, Time);
         WE.Render.API.Draw(Triangle, Program);
