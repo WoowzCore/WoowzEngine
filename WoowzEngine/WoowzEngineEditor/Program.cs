@@ -1,6 +1,6 @@
-﻿using Silk.NET.OpenGL;
-using WE;
+﻿using WE;
 using WLI_Render;
+using WLI.GPU;
 using WLO;
 using WLO.GPU;
 using WLO.Math;
@@ -42,13 +42,18 @@ GLShader FShader = (GLShader)WE.Render.API.CreateShader(WLI.GPU.Shader.Type.Frag
 
 GLProgram Program = (GLProgram)WE.Render.API.CreateProgram(VShader, FShader);
 
+var Layout = new VertexLayout(
+    new VertexAttribute("aPos", 2, VertexAttribute.AttributeType.Float),
+    new VertexAttribute("aColor", 4, VertexAttribute.AttributeType.Byte, true)    
+);
+
 Vertex[] Vertices = [
     new Vertex(new Vector2F(-0.5f, -0.5f), new Color4B(255, 0, 0, 255)), // Красный (лево-низ)
     new Vertex(new Vector2F(0.5f, -0.5f), new Color4B(0, 255, 0, 255)),  // Зеленый (право-низ)
     new Vertex(new Vector2F(0.0f, 0.5f), new Color4B(0, 0, 255, 255))   // Синий (верх)
 ];
 
-GLMesh Triangle = (GLMesh)WE.Render.API.CreateMesh(Vertices);
+GLMesh Triangle = (GLMesh)WE.Render.API.CreateMesh(Layout, Vertices);
 
 
 
@@ -59,7 +64,7 @@ DeltaTimeInfo? DTI = null;
 while(!Window.IsClosed){
     Window.PollEvents();
     
-    if(WL.Thread.LimitByFPS(6000, ref DTI)){
+    if(WL.Thread.LimitByFPS(1000000, ref DTI)){
         i++;
         Window.Title = "NEW TITLE " + i + " | FPS: " + DTI.Value.FPS;
         
