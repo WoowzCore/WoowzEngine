@@ -16,11 +16,7 @@ WE.Render.Start(Window.GetProcAddress, new Render.StartParameters{
     DebugLogger = true
 });
 
-GLImGUI.Builder ImGUI_Builder = new GLImGUI.Builder(WE.Render.API);
-
-ImGUI_Builder.OnGetSize = () => Window.Size;
-
-GLImGUI ImGUI = ImGUI_Builder.Build();
+GLImGUI ImGUI = new GLImGUI(WE.Render.API, true);
 
 // language=GLSL
 string VertexSource = @"
@@ -120,37 +116,39 @@ while(!Window.IsClosed){
         }
         CameraControlls();
         
+        ImGUI.FrameStart(DT, Window.Size);
+        
+        ImGuiNET.ImGui.ShowDemoWindow();
+        
+        ImGUI.FrameEnd();
+        
         WE.Render.API.CRenderView.Viewport = Window.Size;
         
         WE.Render.API.FrameStart();
         
-        WE.Render.API.Clear(new Color4B(200, 200, 200));
+            WE.Render.API.Clear(new Color4B(200, 200, 200));
 
 
-        Matrix4F Projection = Matrix4F.CreatePerspective(1, Window.Aspect, 0.1f, 100f);
-        
-        Matrix4F View = Matrix4F.CreateRotationX(Camera_Rotation.X) *
-                        Matrix4F.CreateRotationY(Camera_Rotation.Y) *
-                        Matrix4F.CreateTranslation(-Camera_Position.X, -Camera_Position.Y, -Camera_Position.Z);
+            Matrix4F Projection = Matrix4F.CreatePerspective(1, Window.Aspect, 0.1f, 100f);
+            
+            Matrix4F View = Matrix4F.CreateRotationX(Camera_Rotation.X) *
+                            Matrix4F.CreateRotationY(Camera_Rotation.Y) *
+                            Matrix4F.CreateTranslation(-Camera_Position.X, -Camera_Position.Y, -Camera_Position.Z);
 
-        Program.SetUniformM4F(Uniform_ViewProjection, Projection * View);
+            Program.SetUniformM4F(Uniform_ViewProjection, Projection * View);
 
-        Program.SetUniformF(Uniform_Time, Time);
-        WE.Render.API.Draw(Triangle, Program);
-        
-        ImGUI.Update(DT);
-        
-        ImGuiNET.ImGui.ShowDemoWindow();
-        
-        ImGUI.Render();
-        
-        
+            Program.SetUniformF(Uniform_Time, Time);
+            WE.Render.API.Draw(Triangle, Program);
+
+            ImGUI.Render();
         
         WE.Render.API.FrameStop();
         
         Window.SwapBuffers();
     }
 }
+
+ImGUI.Stop();
 
 WE.Render.Stop();
 
