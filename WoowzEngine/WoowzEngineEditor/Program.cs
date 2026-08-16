@@ -1,4 +1,5 @@
-﻿using WE;
+﻿using Silk.NET.OpenGL;
+using WE;
 using WLI_Render;
 using WLO;
 using WLO.GPU;
@@ -36,7 +37,10 @@ void main() {
 }";
 
 
-GLShader Shader = (GLShader)WE.Render.API.CreateShader(VertexSource, FragmentSource);
+GLShader VShader = (GLShader)WE.Render.API.CreateShader(WLI.GPU.Shader.Type.Vertex  , VertexSource  );
+GLShader FShader = (GLShader)WE.Render.API.CreateShader(WLI.GPU.Shader.Type.Fragment, FragmentSource);
+
+GLProgram Program = (GLProgram)WE.Render.API.CreateProgram(VShader, FShader);
 
 Vertex[] Vertices = [
     new Vertex(new Vector2F(-0.5f, -0.5f), new Color4B(255, 0, 0, 255)), // Красный (лево-низ)
@@ -67,7 +71,7 @@ while(!Window.IsClosed){
         
         Context.Clear(new Color4B((byte)Random.Shared.Next(255), (byte)Random.Shared.Next(255), (byte)Random.Shared.Next(255)));
 
-        Context.CurrentShader = Shader;
+        Context.CurrentProgram = Program;
         Triangle.Draw(Context);
         
         WE.Render.API.FrameStop();
