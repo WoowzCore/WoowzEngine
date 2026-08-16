@@ -64,20 +64,17 @@ DeltaTimeInfo? DTI = null;
 while(!Window.IsClosed){
     Window.PollEvents();
     
-    if(WL.Thread.LimitByFPS(1000000, ref DTI)){
+    if(WL.Thread.LimitByFPS(120, ref DTI)){
         i++;
         Window.Title = "NEW TITLE " + i + " | FPS: " + DTI.Value.FPS;
         
+        WE.Render.API.CRenderView.Viewport = Window.Size;
+        
         WE.Render.API.FrameStart();
-
-        WE.Render.API.CurrentRenderView.Viewport = Window.Size;
         
-        RenderContext Context = WE.Render.API.CurrentRenderView.Context;
-        
-        Context.Clear(new Color4B((byte)Random.Shared.Next(255), (byte)Random.Shared.Next(255), (byte)Random.Shared.Next(255)));
+        WE.Render.API.Clear(new Color4B((byte)Random.Shared.Next(255), (byte)Random.Shared.Next(255), (byte)Random.Shared.Next(255)));
 
-        Context.CurrentProgram = Program;
-        Triangle.Draw(Context);
+        WE.Render.API.Draw(Triangle, Program);
         
         WE.Render.API.FrameStop();
         
