@@ -1,9 +1,12 @@
-﻿using WE;
+﻿using ImGuiNET;
+using Silk.NET.OpenGL.Extensions.ImGui;
+using WE;
 using WLI_Input;
 using WLI_Render;
 using WLI.GPU;
 using WLO;
 using WLO.GPU;
+using WLO.Interface;
 using WLO.Math;
 using WoowzLib.Render.WLO;
 
@@ -13,6 +16,11 @@ WE.Render.Start(Window.GetProcAddress, new Render.StartParameters{
     DebugLogger = true
 });
 
+GLImGUI.Builder ImGUI_Builder = new GLImGUI.Builder(WE.Render.API);
+
+ImGUI_Builder.OnGetSize = () => Window.Size;
+
+GLImGUI ImGUI = ImGUI_Builder.Build();
 
 // language=GLSL
 string VertexSource = @"
@@ -42,7 +50,6 @@ void main() {
     
     FragColor = vec4(vColor.rgb * pulse, vColor.a);
 }";
-
 
 GLShader VShader = (GLShader)WE.Render.API.CreateShader(WLI.GPU.Shader.Type.Vertex  , VertexSource  );
 GLShader FShader = (GLShader)WE.Render.API.CreateShader(WLI.GPU.Shader.Type.Fragment, FragmentSource);
@@ -125,12 +132,19 @@ while(!Window.IsClosed){
         Matrix4F View = Matrix4F.CreateRotationX(Camera_Rotation.X) *
                         Matrix4F.CreateRotationY(Camera_Rotation.Y) *
                         Matrix4F.CreateTranslation(-Camera_Position.X, -Camera_Position.Y, -Camera_Position.Z);
-        
 
         Program.SetUniformM4F(Uniform_ViewProjection, Projection * View);
 
         Program.SetUniformF(Uniform_Time, Time);
         WE.Render.API.Draw(Triangle, Program);
+        
+        ImGUI.Update(DT);
+        
+        ImGuiNET.ImGui.ShowDemoWindow();
+        
+        ImGUI.Render();
+        
+        
         
         WE.Render.API.FrameStop();
         
