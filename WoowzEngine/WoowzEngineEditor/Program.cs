@@ -81,6 +81,8 @@ while(!Window.IsClosed){
     Window.PollEvents();
     
     if(WL.Thread.LimitByFPS(120, ref DTI)){
+        Window.PollEvents2();
+        
         float DT = (float)DTI.Value.DT;
         
         i++;
@@ -116,9 +118,13 @@ while(!Window.IsClosed){
         }
         CameraControlls();
         
+        ImGUI.MousePosition(Window.Mouse.Position);
+        ImGUI.MouseScroll(Window.Mouse.ScrollDelta);
+        ImGUI.MouseButton(0, Window.Mouse.IsButtonDown(Mouse.Button.Left));
+        ImGUI.MouseButton(1, Window.Mouse.IsButtonDown(Mouse.Button.Right));
         ImGUI.FrameStart(DT, Window.Size);
         
-        ImGuiNET.ImGui.ShowDemoWindow();
+            ImGuiNET.ImGui.ShowDemoWindow();
         
         ImGUI.FrameEnd();
         
