@@ -32,8 +32,12 @@ string FragmentSource = @"
 in vec4 vColor;
 out vec4 FragColor;
 
+uniform float uTime;
+
 void main() {
-    FragColor = vColor;
+    float pulse = (sin(uTime * 3.0) + 1.0) / 2.0 * 0.8 + 0.2;
+    
+    FragColor = vec4(vColor.rgb * pulse, vColor.a);
 }";
 
 
@@ -41,6 +45,7 @@ GLShader VShader = (GLShader)WE.Render.API.CreateShader(WLI.GPU.Shader.Type.Vert
 GLShader FShader = (GLShader)WE.Render.API.CreateShader(WLI.GPU.Shader.Type.Fragment, FragmentSource);
 
 GLProgram Program = (GLProgram)WE.Render.API.CreateProgram(VShader, FShader);
+int Uniform_Time = Program.GetUniform("uTime");
 
 var Layout = new VertexLayout(
     new VertexAttribute("aPos", 2, VertexAttribute.AttributeType.Float),
@@ -48,9 +53,9 @@ var Layout = new VertexLayout(
 );
 
 Vertex[] Vertices = [
-    new Vertex(new Vector2F(-0.5f, -0.5f), new Color4B(255, 0, 0, 255)), // Красный (лево-низ)
-    new Vertex(new Vector2F(0.5f, -0.5f), new Color4B(0, 255, 0, 255)),  // Зеленый (право-низ)
-    new Vertex(new Vector2F(0.0f, 0.5f), new Color4B(0, 0, 255, 255))   // Синий (верх)
+    new Vertex(new Vector2F(-0.5f, -0.5f), new Color4B(255, 0, 0, 255)),
+    new Vertex(new Vector2F(0.5f, -0.5f), new Color4B(0, 255, 0, 255)),
+    new Vertex(new Vector2F(0.0f, 0.5f), new Color4B(0, 0, 255, 255))
 ];
 
 GLMesh Triangle = (GLMesh)WE.Render.API.CreateMesh(Layout, Vertices);
@@ -58,7 +63,7 @@ GLMesh Triangle = (GLMesh)WE.Render.API.CreateMesh(Layout, Vertices);
 
 
 
-
+float Time = 0;
 int i = 0;
 DeltaTimeInfo? DTI = null;
 while(!Window.IsClosed){
@@ -66,14 +71,16 @@ while(!Window.IsClosed){
     
     if(WL.Thread.LimitByFPS(120, ref DTI)){
         i++;
+        Time += (float)DTI.Value.DT;
         Window.Title = "NEW TITLE " + i + " | FPS: " + DTI.Value.FPS;
         
         WE.Render.API.CRenderView.Viewport = Window.Size;
         
         WE.Render.API.FrameStart();
         
-        WE.Render.API.Clear(new Color4B((byte)Random.Shared.Next(255), (byte)Random.Shared.Next(255), (byte)Random.Shared.Next(255)));
+        WE.Render.API.Clear(new Color4B(200, 200, 200));
 
+        Program.SetUniformF(Uniform_Time, Time);
         WE.Render.API.Draw(Triangle, Program);
         
         WE.Render.API.FrameStop();
