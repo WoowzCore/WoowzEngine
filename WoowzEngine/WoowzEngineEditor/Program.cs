@@ -1,6 +1,4 @@
-﻿using ImGuiNET;
-using Silk.NET.OpenGL.Extensions.ImGui;
-using WE;
+﻿using WE;
 using WLI_Input;
 using WLI_Render;
 using WLI.GPU;
@@ -17,6 +15,13 @@ WE.Render.Start(Window.GetProcAddress, new Render.StartParameters{
 });
 
 GLImGUI ImGUI = new GLImGUI(WE.Render.API, true);
+
+Window.Mouse.OnMove += (Position, Delta) => ImGUI.MousePosition(Position);
+Window.Mouse.OnScroll += Delta => ImGUI.MouseScroll(Delta);
+Window.Mouse.OnButton += (Button, Down) => ImGUI.MouseButton(Button, Down);
+
+Window.Keyboard.OnKey += (Key, Down) => ImGUI.KeyboardKey(Key, Down);
+Window.Keyboard.OnChar += Char => ImGUI.KeyboardChar(Char);
 
 // language=GLSL
 string VertexSource = @"
@@ -118,10 +123,6 @@ while(!Window.IsClosed){
         }
         CameraControlls();
         
-        ImGUI.MousePosition(Window.Mouse.Position);
-        ImGUI.MouseScroll(Window.Mouse.ScrollDelta);
-        ImGUI.MouseButton(0, Window.Mouse.IsButtonDown(Mouse.Button.Left));
-        ImGUI.MouseButton(1, Window.Mouse.IsButtonDown(Mouse.Button.Right));
         ImGUI.FrameStart(DT, Window.Size);
         
             ImGuiNET.ImGui.ShowDemoWindow();
