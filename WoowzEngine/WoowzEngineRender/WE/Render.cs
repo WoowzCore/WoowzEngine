@@ -47,9 +47,9 @@ public static class Render{
         }
     }
 
-    public static void Stop(){
+    public static bool Stop(){
         try{
-            if(!IsStarted){ throw new ExceptionWL("Рендер не был даже запущен!"); }
+            if(!IsStarted){ return false; }
             
             Log(LogType_Initialization, "Остановка WoowzEngineRender...");
 
@@ -58,6 +58,7 @@ public static class Render{
             Log(LogType_Initialization, "WoowzEngineRender остановлен!");
             
             IsStarted = false;
+            return true;
         }catch(Exception e){
             throw new ExceptionWL("Произошла ошибка при остановке WoowzEngineRender!", e);
         }
