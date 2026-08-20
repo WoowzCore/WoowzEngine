@@ -34,7 +34,7 @@ public static class Render{
         
         WE.Render.API.FrameStart();
             
-            WE.Render.API.Clear(new Color4B((byte)Random.Shared.Next(0, 255), (byte)Random.Shared.Next(0, 255), (byte)Random.Shared.Next(0, 255)));
+            WE.Render.API.Clear(new Color4B(200, 200, 200));
                 
             __RENDERTESTRENDER();
             
@@ -65,7 +65,6 @@ public static class Render{
     // TODO, TEST RENDER
 
     private static Scene  __SCENE;
-    private static Camera __CAMERA;
     
     private static GLProgram __PROGRAM;
     private static GLMesh    __MESH;
@@ -75,8 +74,6 @@ public static class Render{
     
     public static void __STARTTESTRENDER(){
         __SCENE = new Scene();
-
-        __CAMERA = new Camera();
         
         
         __PROGRAM = (GLProgram)WE.Render.API.CreateProgram(
@@ -134,28 +131,12 @@ void main() {
     }
 
     public static void __RENDERTESTRENDER(){
-        float YAW = WEE.Cycle.Time * 1.5f;
-        float PITCH = (float)System.Math.Sin(WEE.Cycle.Time * 0.8f) * 0.7f;
-        float RADIUS = 7 + (float)System.Math.Sin(WEE.Cycle.Time * 0.4f) * 2;
+        float YAW = WEE.Cycle.Render_Time * 1.5f;
+        float PITCH = (float)System.Math.Sin(WEE.Cycle.Render_Time * 0.8f) * 0.7f;
+        float RADIUS = 5 + (float)System.Math.Sin(WEE.Cycle.Render_Time * 0.4f) * 2;
 
-        __CAMERA.Position = new Vector3F(
-            RADIUS * (float)System.Math.Cos(PITCH) * (float)System.Math.Sin(YAW),
-            RADIUS * (float)System.Math.Sin(PITCH),
-            RADIUS * (float)System.Math.Cos(PITCH) * (float)System.Math.Cos(YAW)
-        );
-
-        __CAMERA.Rotation = new Vector3F(
-            PITCH,
-            -YAW,
-            (float)System.Math.Cos(WEE.Cycle.Time) * 0.2f
-        );
-        
-        
-        
-        
-        
         WE.Render.API.DepthTest = true;
         
-        __SCENE.Render(__CAMERA, __UNIFORM_VPROJ, __UNIFORM_MPROJ);
+        __SCENE.Render(WEE.Editor.SceneViewCamera, __UNIFORM_VPROJ, __UNIFORM_MPROJ);
     }
 }
