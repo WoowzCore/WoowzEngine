@@ -28,9 +28,22 @@ public static class Render{
     public static GLRenderView SceneFramebuffer = null!;
 
     public static void SceneRender(){
+        Vector2I TargetSize = WEE.Interface.SceneViewSize;
+
+        if(TargetSize.X <= 0 || TargetSize.Y <= 0){ return; }
+
+        if(TargetSize.X > 0 && TargetSize.Y > 0 && 
+           (TargetSize.X != SceneFramebuffer.ResultTexture!.Size.X || 
+            TargetSize.Y != SceneFramebuffer.ResultTexture!.Size.Y)){
+            SceneFramebuffer.Destroy();
+            SceneFramebuffer = GLRenderView.Create(WE.Render.API, TargetSize);
+            
+            WEE.Editor.SceneViewCamera.Aspect = TargetSize.Aspect;
+        }
+        
         WE.Render.API.CRenderView = SceneFramebuffer;
         
-        WE.Render.API.CRenderView.Viewport = new Vector2I(800, 600);
+        WE.Render.API.CRenderView.Viewport = TargetSize;
         
         WE.Render.API.FrameStart();
             

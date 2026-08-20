@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Numerics;
 using ImGuiNET;
 using WLO.Interface;
 using WLO.Math;
@@ -28,18 +27,18 @@ public static class Interface{
 
     private static void Update_Menu(){
         if(ImGui.BeginMainMenuBar()){
-            if(ImGui.BeginMenu("File")){
-                if(ImGui.MenuItem("Exit", "Alt+F4")){ WEE.Window.MainWindow.Close(); }
+            if(ImGui.BeginMenu("Файл")){
+                if(ImGui.MenuItem("Выйти", "Alt+F4")){ WEE.Window.MainWindow.Close(); }
                 ImGui.EndMenu();
             }
 
-            if(ImGui.BeginMenu("Edit")){
-                if(ImGui.MenuItem("Undo", "Ctrl+Z")){  }
-                if(ImGui.MenuItem("Redo", "Ctrl+Y")){  }
+            if(ImGui.BeginMenu("Редактировать")){
+                if(ImGui.MenuItem("Отменить", "Ctrl+Z")){  }
+                if(ImGui.MenuItem("Вернуть", "Ctrl+Y")){  }
                 ImGui.EndMenu();
             }
             
-            if(ImGui.BeginMenu("Window")){
+            if(ImGui.BeginMenu("Окно")){
                 ImGui.MenuItem("Scene View", "", true);
                 ImGui.MenuItem("Inspector", "", true);
                 ImGui.MenuItem("Hierarchy", "", true);
@@ -48,13 +47,13 @@ public static class Interface{
                 ImGui.EndMenu();
             }
             
-            if(ImGui.BeginMenu("Help")){
-                if(ImGui.MenuItem("Open GitHub...")){ Process.Start(new ProcessStartInfo("https://github.com/WoowzCore/WoowzEngine"){ UseShellExecute = true }); }
+            if(ImGui.BeginMenu("Помощь")){
+                if(ImGui.MenuItem("Открыть GitHub...")){ Process.Start(new ProcessStartInfo("https://github.com/WoowzCore/WoowzEngine"){ UseShellExecute = true }); }
                 ImGui.EndMenu();
             }
 
-            string MenuText = "hello world!";
-            Vector2 TextSize = ImGui.CalcTextSize(MenuText);
+            string MenuText = $"E-FPS: {WEE.Cycle.Engine_DTI.FPS:F1}, R-FPS: {WEE.Cycle.Render_DTI.FPS:F1}";
+            System.Numerics.Vector2 TextSize = ImGui.CalcTextSize(MenuText);
             ImGui.SameLine(ImGui.GetWindowWidth() - TextSize.X - 10);
             ImGui.TextDisabled(MenuText);
             
@@ -66,15 +65,18 @@ public static class Interface{
     
     public static bool FocusSceneView{ get; private set; }
 
+    public static Vector2I SceneViewSize{ get; private set; }
+    
     private static void Update_SceneView(){
         ImGui.SetNextWindowSize(new System.Numerics.Vector2(800, 600), ImGuiCond.FirstUseEver);
-        ImGui.Begin("Scene View (800x600)");
+        ImGui.Begin($"Просмотр сцены ({SceneViewSize.W}x{SceneViewSize.H})###SceneView");
 
             FocusSceneView = ImGui.IsWindowFocused(ImGuiFocusedFlags.RootAndChildWindows);
             
             System.Numerics.Vector2 __SceneViewport = ImGui.GetContentRegionAvail();
-                
-            ImGui.Image((IntPtr)WEE.Render.SceneFramebuffer.ID, __SceneViewport, new System.Numerics.Vector2(0, 1), new System.Numerics.Vector2(1, 0));
+            SceneViewSize = new Vector2I((int)__SceneViewport.X, (int)__SceneViewport.Y);
+            
+            ImGui.Image((IntPtr)WEE.Render.SceneFramebuffer.ResultTexture!.ID, __SceneViewport, new System.Numerics.Vector2(0, 1), new System.Numerics.Vector2(1, 0));
         
         ImGui.End();
     }
@@ -83,7 +85,7 @@ public static class Interface{
     
     private static void Update_Inspector(){
         ImGui.SetNextWindowSize(new System.Numerics.Vector2(200, 300), ImGuiCond.FirstUseEver);
-        ImGui.Begin("Inspector");
+        ImGui.Begin("Просмотр");
          ImGui.Text("hi, welcome here!");
         ImGui.End();
     }
@@ -92,7 +94,7 @@ public static class Interface{
     
     private static void Update_Hierarchy(){
         ImGui.SetNextWindowSize(new System.Numerics.Vector2(200, 300), ImGuiCond.FirstUseEver);
-        ImGui.Begin("Hierarchy");
+        ImGui.Begin("Иерархия");
             ImGui.Text("Hierarchy");
         ImGui.End();
     }
@@ -101,7 +103,7 @@ public static class Interface{
     
     private static void Update_Assets(){
         ImGui.SetNextWindowSize(new System.Numerics.Vector2(800, 200), ImGuiCond.FirstUseEver);
-        ImGui.Begin("Assets");
+        ImGui.Begin("Ресурсы");
             ImGui.Text("FILES");
         ImGui.End();
     }
@@ -127,13 +129,13 @@ public static class Interface{
     
     private static void Update_Console(){
         ImGui.SetNextWindowSize(new System.Numerics.Vector2(800, 200), ImGuiCond.FirstUseEver);
-        ImGui.Begin("Console");
+        ImGui.Begin("Консоль");
 
-            if(ImGui.Button("Clear")){ __ConsoleEntries.Clear(); }
+            if(ImGui.Button("Очистить")){ __ConsoleEntries.Clear(); }
             ImGui.SameLine();
-            if(ImGui.Button("Test Message")){ WL.Logger.Debug("TEST MESSAGE"); }
+            if(ImGui.Button("Тестовое сообщение")){ WL.Logger.Debug("Тестовое сообщение"); }
             ImGui.SameLine();
-            ImGui.Text($"Logs: {__ConsoleEntries.Count}");
+            ImGui.Text($"Кол-во: {__ConsoleEntries.Count}");
             
             ImGui.Separator();
 

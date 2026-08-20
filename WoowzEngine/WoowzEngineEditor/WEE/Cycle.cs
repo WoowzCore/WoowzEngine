@@ -47,8 +47,6 @@ public static class Cycle{
             Render_DT = (float)Render_DTI.DT;
 
             Render_Time += Render_DT;
-
-            WEE.Window.MainWindow.Title = $"TEST WINDOW E-FPS: {Engine_DTI.FPS:F1}, R-FPS: {Render_DTI.FPS:F1}";
             
             WEE.Interface.Update();
             

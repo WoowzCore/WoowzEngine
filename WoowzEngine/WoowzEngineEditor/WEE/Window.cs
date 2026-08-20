@@ -1,6 +1,4 @@
-﻿using WLO.Math;
-
-namespace WEE;
+﻿namespace WEE;
 
 public static class Window{
     public static void Start(){
@@ -22,5 +20,5 @@ public static class Window{
     
     // ----------------------------------------------------------------------
     
-    public static WLO.Window.GLFW MainWindow;
+    public static WLO.Window.GLFW MainWindow = null!;
 }
