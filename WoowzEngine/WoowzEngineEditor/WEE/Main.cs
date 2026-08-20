@@ -5,6 +5,8 @@ namespace WEE;
 public static class Main{
     public static void Start(string[] Args){
         try{
+            WE.Engine.Start();
+            
             WEE.Window.Start();
             WEE.Render.Start();
             WEE.Interface.Start();
@@ -21,6 +23,8 @@ public static class Main{
             WEE.Interface.Stop();
             WEE.Render.Stop();
             WEE.Window.Stop();
+            
+            WE.Engine.Stop();
 
             return 0;
         }catch(Exception e){

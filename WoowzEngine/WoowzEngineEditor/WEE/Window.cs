@@ -4,14 +4,11 @@ namespace WEE;
 
 public static class Window{
     public static void Start(){
-        WL.GLFW.Start();
-
-        MainWindow = new WLO.Window.GLFW(new Vector2I(800, 600), "WOOWZENGINE MAINWINDOW");
+        MainWindow = WE.Window.CreateWindow();
     }
     
     public static void Stop(){
         if(MainWindow != null!){ MainWindow.Close(); }
-        WL.GLFW.Stop();
     }
 
     public static void ConnectEvents(){
