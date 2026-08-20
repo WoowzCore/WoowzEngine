@@ -1,6 +1,10 @@
 ﻿using WEEO;
+using WLI_Render;
+using WLI.GPU;
+using WLO.GPU;
 using WLO.Math;
 using WLO.Render;
+using WoowzLib.Render.WLO;
 
 namespace WEE;
 
@@ -25,12 +29,14 @@ public static class Render{
     public static void SceneRender(){
         WE.Render.API.CRenderView = SceneFramebuffer;
         
-        WE.Render.API.CRenderView.Viewport = WEE.Interface.SceneViewport;
+        WE.Render.API.CRenderView.Viewport = new Vector2I(800, 600);
         
         WE.Render.API.FrameStart();
             
             WE.Render.API.Clear(new Color4B((byte)Random.Shared.Next(0, 255), (byte)Random.Shared.Next(0, 255), (byte)Random.Shared.Next(0, 255)));
                 
+            __RENDERTESTRENDER();
+            
         WE.Render.API.FrameStop();
     }
     
@@ -45,12 +51,78 @@ public static class Render{
             WE.Render.API.FrameStart();
             
                 WE.Render.API.Clear(new Color4B(200, 200, 200));
-            
+                
                 WEE.Interface.Render();
                 
             WE.Render.API.FrameStop();
         }catch(Exception e){
             throw new ExceptionWEE("Произошла ошибка в главном рендере!", e);
         }
+    }
+    
+    // ----------------------------------------------------------------------
+    // TODO, TEST RENDER
+
+    private static GLProgram __PROGRAM;
+    private static GLMesh    __MESH;
+
+    private static int __UNIFORM_TIME;
+    private static int __UNIFORM_PROJ;
+    
+    public static void __STARTTESTRENDER(){
+        __PROGRAM = (GLProgram)WE.Render.API.CreateProgram(
+            // language=GLSL
+            WE.Render.API.CreateShader(Shader.Type.Vertex, @"
+#version 330 core
+layout (location = 0) in vec2 aPos;
+layout (location = 1) in vec4 aColor;
+
+uniform mat4 uViewProjection;
+
+out vec4 vColor;
+
+void main() {
+    gl_Position = uViewProjection * vec4(aPos, 0.0, 1.0);
+    vColor = aColor;
+}"),
+            // language=GLSL
+            WE.Render.API.CreateShader(Shader.Type.Fragment, @"
+#version 330 core
+in vec4 vColor;
+out vec4 FragColor;
+
+uniform float uTime;
+
+void main() {
+    float pulse = (sin(uTime * 3.0) + 1.0) / 2.0 * 0.8 + 0.2;
+    
+    FragColor = vec4(vColor.rgb * pulse, vColor.a);
+}")
+        );
+
+        __UNIFORM_TIME = __PROGRAM.GetUniform("uTime");
+        __UNIFORM_PROJ = __PROGRAM.GetUniform("uViewProjection");
+        
+        __MESH = (GLMesh)WE.Render.API.CreateMesh(
+            new VertexLayout(
+                new VertexAttribute("aPos", 2, VertexAttribute.AttributeType.Float),
+                new VertexAttribute("aColor", 4, VertexAttribute.AttributeType.Byte, true)    
+            ),
+            [
+                new Vertex(new Vector2F(-0.5f, -0.5f), new Color4B(255, 0, 0, 255)),
+                new Vertex(new Vector2F(0.5f, -0.5f), new Color4B(0, 255, 0, 255)),
+                new Vertex(new Vector2F(0.0f, 0.5f), new Color4B(0, 0, 255, 255))
+            ]
+        );
+    }
+
+    public static void __RENDERTESTRENDER(){
+        __PROGRAM.SetUniformF(__UNIFORM_TIME, WEE.Cycle.Time);
+        
+        Matrix4F Projection = Matrix4F.CreatePerspective(1, WEE.Window.MainWindow.Aspect, 0.1f, 100f);
+        
+        __PROGRAM.SetUniformM4F(__UNIFORM_PROJ, Projection * Matrix4F.CreateTranslation(0, 0, -3));
+        
+        WE.Render.API.Draw(__MESH, __PROGRAM);
     }
 }
