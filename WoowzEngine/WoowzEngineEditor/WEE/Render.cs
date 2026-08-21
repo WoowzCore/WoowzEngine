@@ -130,24 +130,9 @@ void main() {
                 new Vertex(new Vector2F(0.0f, 0.5f), new Color4B(0, 0, 255, 255))
             ]
         );
-
-        GameObject GO1 = new GameObject{ Mesh = __MESH, Program = __PROGRAM };
-        __SCENE.GameObjects.Add(GO1);
-        
-        GameObject GO2 = new GameObject{ Mesh = __MESH, Program = __PROGRAM };
-        GO2.Transform.Position = new Vector3F(-1.5f, 0, 0);
-        __SCENE.GameObjects.Add(GO2);
-        
-        GameObject GO3 = new GameObject{ Mesh = __MESH, Program = __PROGRAM };
-        GO3.Transform.Position = new Vector3F(1.5f, 0, 0);
-        __SCENE.GameObjects.Add(GO3);
     }
 
     public static void __RENDERTESTRENDER(){
-        float YAW = WEE.Cycle.Render_Time * 1.5f;
-        float PITCH = (float)System.Math.Sin(WEE.Cycle.Render_Time * 0.8f) * 0.7f;
-        float RADIUS = 5 + (float)System.Math.Sin(WEE.Cycle.Render_Time * 0.4f) * 2;
-
         WE.Render.API.DepthTest = true;
         
         __SCENE.Render(WEE.Editor.SceneViewCamera, __UNIFORM_VPROJ, __UNIFORM_MPROJ);
