@@ -1,4 +1,5 @@
-﻿using WLO;
+﻿using WEO.Processor;
+using WLO;
 using WLO.Math;
 
 namespace WEO;
@@ -6,44 +7,56 @@ namespace WEO;
 public class Scene{
     public string Name = "New Scene";
 
-    private readonly HashSet<GameObject> __Registry = [];
-    public IEnumerable<GameObject> AllGameObjects => __Registry;
+    private readonly HashSet    <Entity> __Registry = [];
+    public           IEnumerable<Entity> AllEntity => __Registry;
 
-    public bool Add(GameObject GO){
-        if(__Registry.Contains(GO)){ return false; }
+    public IEnumerable<Entity> Roots => __Registry.Where(E => E.Node.Parent == null);
 
-        __Registry.Add(GO);
+    public bool Add(Entity E){
+        if(__Registry.Contains(E)){ return false; }
 
-        GO.Node.OnParentChanged += OnGameObjectParentChanged;
+        __Registry.Add(E);
 
-        foreach(HierarchyNode<GameObject> Child in GO.Node.Children){
+        E.Node.OnChildAdded += OnChildAddedToEntity;
+        E.Node.OnParentChanged += OnEntityParentChanged;
+
+        foreach(HierarchyNode<Entity> Child in E.Node.Children){
             Add(Child.Owner);
         }
 
         return true;
     }
 
-    public bool Remove(GameObject GO){
-        if(!__Registry.Contains(GO)){ return false; }
+    public bool Remove(Entity E){
+        if(!__Registry.Contains(E)){ return false; }
 
-        __Registry.Remove(GO);
+        __Registry.Remove(E);
 
-        GO.Node.OnParentChanged -= OnGameObjectParentChanged;
+        E.Node.OnChildAdded -= OnChildAddedToEntity;
+        E.Node.OnParentChanged -= OnEntityParentChanged;
         
-        foreach(HierarchyNode<GameObject> Child in GO.Node.Children){
+        foreach(HierarchyNode<Entity> Child in E.Node.Children){
             Remove(Child.Owner);
         }
         
         return true;
     }
 
-    private void OnGameObjectParentChanged(HierarchyNode<GameObject> Self, HierarchyNode<GameObject>? OldParent, HierarchyNode<GameObject>? NewParent){
-        
+    private void OnChildAddedToEntity(HierarchyNode<Entity> Self, HierarchyNode<Entity> Child) {
+        Add(Child.Owner);
+    }
+    
+    private void OnEntityParentChanged(HierarchyNode<Entity> Self, HierarchyNode<Entity>? OldParent, HierarchyNode<Entity>? NewParent){
+        if(NewParent != null){
+            if(__Registry.Contains(NewParent.Owner)){
+                Add(Self.Owner);
+            }else{
+                Remove(Self.Owner);
+            }
+        }
     }
     
     public void Render(Camera Camera, int Uniform_ViewProjection, int Uniform_ModelProjection){
-        Matrix4F ViewProjection = Camera.GetProjectionMatrix() * Camera.GetViewMatrix();
-
-        
+        PRender.Render(this, Camera, Uniform_ViewProjection, Uniform_ModelProjection);
     }
 }

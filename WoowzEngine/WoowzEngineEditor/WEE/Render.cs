@@ -1,4 +1,5 @@
 ﻿using WEEO;
+using WEO_Component;
 using WEO;
 using WLI_Render;
 using WLI.GPU;
@@ -77,16 +78,16 @@ public static class Render{
     // ----------------------------------------------------------------------
     // TODO, TEST RENDER
 
-    private static Scene  __SCENE;
+    public static Scene?  ActiveScene;
     
-    private static GLProgram __PROGRAM;
-    private static GLMesh    __MESH;
+    public static GLProgram __PROGRAM;
+    public static GLMesh    __MESH;
 
     private static int __UNIFORM_VPROJ;
     private static int __UNIFORM_MPROJ;
     
     public static void __STARTTESTRENDER(){
-        __SCENE = new Scene();
+        ActiveScene = new Scene();
         
         
         __PROGRAM = (GLProgram)WE.Render.API.CreateProgram(
@@ -130,11 +131,34 @@ void main() {
                 new Vertex(new Vector2F(0.0f, 0.5f), new Color4B(0, 0, 255, 255))
             ]
         );
+
+        Entity testobj(){
+            Entity Result = new Entity();
+            CMeshRenderer C = Result.AddComponent<CMeshRenderer>();
+            C.Mesh = __MESH;
+            C.Program = __PROGRAM;
+            return Result;
+        }
+        
+        Entity E1 = testobj();
+        ActiveScene.Add(E1);
+        
+        Entity E2 = testobj();
+        E2.Transform.Position = new Vector3F(0, 3, 0);
+        ActiveScene.Add(E2);
+        
+        Entity E3 = testobj();
+        E3.Transform.Position = new Vector3F(0, -3, 0);
+        ActiveScene.Add(E3);
+        
+        Entity E3_1 = testobj();
+        E3_1.Node.SetParent(E3.Node);
+        E3_1.Transform.Position = new Vector3F(3, 0, 0);
     }
 
     public static void __RENDERTESTRENDER(){
         WE.Render.API.DepthTest = true;
         
-        __SCENE.Render(WEE.Editor.SceneViewCamera, __UNIFORM_VPROJ, __UNIFORM_MPROJ);
+        ActiveScene.Render(WEE.Editor.SceneViewCamera, __UNIFORM_VPROJ, __UNIFORM_MPROJ);
     }
 }

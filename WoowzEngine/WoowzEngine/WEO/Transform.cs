@@ -9,17 +9,17 @@ public class Transform{
 
     public Transform? Parent;
     
-    public  bool     IsDirty       = true;
-    private Matrix4F __WorldMatrix = Matrix4F.Identity;
+    public bool IsDirty = true;
     
-    public Matrix4F GetLocalMatrix() => Matrix4F.CreateScale(Scale) *
+    public Matrix4F GetLocalMatrix() => Matrix4F.CreateTranslation(Position) *
                                         Matrix4F.CreateRotationX(Rotation.X) *
                                         Matrix4F.CreateRotationY(Rotation.Y) *
                                         Matrix4F.CreateRotationZ(Rotation.Z) *
-                                        Matrix4F.CreateTranslation(Position);
+                                        Matrix4F.CreateScale(Scale);
 
+    private Matrix4F __WorldMatrix = Matrix4F.Identity;
     public Matrix4F GetWorldMatrix(){
-        if(IsDirty || (Parent != null && Parent.IsDirty)){
+        if(IsDirty){
             if(Parent == null){
                 __WorldMatrix = GetLocalMatrix();
             }else{

@@ -1,5 +1,9 @@
 ﻿using System.Diagnostics;
+using System.Numerics;
 using ImGuiNET;
+using WEO_Component;
+using WEO;
+using WLO;
 using WLO.Interface;
 using WLO.Math;
 
@@ -11,6 +15,8 @@ public static class Interface{
 
         ImGUI.IO.ConfigFlags |= ImGuiConfigFlags.DockingEnable;
         ImGUI.IO.ConfigFlags |= ImGuiConfigFlags.NavEnableKeyboard;
+
+        ImGUI.IO.ConfigWindowsMoveFromTitleBarOnly = true;
         
         Start_Console();
     }
@@ -25,6 +31,14 @@ public static class Interface{
 
     // ----------------------------------------------------------------------
 
+    private static bool __ShowSceneView = true;
+    private static bool __ShowInspector = true;
+    private static bool __ShowHierarchy = true;
+    private static bool __ShowAssets    = true;
+    private static bool __ShowConsole   = true;
+
+    private static bool __ShowImGUIDemo = false;
+    
     private static void Update_Menu(){
         if(ImGui.BeginMainMenuBar()){
             if(ImGui.BeginMenu("Файл")){
@@ -39,11 +53,16 @@ public static class Interface{
             }
             
             if(ImGui.BeginMenu("Окно")){
-                ImGui.MenuItem("Scene View", "", true);
-                ImGui.MenuItem("Inspector", "", true);
-                ImGui.MenuItem("Hierarchy", "", true);
-                ImGui.MenuItem("Assets", "", true);
-                ImGui.MenuItem("Console", "", true);
+                ImGui.MenuItem("Просмотр сцены", "", ref __ShowSceneView);
+                ImGui.MenuItem("Просмотр", "", ref __ShowInspector);
+                ImGui.MenuItem("Иерархия", "", ref __ShowHierarchy);
+                ImGui.MenuItem("Ресурсы", "", ref __ShowAssets);
+                ImGui.MenuItem("Консоль", "", ref __ShowConsole);
+                
+                ImGui.Separator();
+
+                ImGui.MenuItem("ImGUI Demo", "", ref __ShowImGUIDemo);
+                
                 ImGui.EndMenu();
             }
             
@@ -52,7 +71,7 @@ public static class Interface{
                 ImGui.EndMenu();
             }
 
-            string MenuText = $"E-FPS: {WEE.Cycle.Engine_DTI.FPS:F1}, R-FPS: {WEE.Cycle.Render_DTI.FPS:F1}";
+            string MenuText = $"E-FPS: {WEE.Cycle.Engine_DTI.FPS:F1}";
             System.Numerics.Vector2 TextSize = ImGui.CalcTextSize(MenuText);
             ImGui.SameLine(ImGui.GetWindowWidth() - TextSize.X - 10);
             ImGui.TextDisabled(MenuText);
@@ -68,8 +87,10 @@ public static class Interface{
     public static Vector2I SceneViewSize{ get; private set; }
     
     private static void Update_SceneView(){
+        if(!__ShowSceneView){ return; }
+
         ImGui.SetNextWindowSize(new System.Numerics.Vector2(800, 600), ImGuiCond.FirstUseEver);
-        ImGui.Begin($"Просмотр сцены ({SceneViewSize.W}x{SceneViewSize.H})###SceneView");
+        ImGui.Begin($"Просмотр сцены ({SceneViewSize.W}x{SceneViewSize.H}), R-FPS: {WEE.Cycle.Render_DTI.FPS:F1}###SceneView", ref __ShowSceneView);
 
             FocusSceneView = ImGui.IsWindowFocused(ImGuiFocusedFlags.RootAndChildWindows);
             
@@ -84,26 +105,126 @@ public static class Interface{
     // ----------------------------------------------------------------------
     
     private static void Update_Inspector(){
+        if(!__ShowInspector){ return; }
+
         ImGui.SetNextWindowSize(new System.Numerics.Vector2(200, 300), ImGuiCond.FirstUseEver);
-        ImGui.Begin("Просмотр");
-         ImGui.Text("hi, welcome here!");
+        ImGui.Begin("Просмотр", ref __ShowInspector);
+            if(SelectedEntity == null){
+                ImGui.TextDisabled("Выберите объект в иерархии...");
+            }else{
+                string Name = SelectedEntity.Name;
+                if(ImGui.InputText("Название", ref Name, 100)){
+                    SelectedEntity.Name = Name;
+                }
+                
+                ImGui.Separator();
+
+                if(ImGui.CollapsingHeader("Положение", ImGuiTreeNodeFlags.DefaultOpen)){
+                    System.Numerics.Vector3 Position = new Vector3(SelectedEntity.Transform.Position.X, SelectedEntity.Transform.Position.Y, SelectedEntity.Transform.Position.Z);
+
+                    if(ImGui.DragFloat3("Позиция", ref Position, 0.1f)){
+                        SelectedEntity.Transform.Position = new Vector3F(Position.X, Position.Y, Position.Z);
+                        SelectedEntity.SetTransformDirty();
+                    }
+                    
+                    System.Numerics.Vector3 Scale = new Vector3(SelectedEntity.Transform.Scale.X, SelectedEntity.Transform.Scale.Y, SelectedEntity.Transform.Scale.Z);
+
+                    if(ImGui.DragFloat3("Размер", ref Scale, 0.1f)){
+                        SelectedEntity.Transform.Scale = new Vector3F(Scale.X, Scale.Y, Scale.Z);
+                        SelectedEntity.SetTransformDirty();
+                    }
+                    
+                    System.Numerics.Vector3 Rotation = new Vector3(SelectedEntity.Transform.Rotation.X, SelectedEntity.Transform.Rotation.Y, SelectedEntity.Transform.Rotation.Z);
+
+                    if(ImGui.DragFloat3("Поворот", ref Rotation, 0.1f)){
+                        SelectedEntity.Transform.Rotation = new Vector3F(Rotation.X, Rotation.Y, Rotation.Z);
+                        SelectedEntity.SetTransformDirty();
+                    }
+                }
+                
+                ImGui.Separator();
+            }
         ImGui.End();
     }
     
     // ----------------------------------------------------------------------
+
+    public static Entity? SelectedEntity = null!;
     
     private static void Update_Hierarchy(){
+        if(!__ShowHierarchy){ return; }
+
         ImGui.SetNextWindowSize(new System.Numerics.Vector2(200, 300), ImGuiCond.FirstUseEver);
-        ImGui.Begin("Иерархия");
-            ImGui.Text("Hierarchy");
+        ImGui.Begin("Иерархия###Hierarchy", ref __ShowHierarchy);
+
+            if(WEE.Render.ActiveScene == null){
+                ImGui.Text("Нет активной сцены");
+                ImGui.End();
+                return;
+            }
+
+            List<Entity> AllEntities = WEE.Render.ActiveScene.AllEntity.ToList();
+            ImGui.TextDisabled($"Всего: {AllEntities.Count}, Корней: {WEE.Render.ActiveScene.Roots.Count()}");
+
+            ImGui.BeginChild("HierarchyList");
+            
+                foreach(Entity Entity in WEE.Render.ActiveScene.Roots){
+                    if(Entity.Node.Parent == null){
+                        DrawEntityNode(Entity);
+                    }
+                }
+
+                if(ImGui.IsMouseDown(0) && ImGui.IsWindowHovered()){
+                    SelectedEntity = null;
+                }
+
+                if(ImGui.BeginPopupContextWindow("HierarchyContext", ImGuiPopupFlags.MouseButtonRight | ImGuiPopupFlags.NoOpenOverItems)){
+                    if(ImGui.MenuItem("Создать пустой Entity")){
+                        Entity NewEntity = new Entity();
+                        CMeshRenderer __CMESHRENDERER = NewEntity.AddComponent<CMeshRenderer>();
+                        __CMESHRENDERER.Mesh = WEE.Render.__MESH;
+                        __CMESHRENDERER.Program = WEE.Render.__PROGRAM;
+                        WEE.Render.ActiveScene.Add(NewEntity);
+                        SelectedEntity = NewEntity;
+                    }
+                    ImGui.EndPopup();
+                }
+                
+            ImGui.EndChild();
+        
         ImGui.End();
+    }
+
+    private static void DrawEntityNode(Entity Entity){
+        ImGuiTreeNodeFlags Flags = (SelectedEntity == Entity ? ImGuiTreeNodeFlags.Selected : 0);
+
+        Flags |= ImGuiTreeNodeFlags.OpenOnArrow | ImGuiTreeNodeFlags.SpanAvailWidth;
+
+        if(Entity.Node.Children.Count == 0){
+            Flags |= ImGuiTreeNodeFlags.Leaf | ImGuiTreeNodeFlags.NoTreePushOnOpen;
+        }
+
+        bool Opened = ImGui.TreeNodeEx($@"{Entity.Name}###{Entity.GetHashCode()}", Flags);
+
+        if(ImGui.IsItemClicked()){
+            SelectedEntity = Entity;
+        }
+
+        if(Opened && Entity.Node.Children.Count > 0){
+            foreach(HierarchyNode<Entity> ChildNode in Entity.Node.Children){
+                DrawEntityNode(ChildNode.Owner);
+            }
+            ImGui.TreePop();
+        }
     }
     
     // ----------------------------------------------------------------------
     
     private static void Update_Assets(){
+        if(!__ShowAssets){ return; }
+
         ImGui.SetNextWindowSize(new System.Numerics.Vector2(800, 200), ImGuiCond.FirstUseEver);
-        ImGui.Begin("Ресурсы");
+        ImGui.Begin("Ресурсы", ref __ShowAssets);
             ImGui.Text("FILES");
         ImGui.End();
     }
@@ -128,8 +249,10 @@ public static class Interface{
     }
     
     private static void Update_Console(){
+        if(!__ShowConsole){ return; }
+
         ImGui.SetNextWindowSize(new System.Numerics.Vector2(800, 200), ImGuiCond.FirstUseEver);
-        ImGui.Begin("Консоль");
+        ImGui.Begin("Консоль", ref __ShowConsole);
 
             if(ImGui.Button("Очистить")){ __ConsoleEntries.Clear(); }
             ImGui.SameLine();
@@ -174,7 +297,9 @@ public static class Interface{
         Update_Assets();
         
         Update_Console();
-        
+
+        if(__ShowImGUIDemo){ ImGui.ShowDemoWindow(ref __ShowImGUIDemo); }
+
         ImGUI.FrameEnd();
     }
 
