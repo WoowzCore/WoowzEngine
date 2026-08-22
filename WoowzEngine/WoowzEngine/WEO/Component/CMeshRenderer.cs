@@ -1,4 +1,5 @@
 ﻿using WEI;
+using WEI.Editor;
 using WEO.Processor;
 using WLI.GPU;
 using WLO.Math;
@@ -9,9 +10,9 @@ public class CMeshRenderer : RenderComponent{
     public Mesh?    Mesh = null!;
     public Program? Program = null!;
 
-    [Save] private Color4B Color = new Color4B(255, 255, 255);
+    [WEESave] private Color4B Color = new Color4B(255, 255, 255);
 
-    [Save] private bool Active = true;
+    [WEESave] private bool Active = true;
     
     public override void OnRender(){
         if(Mesh == null || Program == null || !Active){ return; }

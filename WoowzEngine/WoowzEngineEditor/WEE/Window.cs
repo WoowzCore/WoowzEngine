@@ -3,6 +3,7 @@
 public static class Window{
     public static void Start(){
         MainWindow = WE.Window.CreateWindow();
+        MainWindow.TODO_UseDarkMode();
         UpdateTitle();
     }
     

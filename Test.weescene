@@ -29,6 +29,10 @@
           "Color": {
             "__Type": "WLO.Math.Color4B",
             "Value": 4294908160
+          },
+          "Active": {
+            "Value": true,
+            "__Type": "System.Boolean"
           }
         }
       ],
@@ -62,6 +66,10 @@
                 "Color": {
                   "__Type": "WLO.Math.Color4B",
                   "Value": 4278190335
+                },
+                "Active": {
+                  "Value": true,
+                  "__Type": "System.Boolean"
                 }
               }
             ],
@@ -100,6 +108,10 @@
           "Color": {
             "__Type": "WLO.Math.Color4B",
             "Value": 4294967295
+          },
+          "Active": {
+            "Value": true,
+            "__Type": "System.Boolean"
           }
         }
       ],
@@ -133,6 +145,10 @@
                 "Color": {
                   "__Type": "WLO.Math.Color4B",
                   "Value": 4294967295
+                },
+                "Active": {
+                  "Value": true,
+                  "__Type": "System.Boolean"
                 }
               }
             ],
@@ -141,6 +157,72 @@
             }
           }
         ]
+      }
+    },
+    {
+      "Name": "TEST CTEST",
+      "Transform": {
+        "Position": {
+          "__Type": "WLO.Math.Vector3F",
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        },
+        "Rotation": {
+          "__Type": "WLO.Math.Vector3F",
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        },
+        "Scale": {
+          "__Type": "WLO.Math.Vector3F",
+          "X": 1,
+          "Y": 1,
+          "Z": 1
+        }
+      },
+      "Components": [
+        {
+          "__Type": "LUO.Component.CTest, LithiumUniverse, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "FLOAT": {
+            "Value": -1.1,
+            "__Type": "System.Single"
+          },
+          "INT": {
+            "Value": 39,
+            "__Type": "System.Int32"
+          },
+          "BOOL": {
+            "Value": false,
+            "__Type": "System.Boolean"
+          },
+          "V2F": {
+            "__Type": "WLO.Math.Vector2F",
+            "X": -1,
+            "Y": 1
+          },
+          "V3F": {
+            "__Type": "WLO.Math.Vector3F",
+            "X": 3.7,
+            "Y": 6.5,
+            "Z": 5.8
+          },
+          "STRING": {
+            "Value": "NO WAY",
+            "__Type": "System.String"
+          },
+          "COLOR": {
+            "__Type": "WLO.Math.Color4B",
+            "Value": 4286307130
+          },
+          "MULTILINESTRING": {
+            "Value": "Hello\nWorld!\nM\nU\nL\nT\nI\nL\nI\nN\nE\n \nS\nT\nR\nI\nN\nG\n!",
+            "__Type": "System.String"
+          }
+        }
+      ],
+      "Hierarchy": {
+        "Children": []
       }
     }
   ]

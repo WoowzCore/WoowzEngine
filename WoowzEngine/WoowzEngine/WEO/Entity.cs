@@ -89,7 +89,21 @@ public class Entity : WLI.Serializable, WLI.Hierarchical<Entity>{
             __Components.Clear();
             foreach(object V_Component__ in V_Components){
                 if(V_Component__ is Dictionary<string, object> V_Component){
-                    if(WL.Serializer.Deserialize(V_Component) is Component Component){
+                    string TypeString = V_Component[WL.Serializer.__Type]?.ToString() ?? "Unknown";
+                    Type? Type = WL.Serializer.FindType(TypeString);
+
+                    WEI.Component? Component;
+                    if(Type != null && typeof(Component).IsAssignableFrom(Type)){
+                        Component = Activator.CreateInstance(Type) as Component;
+                        Component?.Deserialize(V_Component);
+                    }else{
+                        UnknownComponent Unknown = new UnknownComponent();
+                        Unknown.Deserialize(V_Component);
+                        Component = Unknown;
+                        WL.Logger.Warn($"Тип компонента {TypeString} не найден!");
+                    }
+
+                    if(Component != null){
                         Component.Owner = this;
                         __Components.Add(Component);
                     }

@@ -1,8 +1,4 @@
 {
   "Name": "LithiumUniverse",
-  "GameDLLPath": "",
-  "SceneClearColor": {
-    "__Type": "WLO.Math.Color4B",
-    "Value": 4291348680
-  }
+  "GameDLLPath": "W:\\Other\\LitihumUniverse\\LithiumUniverse\\LithiumUniverse\\bin\\Debug\\net8.0\\LithiumUniverse.dll"
 }

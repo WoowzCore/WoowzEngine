@@ -5,6 +5,7 @@ using ImGuiNET;
 using NativeFileDialogSharp;
 using WEEO;
 using WEI;
+using WEI.Editor;
 using WEO_Component;
 using WEO;
 using WLO;
@@ -169,13 +170,18 @@ public static class Interface{
 
     public static string __SceneFilePath = null!;
     private const  string __SceneFileExtension = "weescene";
+
+    private static void CloseScene(){
+        ActiveScene?.Clear();
+        SelectedEntity = null;
+        ActiveScene = null;
+    }
     
     private static void Update_Menu(){
         if(ImGui.BeginMainMenuBar()){
             if(ImGui.BeginMenu("Файл")){
                 if(ImGui.MenuItem("Новая сцена")){
-                    ActiveScene?.Clear();
-                    SelectedEntity = null;
+                    CloseScene();
                     ActiveScene = new Scene();
                 }
                 
@@ -195,6 +201,7 @@ public static class Interface{
                 
                 ImGui.Separator();
                 
+                if(ImGui.MenuItem("Закрыть сцену", "", false, ActiveScene != null)){ CloseScene(); }
                 if(ImGui.MenuItem("Выйти", "Alt+F4")){ WEE.Window.MainWindow.Close(); }
                 ImGui.EndMenu();
             }
@@ -310,8 +317,8 @@ public static class Interface{
             __SceneFilePath = Path;
             SelectedEntity = null;
             WL.Logger.Info($"Сцена загружена: {Path}");
-        }catch (Exception e){
-            WL.Logger.Error($"Ошибка загрузки: {e.Message}");
+        }catch(Exception e){
+            WL.Logger.Error($"Ошибка загрузки: {e.Message + "\n" + e.StackTrace}");
         }
     }
     
@@ -471,11 +478,19 @@ public static class Interface{
                     }
 
                     if(ImGui.BeginPopup("AddComponentPopup")){
-                        if(ImGui.MenuItem("CMeshRenderer")){
-                            CMeshRenderer __CMESHREDNDERER = SelectedEntity.AddComponent<CMeshRenderer>();
-                            __CMESHREDNDERER.Mesh = WEE.Render.__MESH;
-                            __CMESHREDNDERER.Program = WEE.Render.__PROGRAM;
+                        foreach(Type ComponentType in WEE.Registry.AvailableComponents){
+                            if(ImGui.MenuItem(ComponentType.Name)){
+                                MethodInfo Method = typeof(Entity).GetMethod("AddComponent")!;
+                                MethodInfo Generic = Method.MakeGenericMethod(ComponentType);
+                                object? Component = Generic.Invoke(SelectedEntity, null);
+                                
+                                if(Component is CMeshRenderer CMR){
+                                    CMR.Mesh = WEE.Render.__MESH;
+                                    CMR.Program = WEE.Render.__PROGRAM;
+                                }
+                            }
                         }
+                        
                         ImGui.EndPopup();
                     }
                 }
@@ -489,46 +504,48 @@ public static class Interface{
         FieldInfo[] Fields = Component.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 
         foreach(FieldInfo Field in Fields){
-            if(Field.GetCustomAttribute<WEI.Save>() == null) continue;
+            if(Field.GetCustomAttribute<WEESave>() == null){ continue; }
 
             ImGui.PushID(Field.Name);
             
-            string label = Field.Name;
-            object value = Field.GetValue(Component);
+            string Label = Field.Name;
+            object Value = Field.GetValue(Component)!;
 
             if(Field.FieldType == typeof(float)){
-                float val = (float)value;
-                if(ImGui.DragFloat(label, ref val, 0.1f)) Field.SetValue(Component, val);
-            }
-            
-            else if(Field.FieldType == typeof(int)){
-                int val = (int)value;
-                if(ImGui.DragInt(label, ref val)) Field.SetValue(Component, val);
-            }
-            
-            else if(Field.FieldType == typeof(bool)){
-                bool val = (bool)value;
-                if(ImGui.Checkbox(label, ref val)) Field.SetValue(Component, val);
-            }
-            
-            else if(Field.FieldType == typeof(string)){
-                string val = (string)value ?? "";
-                if(ImGui.InputText(label, ref val, 200)) Field.SetValue(Component, val);
-            }
-            
-            else if(Field.FieldType == typeof(Vector3F)){
-                Vector3F v = (Vector3F)value;
-                System.Numerics.Vector3 sysV = new(v.X, v.Y, v.Z);
-                if(ImGui.DragFloat3(label, ref sysV, 0.1f)){
-                    Field.SetValue(Component, new Vector3F(sysV.X, sysV.Y, sysV.Z));
+                float V = (float)Value;
+                if(ImGui.DragFloat(Label, ref V, 0.1f)){ Field.SetValue(Component, V); }
+            }else if(Field.FieldType == typeof(int)){
+                int V = (int)Value;
+                if(ImGui.DragInt(Label, ref V)){ Field.SetValue(Component, V); }
+            }else if(Field.FieldType == typeof(bool)){
+                bool V = (bool)Value;
+                if(ImGui.Checkbox(Label, ref V)){ Field.SetValue(Component, V); }
+            }else if(Field.FieldType == typeof(string)){
+                string V = (string)Value ?? "";
+
+                WEEMultilineString? MultilineAttribute = Field.GetCustomAttribute<WEEMultilineString>();
+
+                if(MultilineAttribute != null){
+                    ImGui.Text(Label);
+                    if(ImGui.InputTextMultiline($"##{Label}", ref V, 5000, new Vector2(-1, MultilineAttribute.Height))){
+                        Field.SetValue(Component, V);
+                    }
+                }else{
+                    if(ImGui.InputText(Label, ref V, 200)){
+                        Field.SetValue(Component, V);
+                    }
                 }
-            }
-            
-            else if(Field.FieldType == typeof(Color4B)){
-                Color4B c = (Color4B)value;
-                System.Numerics.Vector4 sysC = new(c.R / 255f, c.G / 255f, c.B / 255f, c.A / 255f);
-                if(ImGui.ColorEdit4(label, ref sysC)){
-                    Field.SetValue(Component, new Color4B((byte)(sysC.X * 255), (byte)(sysC.Y * 255), (byte)(sysC.Z * 255), (byte)(sysC.W * 255)));
+            }else if(Field.FieldType == typeof(Vector3F)){
+                Vector3F V = (Vector3F)Value;
+                System.Numerics.Vector3 SysV = new Vector3(V.X, V.Y, V.Z);
+                if(ImGui.DragFloat3(Label, ref SysV, 0.1f)){
+                    Field.SetValue(Component, new Vector3F(SysV.X, SysV.Y, SysV.Z));
+                }
+            }else if(Field.FieldType == typeof(Color4B)){
+                Color4B V = (Color4B)Value;
+                System.Numerics.Vector4 SysV = new Vector4(V.R / 255f, V.G / 255f, V.B / 255f, V.A / 255f);
+                if(ImGui.ColorEdit4(Label, ref SysV)){
+                    Field.SetValue(Component, new Color4B((byte)(SysV.X * 255), (byte)(SysV.Y * 255), (byte)(SysV.Z * 255), (byte)(SysV.W * 255)));
                 }
             }
             
@@ -657,22 +674,25 @@ public static class Interface{
     }
 
     // ----------------------------------------------------------------------
-
-    private struct __LogEntry{
-        public string  Message;
-        public Color4B Color;
-    }
-
-    private static readonly List<__LogEntry> __ConsoleEntries = [];
-    private const           int              __MaxLogs        = 500;
-    private static          bool             __ScrollToBottom = true;
+    
+    private static string __FullLogBuffer  = "";
+    private static bool   __ScrollToBottom = false;
     
     private static void Start_Console(){
         WL.Logger.CurrentLogger!.OnLog += (Type, Message) => {
-            __ConsoleEntries.Add(new __LogEntry{ Message = Message, Color = new Color4B(255, 255, 255)});
-            if(__ConsoleEntries.Count > __MaxLogs){ __ConsoleEntries.RemoveAt(0); }
+            __FullLogBuffer += Message + "\n";
+            if(__FullLogBuffer.Length > 100000){ __FullLogBuffer = __FullLogBuffer.Substring(__FullLogBuffer.Length - 50000); }
             __ScrollToBottom = true;
         };
+    }
+
+    private static unsafe int ConsoleCallback(ImGuiInputTextCallbackData* Data){
+        if(__ScrollToBottom){
+            Data -> CursorPos = Data -> BufTextLen;
+            Data -> SelectionStart = Data -> BufTextLen;
+            Data -> SelectionEnd = Data -> BufTextLen;
+        }
+        return 0;
     }
     
     private static void Update_Console(){
@@ -680,24 +700,22 @@ public static class Interface{
 
         if(ImGui.Begin("Консоль###Console", ref __ShowConsole)){
 
-            if(ImGui.Button("Очистить")){ __ConsoleEntries.Clear(); }
+            if(ImGui.Button("Очистить")){ __FullLogBuffer = ""; }
             ImGui.SameLine();
-            ImGui.Text($"Кол-во: {__ConsoleEntries.Count}");
-
+            if(ImGui.Button("Тестовое сообщение")){ WL.Logger.Debug("Тестовое сообщение"); }
             ImGui.Separator();
 
             float FooterHeightToReverse = ImGui.GetStyle().ItemSpacing.Y + ImGui.GetFrameHeightWithSpacing();
-            if(ImGui.BeginChild("ScrollingRegion", new System.Numerics.Vector2(0, -FooterHeightToReverse), ImGuiChildFlags.Borders, ImGuiWindowFlags.HorizontalScrollbar)){
 
-                foreach(__LogEntry Entry in __ConsoleEntries){
-                    ImGui.TextColored(new System.Numerics.Vector4(Entry.Color.R / 255f, Entry.Color.G / 255f, Entry.Color.B / 255f, Entry.Color.A / 255f), Entry.Message);
-                }
+            if(__ScrollToBottom){ ImGui.SetKeyboardFocusHere(); }
+            
+            unsafe{
+                ImGui.InputTextMultiline("##FulLog", ref __FullLogBuffer, (uint)__FullLogBuffer.Length + 1, new Vector2(-1, -FooterHeightToReverse), ImGuiInputTextFlags.ReadOnly | ImGuiInputTextFlags.CallbackAlways, ConsoleCallback);
 
-                if(__ScrollToBottom){
-                    ImGui.SetScrollHereY(1);
+                if(__ScrollToBottom && ImGui.IsItemActive()){
                     __ScrollToBottom = false;
                 }
-            } ImGui.EndChild();
+            }
         } ImGui.End();
     }
     
@@ -722,7 +740,16 @@ public static class Interface{
             ImGui.SameLine();
             if(ImGui.Button("...###SelectGameDLL")){
                 DialogResult? Result = Dialog.FileOpen("dll");
-                if(Result.IsOk){ Config.GameDLLPath = Result.Path; }
+                if(Result.IsOk){
+                    Config.GameDLLPath = Result.Path;
+
+                    try{
+                        Assembly GameAssembly = Assembly.LoadFrom(Config.GameDLLPath);
+                        WEE.Registry.ResetAndReload(GameAssembly);
+                    }catch(Exception e){
+                        WL.Logger.Error("ошибка при загрузке dll, todo");
+                    }
+                }
             }
 
             ImGui.Spacing();
@@ -754,11 +781,19 @@ public static class Interface{
                 if(__FirstFrame){
                     __FirstFrame = false;
 
+                    Assembly? GameAssembly = null;
+                    try{
+                        if(Config != null && !string.IsNullOrEmpty(Config.GameDLLPath)){ GameAssembly = Assembly.LoadFrom(Config.GameDLLPath); }
+                    }catch(Exception e){
+                        WL.Logger.Error("ошибка при загрузке dll, todo 2");
+                    }
+                    WEE.Registry.ResetAndReload(GameAssembly);
+
                     ImGuiDockBuilder.igDockBuilderRemoveNode(DockSpaceID); 
                     ImGuiDockBuilder.igDockBuilderAddNode(DockSpaceID, ImGuiDockNodeFlags.None);
                     ImGuiDockBuilder.igDockBuilderSetNodeSize(DockSpaceID, ImGui.GetMainViewport().Size);
 
-                    ImGuiDockBuilder.igDockBuilderSplitNode(DockSpaceID, ImGuiDir.Right, 0.15f, out uint dockid_right, out uint dockid_left);
+                    ImGuiDockBuilder.igDockBuilderSplitNode(DockSpaceID, ImGuiDir.Right, 0.25f, out uint dockid_right, out uint dockid_left);
 
                     ImGuiDockBuilder.igDockBuilderSplitNode(dockid_left, ImGuiDir.Up, 0.75f, out uint dockid_up, out uint dockid_down);
 
