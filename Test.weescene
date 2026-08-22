@@ -1,8 +1,8 @@
 {
-  "Name": "New Scene",
+  "Name": "Scena kryta",
   "Entities": [
     {
-      "Name": "New Entity",
+      "Name": "TRIANGLE1 BLUE",
       "Transform": {
         "Position": {
           "__Type": "WLO.Math.Vector3F",
@@ -35,7 +35,7 @@
       "Hierarchy": {
         "Children": [
           {
-            "Name": "New Entity",
+            "Name": "TRIANGLE2 RED",
             "Transform": {
               "Position": {
                 "__Type": "WLO.Math.Vector3F",
@@ -73,7 +73,7 @@
       }
     },
     {
-      "Name": "New Entity",
+      "Name": "TRIANGLE3",
       "Transform": {
         "Position": {
           "__Type": "WLO.Math.Vector3F",
@@ -106,7 +106,7 @@
       "Hierarchy": {
         "Children": [
           {
-            "Name": "New Entity",
+            "Name": "TRIANGLE4",
             "Transform": {
               "Position": {
                 "__Type": "WLO.Math.Vector3F",

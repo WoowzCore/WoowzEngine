@@ -25,6 +25,56 @@ public static class Interface{
 
         ImGUI.IO.ConfigWindowsMoveFromTitleBarOnly = true;
         
+        ImGuiStylePtr Style = ImGui.GetStyle();
+        RangeAccessor<Vector4> Colors = Style.Colors;
+
+        Vector4 mainRed = new Vector4(0.70f, 0.00f, 0.00f, 1.00f);
+        Vector4 hoverRed = new Vector4(0.85f, 0.10f, 0.10f, 1.00f);
+        Vector4 activeRed = new Vector4(1.00f, 0.00f, 0.00f, 1.00f);
+        Vector4 darkRed = new Vector4(0.40f, 0.00f, 0.00f, 1.00f);
+
+        Colors[(int)ImGuiCol.TitleBg] = new Vector4(0.15f, 0.00f, 0.00f, 1.00f);
+        Colors[(int)ImGuiCol.TitleBgActive] = darkRed;
+        Colors[(int)ImGuiCol.TitleBgCollapsed] = new Vector4(0.00f, 0.00f, 0.00f, 0.51f);
+
+        Colors[(int)ImGuiCol.Button] = mainRed;
+        Colors[(int)ImGuiCol.ButtonHovered] = hoverRed;
+        Colors[(int)ImGuiCol.ButtonActive] = activeRed;
+
+        Colors[(int)ImGuiCol.FrameBg] = new Vector4(0.20f, 0.05f, 0.05f, 0.54f);
+        Colors[(int)ImGuiCol.FrameBgHovered] = new Vector4(0.40f, 0.10f, 0.10f, 0.40f);
+        Colors[(int)ImGuiCol.FrameBgActive] = new Vector4(0.50f, 0.10f, 0.10f, 0.67f);
+
+        Colors[(int)ImGuiCol.Tab] = darkRed;
+        Colors[(int)ImGuiCol.TabHovered] = hoverRed;
+        Colors[(int)ImGuiCol.TabSelected] = activeRed;
+        Colors[(int)ImGuiCol.TabSelectedOverline] = activeRed;
+        Colors[(int)ImGuiCol.TabDimmed] = darkRed;
+        Colors[(int)ImGuiCol.TabDimmedSelected] = mainRed;
+
+        Colors[(int)ImGuiCol.Header] = darkRed;
+        Colors[(int)ImGuiCol.HeaderHovered] = mainRed;
+        Colors[(int)ImGuiCol.HeaderActive] = hoverRed;
+
+        Colors[(int)ImGuiCol.CheckMark] = activeRed;
+        Colors[(int)ImGuiCol.SliderGrab] = mainRed;
+        Colors[(int)ImGuiCol.SliderGrabActive] = hoverRed;
+        Colors[(int)ImGuiCol.SeparatorHovered] = hoverRed;
+        Colors[(int)ImGuiCol.SeparatorActive] = activeRed;
+        Colors[(int)ImGuiCol.ResizeGrip] = darkRed;
+        Colors[(int)ImGuiCol.ResizeGripHovered] = mainRed;
+        Colors[(int)ImGuiCol.ResizeGripActive] = activeRed;
+        Colors[(int)ImGuiCol.DockingPreview] = mainRed;
+        Colors[(int)ImGuiCol.TextSelectedBg] = new Vector4(0.90f, 0.20f, 0.20f, 0.35f);
+
+        Style.WindowRounding = 0;
+        Style.FrameRounding = 12;
+        Style.PopupRounding = 0;
+        Style.GrabRounding = 12;
+        Style.TabRounding = 0;
+
+        Style.TabBorderSize = 1;
+        
         Start_Console();
     }
     
@@ -66,11 +116,11 @@ public static class Interface{
                     OpenScene();
                 }
                 
-                if(ImGui.MenuItem("Сохранить", "Ctrl+S")){
+                if(ImGui.MenuItem("Сохранить", "Ctrl+S", false, ActiveScene != null)){
                     SaveScene();
                 }
                 
-                if(ImGui.MenuItem("Сохранить как", "Ctrl+Shift+S")){
+                if(ImGui.MenuItem("Сохранить как", "Ctrl+Shift+S", false, ActiveScene != null)){
                     SaveSceneAs();
                 }
                 
@@ -105,6 +155,18 @@ public static class Interface{
                 ImGui.EndMenu();
             }
 
+            if(ActiveScene != null){
+                ImGui.SameLine();
+                ImGui.TextDisabled("|");
+                ImGui.SameLine();
+
+                ImGui.InputText("##SceneNameInput", ref ActiveScene.Name, 128);
+                
+                ImGui.SameLine();
+                ImGui.TextDisabled("|");
+                ImGui.SameLine();
+            }
+            
             string MenuText = $"E-FPS: {WEE.Cycle.Engine_DTI.FPS:F1}";
             System.Numerics.Vector2 TextSize = ImGui.CalcTextSize(MenuText);
             ImGui.SameLine(ImGui.GetWindowWidth() - TextSize.X - 10);
@@ -115,6 +177,8 @@ public static class Interface{
     }
 
     private static void SaveSceneAs(){
+        if(ActiveScene == null){ return; }
+        
         DialogResult? Result = Dialog.FileSave(__SceneFileExtension);
 
         if(Result.IsOk){
@@ -134,6 +198,7 @@ public static class Interface{
     }
 
     private static void SaveScene(){
+        if(ActiveScene == null){ return; }
         if(string.IsNullOrEmpty(__SceneFilePath)){
             SaveSceneAs();
         }else{
@@ -185,18 +250,78 @@ public static class Interface{
     public static bool FocusSceneView{ get; private set; }
 
     public static Vector2I SceneViewSize{ get; private set; }
+
+    public static bool Is2DView = false;
     
     private static void Update_SceneView(){
         if(!__ShowSceneView){ return; }
 
-        ImGui.SetNextWindowSize(new System.Numerics.Vector2(800, 600), ImGuiCond.FirstUseEver);
-        ImGui.Begin($"Просмотр сцены ({SceneViewSize.W}x{SceneViewSize.H}), R-FPS: {WEE.Cycle.Render_DTI.FPS:F1}###SceneView", ref __ShowSceneView);
+        ImGui.Begin($"Просмотр сцены###SceneView", ref __ShowSceneView);
 
             FocusSceneView = ImGui.IsWindowFocused(ImGuiFocusedFlags.RootAndChildWindows);
+
+            ImGui.BeginChild("SceneToolbar", new Vector2(0, 30), ImGuiChildFlags.Borders, ImGuiWindowFlags.NoScrollbar);
+            
+                ImGui.SameLine(5);
+                ImGui.SetCursorPosY(5);
+                
+                ImGui.Text($"({SceneViewSize.W}x{SceneViewSize.H}), R-FPS: {WEE.Cycle.Render_DTI.FPS:F1}");
+                
+                ImGui.SameLine();
+                ImGui.TextDisabled("|");
+                ImGui.SameLine();
+                
+                string ModeText = Is2DView ? "2D" : "3D";
+
+                if(ImGui.Button(ModeText, new Vector2(100, 20))){
+                    Is2DView = !Is2DView;
+
+                    if(Is2DView){
+                        WEE.Editor.SceneViewCamera.IsOrthographic = true;
+                    }else{
+                        WEE.Editor.SceneViewCamera.IsOrthographic = false;
+                    }
+                }
+                
+                ImGui.SameLine();
+                ImGui.TextDisabled("|");
+                ImGui.SameLine();
+                
+                ImGui.TextDisabled("Позиция:");
+                ImGui.SameLine();
+                Vector3 CameraPosition = new Vector3(WEE.Editor.SceneViewCamera.Position.X, WEE.Editor.SceneViewCamera.Position.Y, WEE.Editor.SceneViewCamera.Position.Z);
+                ImGui.SetNextItemWidth(200);
+                if(ImGui.DragFloat3("##CamPos", ref CameraPosition, 0.1f)){
+                    WEE.Editor.SceneViewCamera.Position = new Vector3F(CameraPosition.X, CameraPosition.Y, CameraPosition.Z);
+                }
+                
+                ImGui.SameLine();
+                ImGui.TextDisabled("|");
+                ImGui.SameLine();
+                
+                ImGui.TextDisabled("Поворот:");
+                ImGui.SameLine();
+                Vector3 CameraRotation = new Vector3(WEE.Editor.SceneViewCamera.Rotation.X, WEE.Editor.SceneViewCamera.Rotation.Y, WEE.Editor.SceneViewCamera.Rotation.Z);
+                ImGui.SetNextItemWidth(200);
+                if(ImGui.DragFloat3("##CamRos", ref CameraRotation, 0.1f)){
+                    WEE.Editor.SceneViewCamera.Rotation = new Vector3F(CameraRotation.X, CameraRotation.Y, CameraRotation.Z);
+                }
+                
+                ImGui.SameLine();
+                ImGui.TextDisabled("|");
+                ImGui.SameLine();
+
+                if(ImGui.Button("Сброс")){
+                    WEE.Editor.SceneViewCamera.Position = WEE.Editor.SceneViewCamera.Rotation = new Vector3F();
+                }
+                
+            ImGui.EndChild();
             
             System.Numerics.Vector2 __SceneViewport = ImGui.GetContentRegionAvail();
+            __SceneViewport.X = System.Math.Max(1, __SceneViewport.X);
+            __SceneViewport.Y = System.Math.Max(1, __SceneViewport.Y);
             SceneViewSize = new Vector2I((int)__SceneViewport.X, (int)__SceneViewport.Y);
-
+            
             if(ActiveScene != null){
                 ImGui.Image((IntPtr)WEE.Render.SceneFramebuffer.ResultTexture!.ID, __SceneViewport, new System.Numerics.Vector2(0, 1), new System.Numerics.Vector2(1, 0));
             }
@@ -209,7 +334,6 @@ public static class Interface{
     private static void Update_Inspector(){
         if(!__ShowInspector){ return; }
 
-        ImGui.SetNextWindowSize(new System.Numerics.Vector2(200, 300), ImGuiCond.FirstUseEver);
         if(ImGui.Begin("Просмотр###Inspector", ref __ShowInspector)){
             try{
                 if(SelectedEntity == null){
@@ -342,7 +466,6 @@ public static class Interface{
     private static void Update_Hierarchy(){
         if(!__ShowHierarchy){ return; }
 
-        ImGui.SetNextWindowSize(new System.Numerics.Vector2(200, 300), ImGuiCond.FirstUseEver);
         ImGui.Begin("Иерархия###Hierarchy", ref __ShowHierarchy);
 
             if(ActiveScene == null){
@@ -451,7 +574,6 @@ public static class Interface{
     private static void Update_Assets(){
         if(!__ShowAssets){ return; }
 
-        ImGui.SetNextWindowSize(new System.Numerics.Vector2(800, 200), ImGuiCond.FirstUseEver);
         ImGui.Begin("Ресурсы###Assets", ref __ShowAssets);
             ImGui.Text("FILES");
         ImGui.End();
@@ -479,12 +601,9 @@ public static class Interface{
     private static void Update_Console(){
         if(!__ShowConsole){ return; }
 
-        ImGui.SetNextWindowSize(new System.Numerics.Vector2(800, 200), ImGuiCond.FirstUseEver);
         ImGui.Begin("Консоль###Console", ref __ShowConsole);
 
             if(ImGui.Button("Очистить")){ __ConsoleEntries.Clear(); }
-            ImGui.SameLine();
-            if(ImGui.Button("Тестовое сообщение")){ WL.Logger.Debug("Тестовое сообщение"); }
             ImGui.SameLine();
             ImGui.Text($"Кол-во: {__ConsoleEntries.Count}");
             

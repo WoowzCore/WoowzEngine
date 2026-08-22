@@ -11,6 +11,9 @@ public class Camera{
     public float Near   = 0.1f;
     public float Far    = 1000;
 
+    public bool  IsOrthographic = false;
+    public float OrthoSize      = 5;
+    
     // todo, перенести куда нибудь
     public Vector3F Forward{
         get{
@@ -33,5 +36,16 @@ public class Camera{
                                        Matrix4F.CreateRotationZ(Rotation.Z) *
                                        Matrix4F.CreateTranslation(Position.Negative);
 
-    public Matrix4F GetProjectionMatrix() => Matrix4F.CreatePerspective(FOV * (float)(System.Math.PI / 180 /* todo */), Aspect, Near, Far);
+    public Matrix4F GetProjectionMatrix(){
+        if(IsOrthographic){
+            float R = OrthoSize * Aspect;
+            float L = -R;
+            float T = OrthoSize;
+            float B = -T;
+            
+            return Matrix4F.CreateOrtho(L, R, B, T, Near, Far);
+        }else{
+            return Matrix4F.CreatePerspective(FOV * (float)(System.Math.PI / 180 /* todo */), Aspect, Near, Far);
+        }
+    }
 }
