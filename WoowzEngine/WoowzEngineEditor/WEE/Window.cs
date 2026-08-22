@@ -3,6 +3,7 @@
 public static class Window{
     public static void Start(){
         MainWindow = WE.Window.CreateWindow();
+        UpdateTitle();
     }
     
     public static void Stop(){
@@ -16,6 +17,10 @@ public static class Window{
 
         MainWindow.Keyboard.OnKey += (Key, Down) => WEE.Interface.ImGUI.KeyboardKey(Key, Down);
         MainWindow.Keyboard.OnChar += Char => WEE.Interface.ImGUI.KeyboardChar(Char);
+    }
+
+    public static void UpdateTitle(){
+        MainWindow.Title = $"WoowzEngineEditor - {(WEE.Interface.ActiveScene != null ? WEE.Interface.__SceneFilePath : "Не открыта сцена")}";
     }
     
     // ----------------------------------------------------------------------

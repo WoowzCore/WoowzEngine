@@ -32,7 +32,7 @@ public static class Cycle{
 
     public static void CycleEngine(){
         try{
-            
+            WEE.Window.UpdateTitle();
         }catch(Exception e){
             throw new ExceptionWEE("Произошла ошибка в ENGINE цикле!", e);
         }

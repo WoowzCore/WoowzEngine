@@ -77,19 +77,15 @@ public static class Render{
     
     // ----------------------------------------------------------------------
     // TODO, TEST RENDER
-
-    public static Scene?  ActiveScene;
     
     public static GLProgram __PROGRAM;
     public static GLMesh    __MESH;
 
     private static int __UNIFORM_VPROJ;
     private static int __UNIFORM_MPROJ;
+    private static int __UNIFORM_COLOR;
     
     public static void __STARTTESTRENDER(){
-        ActiveScene = new Scene();
-        
-        
         __PROGRAM = (GLProgram)WE.Render.API.CreateProgram(
             // language=GLSL
             WE.Render.API.CreateShader(Shader.Type.Vertex, @"
@@ -112,13 +108,16 @@ void main() {
 in vec4 vColor;
 out vec4 FragColor;
 
+uniform vec3 uColor;
+
 void main() {
-    FragColor = vColor;
+    FragColor = vec4(uColor.rgb, vColor.a);
 }")
         );
 
         __UNIFORM_VPROJ = __PROGRAM.GetUniform("uViewProjection");
         __UNIFORM_MPROJ = __PROGRAM.GetUniform("uModelProjection");
+        __UNIFORM_COLOR = __PROGRAM.GetUniform("uColor");
         
         __MESH = (GLMesh)WE.Render.API.CreateMesh(
             new VertexLayout(
@@ -126,39 +125,16 @@ void main() {
                 new VertexAttribute("aColor", 4, VertexAttribute.AttributeType.Byte, true)    
             ),
             [
-                new Vertex(new Vector2F(-0.5f, -0.5f), new Color4B(255, 0, 0, 255)),
-                new Vertex(new Vector2F(0.5f, -0.5f), new Color4B(0, 255, 0, 255)),
-                new Vertex(new Vector2F(0.0f, 0.5f), new Color4B(0, 0, 255, 255))
+                new Vertex(new Vector2F(-0.5f, -0.5f), new Color4B(255, 255, 255, 255)),
+                new Vertex(new Vector2F(0.5f, -0.5f), new Color4B(255, 255, 255, 255)),
+                new Vertex(new Vector2F(0.0f, 0.5f), new Color4B(255, 255, 255, 255))
             ]
         );
-
-        Entity testobj(){
-            Entity Result = new Entity();
-            CMeshRenderer C = Result.AddComponent<CMeshRenderer>();
-            C.Mesh = __MESH;
-            C.Program = __PROGRAM;
-            return Result;
-        }
-        
-        Entity E1 = testobj();
-        ActiveScene.Add(E1);
-        
-        Entity E2 = testobj();
-        E2.Transform.Position = new Vector3F(0, 3, 0);
-        ActiveScene.Add(E2);
-        
-        Entity E3 = testobj();
-        E3.Transform.Position = new Vector3F(0, -3, 0);
-        ActiveScene.Add(E3);
-        
-        Entity E3_1 = testobj();
-        E3_1.Node.SetParent(E3.Node);
-        E3_1.Transform.Position = new Vector3F(3, 0, 0);
     }
 
     public static void __RENDERTESTRENDER(){
         WE.Render.API.DepthTest = true;
         
-        ActiveScene.Render(WEE.Editor.SceneViewCamera, __UNIFORM_VPROJ, __UNIFORM_MPROJ);
+        WEE.Interface.ActiveScene?.Render(WEE.Editor.SceneViewCamera, __UNIFORM_VPROJ, __UNIFORM_MPROJ, __UNIFORM_COLOR);
     }
 }

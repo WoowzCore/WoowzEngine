@@ -1,0 +1,147 @@
+{
+  "Name": "New Scene",
+  "Entities": [
+    {
+      "Name": "New Entity",
+      "Transform": {
+        "Position": {
+          "__Type": "WLO.Math.Vector3F",
+          "X": 0,
+          "Y": 1.4,
+          "Z": 0
+        },
+        "Rotation": {
+          "__Type": "WLO.Math.Vector3F",
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        },
+        "Scale": {
+          "__Type": "WLO.Math.Vector3F",
+          "X": 1,
+          "Y": 1,
+          "Z": 1
+        }
+      },
+      "Components": [
+        {
+          "__Type": "WEO_Component.CMeshRenderer, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "Color": {
+            "__Type": "WLO.Math.Color4B",
+            "Value": 4294908160
+          }
+        }
+      ],
+      "Hierarchy": {
+        "Children": [
+          {
+            "Name": "New Entity",
+            "Transform": {
+              "Position": {
+                "__Type": "WLO.Math.Vector3F",
+                "X": 0,
+                "Y": 1,
+                "Z": 0
+              },
+              "Rotation": {
+                "__Type": "WLO.Math.Vector3F",
+                "X": 0,
+                "Y": 0,
+                "Z": 0
+              },
+              "Scale": {
+                "__Type": "WLO.Math.Vector3F",
+                "X": 1,
+                "Y": -1,
+                "Z": 1
+              }
+            },
+            "Components": [
+              {
+                "__Type": "WEO_Component.CMeshRenderer, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+                "Color": {
+                  "__Type": "WLO.Math.Color4B",
+                  "Value": 4278190335
+                }
+              }
+            ],
+            "Hierarchy": {
+              "Children": []
+            }
+          }
+        ]
+      }
+    },
+    {
+      "Name": "New Entity",
+      "Transform": {
+        "Position": {
+          "__Type": "WLO.Math.Vector3F",
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        },
+        "Rotation": {
+          "__Type": "WLO.Math.Vector3F",
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        },
+        "Scale": {
+          "__Type": "WLO.Math.Vector3F",
+          "X": 1,
+          "Y": 1,
+          "Z": 1
+        }
+      },
+      "Components": [
+        {
+          "__Type": "WEO_Component.CMeshRenderer, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "Color": {
+            "__Type": "WLO.Math.Color4B",
+            "Value": 4294967295
+          }
+        }
+      ],
+      "Hierarchy": {
+        "Children": [
+          {
+            "Name": "New Entity",
+            "Transform": {
+              "Position": {
+                "__Type": "WLO.Math.Vector3F",
+                "X": 0,
+                "Y": 0.4,
+                "Z": 0
+              },
+              "Rotation": {
+                "__Type": "WLO.Math.Vector3F",
+                "X": 0,
+                "Y": 0,
+                "Z": 0
+              },
+              "Scale": {
+                "__Type": "WLO.Math.Vector3F",
+                "X": 1,
+                "Y": 1,
+                "Z": 1
+              }
+            },
+            "Components": [
+              {
+                "__Type": "WEO_Component.CMeshRenderer, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+                "Color": {
+                  "__Type": "WLO.Math.Color4B",
+                  "Value": 4294967295
+                }
+              }
+            ],
+            "Hierarchy": {
+              "Children": []
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
