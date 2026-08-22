@@ -48,7 +48,7 @@ public static class Render{
         
         WE.Render.API.FrameStart();
             
-            WE.Render.API.Clear(new Color4B(200, 200, 200));
+            WE.Render.API.Clear(WEE.Interface.BackgroundColor);
                 
             __RENDERTESTRENDER();
             

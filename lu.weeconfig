@@ -1,0 +1,8 @@
+{
+  "Name": "LithiumUniverse",
+  "GameDLLPath": "",
+  "SceneClearColor": {
+    "__Type": "WLO.Math.Color4B",
+    "Value": 4291348680
+  }
+}

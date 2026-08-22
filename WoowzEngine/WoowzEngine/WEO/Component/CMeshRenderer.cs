@@ -10,9 +10,11 @@ public class CMeshRenderer : RenderComponent{
     public Program? Program = null!;
 
     [Save] private Color4B Color = new Color4B(255, 255, 255);
+
+    [Save] private bool Active = true;
     
     public override void OnRender(){
-        if(Mesh == null || Program == null){ return; }
+        if(Mesh == null || Program == null || !Active){ return; }
         
         Program.SetUniformM4F(PRender.TODO_Uniform_ViewProjection, PRender.ViewProjection);
         Program.SetUniformM4F(PRender.TODO_Uniform_ModelProjection, Owner.Transform.GetWorldMatrix());

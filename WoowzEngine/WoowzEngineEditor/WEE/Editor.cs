@@ -1,5 +1,4 @@
-﻿using Silk.NET.Input;
-using WEO;
+﻿using WEO;
 using WLI_Input;
 using WLO.Math;
 
@@ -16,6 +15,8 @@ public static class Editor{
     }
 
     public static void UpdateCamera(){
+        if(WEE.Interface.ActiveScene == null){ return; }
+
         if(WEE.Interface.FocusSceneView){
             UpdateCameraControls();    
         }

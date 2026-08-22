@@ -88,6 +88,74 @@ public static class Interface{
 
     // ----------------------------------------------------------------------
 
+    public static  EditorConfig? Config                = null!;
+    private static string        __ConfigPath          = "";
+    public static  bool          __IsProjectLoaded     = false;
+    private static string        __NewProjectName      = "New Project";
+    private const  string        __ConfigFileExtension = "weeconfig";
+    
+    public static void Update_Launcher(){
+        ImGui.SetNextWindowPos(ImGui.GetMainViewport().GetCenter(), ImGuiCond.Always, new Vector2(0.5f, 0.5f));
+        ImGui.SetNextWindowSize(new Vector2(400, 250));
+
+        if(ImGui.Begin("Загрузчик", ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoCollapse)){
+            ImGui.Text("Добро пожаловать в WoowzEngineEditor");
+            ImGui.Separator();
+            ImGui.Spacing();
+            
+            ImGui.Text("Создать новый проект");
+            ImGui.InputText("Название", ref __NewProjectName, 64);
+            if(ImGui.Button("Создать и выбрать папку", new Vector2(-1, 30))){
+                CreateNewProject();        
+            }
+            
+            ImGui.Spacing();
+            ImGui.Separator();
+            ImGui.Spacing();
+            
+            ImGui.Text("Открыть существующий");
+            if(ImGui.Button("Выбрать файл конфига", new Vector2(-1, 30))){
+                OpenExistingProject();
+            }
+            
+            ImGui.End();
+        }
+    }
+
+    private static void CreateNewProject(){
+        DialogResult? Result = Dialog.FileSave(__ConfigFileExtension);
+        if(Result.IsOk){
+            string __ConfigPath = Result.Path;
+
+            if(!__ConfigPath.EndsWith($".{__ConfigFileExtension}", StringComparison.OrdinalIgnoreCase)){
+                __ConfigPath += $".{__ConfigFileExtension}";
+            }
+
+            Config = new EditorConfig{
+                Name = __NewProjectName
+            };
+            
+            Config.Save(__ConfigPath);
+            
+            OnProjectLoaded();    
+        }
+    }
+
+    private static void OpenExistingProject(){
+        DialogResult? Result = Dialog.FileOpen(__ConfigFileExtension);
+        if(Result.IsOk){
+            __ConfigPath = Result.Path;
+            Config = EditorConfig.Load(__ConfigPath);
+            OnProjectLoaded();
+        }
+    }
+
+    private static void OnProjectLoaded(){
+        __IsProjectLoaded = true;
+    }
+    
+    // ----------------------------------------------------------------------
+
     public static Scene?  ActiveScene;
     
     private static bool __ShowSceneView = true;
@@ -95,6 +163,7 @@ public static class Interface{
     private static bool __ShowHierarchy = true;
     private static bool __ShowAssets    = true;
     private static bool __ShowConsole   = true;
+    private static bool __ShowConfig    = false;
 
     private static bool __ShowImGUIDemo = false;
 
@@ -142,6 +211,7 @@ public static class Interface{
                 ImGui.MenuItem("Иерархия", "", ref __ShowHierarchy);
                 ImGui.MenuItem("Ресурсы", "", ref __ShowAssets);
                 ImGui.MenuItem("Консоль", "", ref __ShowConsole);
+                ImGui.MenuItem("Конфиг", "", ref __ShowConfig);
                 
                 ImGui.Separator();
 
@@ -160,6 +230,7 @@ public static class Interface{
                 ImGui.TextDisabled("|");
                 ImGui.SameLine();
 
+                ImGui.SetNextItemWidth(300);
                 ImGui.InputText("##SceneNameInput", ref ActiveScene.Name, 128);
                 
                 ImGui.SameLine();
@@ -171,7 +242,6 @@ public static class Interface{
             System.Numerics.Vector2 TextSize = ImGui.CalcTextSize(MenuText);
             ImGui.SameLine(ImGui.GetWindowWidth() - TextSize.X - 10);
             ImGui.TextDisabled(MenuText);
-            
             ImGui.EndMainMenuBar();
         }
     }
@@ -183,7 +253,7 @@ public static class Interface{
 
         if(Result.IsOk){
             string Path = Result.Path;
-            if(!Path.EndsWith($".{__SceneFileExtension}")){ Path += $".{__SceneFileExtension}"; }
+            if(!Path.EndsWith($".{__SceneFileExtension}", StringComparison.OrdinalIgnoreCase)){ Path += $".{__SceneFileExtension}"; }
             
             __SaveScene(Path);
         }
@@ -252,41 +322,37 @@ public static class Interface{
     public static Vector2I SceneViewSize{ get; private set; }
 
     public static bool Is2DView = false;
+
+    public static Color4B BackgroundColor = new Color4B(200, 200, 200);
     
     private static void Update_SceneView(){
         if(!__ShowSceneView){ return; }
 
-        ImGui.Begin($"Просмотр сцены###SceneView", ref __ShowSceneView);
+        if(ImGui.Begin("Просмотр сцены###SceneView", ref __ShowSceneView)){
 
             FocusSceneView = ImGui.IsWindowFocused(ImGuiFocusedFlags.RootAndChildWindows);
 
-            ImGui.BeginChild("SceneToolbar", new Vector2(0, 30), ImGuiChildFlags.Borders, ImGuiWindowFlags.NoScrollbar);
-            
-                ImGui.SameLine(5);
-                ImGui.SetCursorPosY(5);
-                
+            if(ImGui.BeginChild("SceneToolbar", new Vector2(0, 30), ImGuiChildFlags.Borders, ImGuiWindowFlags.NoScrollbar)){
+                ImGui.SameLine();
+
                 ImGui.Text($"({SceneViewSize.W}x{SceneViewSize.H}), R-FPS: {WEE.Cycle.Render_DTI.FPS:F1}");
-                
+
                 ImGui.SameLine();
                 ImGui.TextDisabled("|");
                 ImGui.SameLine();
-                
+
                 string ModeText = Is2DView ? "2D" : "3D";
 
                 if(ImGui.Button(ModeText, new Vector2(100, 20))){
                     Is2DView = !Is2DView;
 
-                    if(Is2DView){
-                        WEE.Editor.SceneViewCamera.IsOrthographic = true;
-                    }else{
-                        WEE.Editor.SceneViewCamera.IsOrthographic = false;
-                    }
+                    WEE.Editor.SceneViewCamera.IsOrthographic = Is2DView;
                 }
-                
+
                 ImGui.SameLine();
                 ImGui.TextDisabled("|");
                 ImGui.SameLine();
-                
+
                 ImGui.TextDisabled("Позиция:");
                 ImGui.SameLine();
                 Vector3 CameraPosition = new Vector3(WEE.Editor.SceneViewCamera.Position.X, WEE.Editor.SceneViewCamera.Position.Y, WEE.Editor.SceneViewCamera.Position.Z);
@@ -294,11 +360,11 @@ public static class Interface{
                 if(ImGui.DragFloat3("##CamPos", ref CameraPosition, 0.1f)){
                     WEE.Editor.SceneViewCamera.Position = new Vector3F(CameraPosition.X, CameraPosition.Y, CameraPosition.Z);
                 }
-                
+
                 ImGui.SameLine();
                 ImGui.TextDisabled("|");
                 ImGui.SameLine();
-                
+
                 ImGui.TextDisabled("Поворот:");
                 ImGui.SameLine();
                 Vector3 CameraRotation = new Vector3(WEE.Editor.SceneViewCamera.Rotation.X, WEE.Editor.SceneViewCamera.Rotation.Y, WEE.Editor.SceneViewCamera.Rotation.Z);
@@ -306,7 +372,7 @@ public static class Interface{
                 if(ImGui.DragFloat3("##CamRos", ref CameraRotation, 0.1f)){
                     WEE.Editor.SceneViewCamera.Rotation = new Vector3F(CameraRotation.X, CameraRotation.Y, CameraRotation.Z);
                 }
-                
+
                 ImGui.SameLine();
                 ImGui.TextDisabled("|");
                 ImGui.SameLine();
@@ -314,19 +380,26 @@ public static class Interface{
                 if(ImGui.Button("Сброс")){
                     WEE.Editor.SceneViewCamera.Position = WEE.Editor.SceneViewCamera.Rotation = new Vector3F();
                 }
-                
-            ImGui.EndChild();
-            
+
+                ImGui.SameLine();
+                ImGui.TextDisabled("|");
+                ImGui.SameLine();
+
+                Vector3 BackgroundColor__ = new Vector3(BackgroundColor.R / 255f, BackgroundColor.G / 255f, BackgroundColor.B / 255f);
+                if(ImGui.ColorEdit3("##Background", ref BackgroundColor__, ImGuiColorEditFlags.NoInputs | ImGuiColorEditFlags.NoLabel)){
+                    BackgroundColor = new Color4B((byte)(BackgroundColor__.X * 255), (byte)(BackgroundColor__.Y * 255), (byte)(BackgroundColor__.Z * 255));
+                }
+            } ImGui.EndChild();
+
             System.Numerics.Vector2 __SceneViewport = ImGui.GetContentRegionAvail();
             __SceneViewport.X = System.Math.Max(1, __SceneViewport.X);
             __SceneViewport.Y = System.Math.Max(1, __SceneViewport.Y);
             SceneViewSize = new Vector2I((int)__SceneViewport.X, (int)__SceneViewport.Y);
-            
+
             if(ActiveScene != null){
                 ImGui.Image((IntPtr)WEE.Render.SceneFramebuffer.ResultTexture!.ID, __SceneViewport, new System.Numerics.Vector2(0, 1), new System.Numerics.Vector2(1, 0));
             }
-            
-        ImGui.End();
+        } ImGui.End();
     }
 
     // ----------------------------------------------------------------------
@@ -338,8 +411,7 @@ public static class Interface{
             try{
                 if(SelectedEntity == null){
                     ImGui.TextDisabled("Выберите объект в иерархии...");
-                }
-                else{
+                }else{
                     string Name = SelectedEntity.Name;
                     if(ImGui.InputText("Название", ref Name, 100)){
                         SelectedEntity.Name = Name;
@@ -373,9 +445,11 @@ public static class Interface{
                     ImGui.Separator();
 
                     foreach(Component Component in SelectedEntity.GetAllComponents().ToList()){
+                        ImGui.PushID(Component.GetHashCode());
+                        
                         bool ComponentOpen = ImGui.CollapsingHeader(Component.GetType().Name, ImGuiTreeNodeFlags.DefaultOpen);
 
-                        if(ImGui.BeginPopupContextItem($"{Component.GetHashCode()}")){
+                        if(ImGui.BeginPopupContextItem("ComponentSettings")){
                             if(ImGui.MenuItem("Удалить компонент")){
                                 SelectedEntity.RemoveComponent(Component);
                             }
@@ -386,6 +460,8 @@ public static class Interface{
                         if(ComponentOpen){
                             DrawComponentFields(Component);
                         }
+                        
+                        ImGui.PopID();
                     }
 
                     ImGui.Separator();
@@ -400,60 +476,63 @@ public static class Interface{
                             __CMESHREDNDERER.Mesh = WEE.Render.__MESH;
                             __CMESHREDNDERER.Program = WEE.Render.__PROGRAM;
                         }
-
                         ImGui.EndPopup();
                     }
                 }
-            }finally{
-                ImGui.End();
+            }catch(Exception e){
+                WL.Logger.Warn("TODO INSPECTOR " + e.Message);
             }
-        }
+        } ImGui.End();
     }
 
     private static void DrawComponentFields(WEI.Component Component){
-        var fields = Component.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+        FieldInfo[] Fields = Component.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 
-        foreach(var field in fields){
-            if(field.GetCustomAttribute<WEI.Save>() == null) continue;
+        foreach(FieldInfo Field in Fields){
+            if(Field.GetCustomAttribute<WEI.Save>() == null) continue;
 
-            string label = field.Name;
-            object value = field.GetValue(Component);
+            ImGui.PushID(Field.Name);
+            
+            string label = Field.Name;
+            object value = Field.GetValue(Component);
 
-            if(field.FieldType == typeof(float)){
+            if(Field.FieldType == typeof(float)){
                 float val = (float)value;
-                if(ImGui.DragFloat(label, ref val, 0.1f)) field.SetValue(Component, val);
+                if(ImGui.DragFloat(label, ref val, 0.1f)) Field.SetValue(Component, val);
             }
             
-            else if(field.FieldType == typeof(int)){
+            else if(Field.FieldType == typeof(int)){
                 int val = (int)value;
-                if(ImGui.DragInt(label, ref val)) field.SetValue(Component, val);
+                if(ImGui.DragInt(label, ref val)) Field.SetValue(Component, val);
             }
             
-            else if(field.FieldType == typeof(bool)){
+            else if(Field.FieldType == typeof(bool)){
                 bool val = (bool)value;
-                if(ImGui.Checkbox(label, ref val)) field.SetValue(Component, val);
+                if(ImGui.Checkbox(label, ref val)) Field.SetValue(Component, val);
             }
             
-            else if(field.FieldType == typeof(string)){
+            else if(Field.FieldType == typeof(string)){
                 string val = (string)value ?? "";
-                if(ImGui.InputText(label, ref val, 200)) field.SetValue(Component, val);
+                if(ImGui.InputText(label, ref val, 200)) Field.SetValue(Component, val);
             }
             
-            else if(field.FieldType == typeof(Vector3F)){
+            else if(Field.FieldType == typeof(Vector3F)){
                 Vector3F v = (Vector3F)value;
                 System.Numerics.Vector3 sysV = new(v.X, v.Y, v.Z);
                 if(ImGui.DragFloat3(label, ref sysV, 0.1f)){
-                    field.SetValue(Component, new Vector3F(sysV.X, sysV.Y, sysV.Z));
+                    Field.SetValue(Component, new Vector3F(sysV.X, sysV.Y, sysV.Z));
                 }
             }
             
-            else if(field.FieldType == typeof(Color4B)){
+            else if(Field.FieldType == typeof(Color4B)){
                 Color4B c = (Color4B)value;
                 System.Numerics.Vector4 sysC = new(c.R / 255f, c.G / 255f, c.B / 255f, c.A / 255f);
                 if(ImGui.ColorEdit4(label, ref sysC)){
-                    field.SetValue(Component, new Color4B((byte)(sysC.X * 255), (byte)(sysC.Y * 255), (byte)(sysC.Z * 255), (byte)(sysC.W * 255)));
+                    Field.SetValue(Component, new Color4B((byte)(sysC.X * 255), (byte)(sysC.Y * 255), (byte)(sysC.Z * 255), (byte)(sysC.W * 255)));
                 }
             }
+            
+            ImGui.PopID();
         }
     }
     
@@ -466,51 +545,49 @@ public static class Interface{
     private static void Update_Hierarchy(){
         if(!__ShowHierarchy){ return; }
 
-        ImGui.Begin("Иерархия###Hierarchy", ref __ShowHierarchy);
+        if(ImGui.Begin("Иерархия###Hierarchy", ref __ShowHierarchy)){
+            try{
+                if(ActiveScene == null){
+                    ImGui.Text("Нет активной сцены");
+                }else{
+                    List<Entity> AllEntities = ActiveScene.AllEntity.ToList();
+                    ImGui.TextDisabled($"Всего: {AllEntities.Count}, Корней: {ActiveScene.Roots.Count()}");
 
-            if(ActiveScene == null){
-                ImGui.Text("Нет активной сцены");
-                ImGui.End();
-                return;
-            }
-
-            List<Entity> AllEntities = ActiveScene.AllEntity.ToList();
-            ImGui.TextDisabled($"Всего: {AllEntities.Count}, Корней: {ActiveScene.Roots.Count()}");
-
-            ImGui.BeginChild("HierarchyList");
-            
-                foreach(Entity Entity in ActiveScene.Roots.ToList()){
-                    if(Entity.Node.Parent == null){
-                        DrawEntityNode(Entity);
-                    }
-                }
-
-                if(ImGui.IsMouseDown(0) && ImGui.IsWindowHovered()){
-                    SelectedEntity = null;
-                }
-
-                if(ImGui.BeginPopupContextWindow("HierarchyContext", ImGuiPopupFlags.MouseButtonRight | ImGuiPopupFlags.NoOpenOverItems)){
-                    if(ImGui.MenuItem("Создать Entity")){
-                        Entity NewEntity = new Entity();
-                        ActiveScene.Add(NewEntity);
-                        SelectedEntity = NewEntity;
-                    }
-                    ImGui.EndPopup();
-                }
-
-                if(ImGui.BeginDragDropTarget()){
-                    unsafe{
-                        ImGuiPayloadPtr Payload = ImGui.AcceptDragDropPayload("ENTITY_HIERARCHY");
-                        if(Payload.NativePtr != null && __DraggedEntity != null){
-                            __DraggedEntity.Node.SetParent(null);
+                    if(ImGui.BeginChild("HierarchyList")){
+                        foreach(Entity Entity in ActiveScene.Roots.ToList()){
+                            if(Entity.Node.Parent == null){
+                                DrawEntityNode(Entity);
+                            }
                         }
-                    }
-                    ImGui.EndDragDropTarget();
+
+                        if(ImGui.IsMouseDown(0) && ImGui.IsWindowHovered()){
+                            SelectedEntity = null;
+                        }
+
+                        if(ImGui.BeginPopupContextWindow("HierarchyContext", ImGuiPopupFlags.MouseButtonRight | ImGuiPopupFlags.NoOpenOverItems)){
+                            if(ImGui.MenuItem("Создать Entity")){
+                                Entity NewEntity = new Entity();
+                                ActiveScene.Add(NewEntity);
+                                SelectedEntity = NewEntity;
+                            }
+                            ImGui.EndPopup();
+                        }
+
+                        if(ImGui.BeginDragDropTarget()){
+                            unsafe{
+                                ImGuiPayloadPtr Payload = ImGui.AcceptDragDropPayload("ENTITY_HIERARCHY");
+                                if(Payload.NativePtr != null && __DraggedEntity != null){
+                                    __DraggedEntity.Node.SetParent(null);
+                                }
+                            }
+                            ImGui.EndDragDropTarget();
+                        }
+                    } ImGui.EndChild();
                 }
-                
-            ImGui.EndChild();
-        
-        ImGui.End();
+            }catch(Exception e){
+                WL.Logger.Warn("TODO HIERARCHY " + e.Message);
+            }
+        } ImGui.End();
     }
 
     private static void DrawEntityNode(Entity Entity){
@@ -574,9 +651,9 @@ public static class Interface{
     private static void Update_Assets(){
         if(!__ShowAssets){ return; }
 
-        ImGui.Begin("Ресурсы###Assets", ref __ShowAssets);
+        if(ImGui.Begin("Ресурсы###Assets", ref __ShowAssets)){
             ImGui.Text("FILES");
-        ImGui.End();
+        } ImGui.End();
     }
 
     // ----------------------------------------------------------------------
@@ -601,16 +678,16 @@ public static class Interface{
     private static void Update_Console(){
         if(!__ShowConsole){ return; }
 
-        ImGui.Begin("Консоль###Console", ref __ShowConsole);
+        if(ImGui.Begin("Консоль###Console", ref __ShowConsole)){
 
             if(ImGui.Button("Очистить")){ __ConsoleEntries.Clear(); }
             ImGui.SameLine();
             ImGui.Text($"Кол-во: {__ConsoleEntries.Count}");
-            
+
             ImGui.Separator();
 
             float FooterHeightToReverse = ImGui.GetStyle().ItemSpacing.Y + ImGui.GetFrameHeightWithSpacing();
-            ImGui.BeginChild("ScrollingRegion", new System.Numerics.Vector2(0, -FooterHeightToReverse), ImGuiChildFlags.Borders, ImGuiWindowFlags.HorizontalScrollbar);
+            if(ImGui.BeginChild("ScrollingRegion", new System.Numerics.Vector2(0, -FooterHeightToReverse), ImGuiChildFlags.Borders, ImGuiWindowFlags.HorizontalScrollbar)){
 
                 foreach(__LogEntry Entry in __ConsoleEntries){
                     ImGui.TextColored(new System.Numerics.Vector4(Entry.Color.R / 255f, Entry.Color.G / 255f, Entry.Color.B / 255f, Entry.Color.A / 255f), Entry.Message);
@@ -620,60 +697,99 @@ public static class Interface{
                     ImGui.SetScrollHereY(1);
                     __ScrollToBottom = false;
                 }
-            
-            ImGui.EndChild();
-            
-        ImGui.End();
+            } ImGui.EndChild();
+        } ImGui.End();
     }
     
     // ----------------------------------------------------------------------
 
+    private static void Update_Config(){
+        if(!__ShowConfig || Config == null){ return; }
+        
+        ImGui.SetNextWindowSize(new Vector2(450, 250), ImGuiCond.FirstUseEver);
+        if(ImGui.Begin("Конфиг###Config", ref __ShowConfig)){
+            ImGui.TextDisabled($"Путь к конфигу: {__ConfigPath}");
+            ImGui.Separator();
+            ImGui.Spacing();
+
+            ImGui.InputText("Название проекта", ref Config.Name, 64);
+
+            ImGui.Text("Путь к Game DLL");
+            float __ButtonW = 35;
+            float __Spacing = ImGui.GetStyle().ItemSpacing.X;
+            ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X - __ButtonW - __Spacing);
+            ImGui.InputText("##GameDLLPath", ref Config.GameDLLPath, 256);
+            ImGui.SameLine();
+            if(ImGui.Button("...###SelectGameDLL")){
+                DialogResult? Result = Dialog.FileOpen("dll");
+                if(Result.IsOk){ Config.GameDLLPath = Result.Path; }
+            }
+
+            ImGui.Spacing();
+            ImGui.Separator();
+            ImGui.Spacing();
+            
+            if(ImGui.Button("Сохранить", new Vector2(-1, 30))){
+                Config.Save(__ConfigPath);
+                WL.Logger.Info("Конфиг сохранён!");
+            }
+        } ImGui.End();
+    }
+    
+    // ----------------------------------------------------------------------
+    
     private static bool __FirstFrame = true;
     
     public static void Update(){
         ImGUI.FrameStart(WEE.Cycle.Render_DT, WEE.Window.MainWindow.Size);
-        
-            Update_Menu();
 
-            uint DockSpaceID = ImGui.GetID("MainDockSpace");
-            ImGui.DockSpaceOverViewport(DockSpaceID, ImGui.GetMainViewport(), ImGuiDockNodeFlags.PassthruCentralNode);
+            if(!__IsProjectLoaded){
+                Update_Launcher();   
+            }else{
+                Update_Menu();
 
-            if(__FirstFrame){
-                __FirstFrame = false;
+                uint DockSpaceID = ImGui.GetID("MainDockSpace");
+                ImGui.DockSpaceOverViewport(DockSpaceID, ImGui.GetMainViewport(), ImGuiDockNodeFlags.PassthruCentralNode);
 
-                ImGuiDockBuilder.igDockBuilderRemoveNode(DockSpaceID); 
-                ImGuiDockBuilder.igDockBuilderAddNode(DockSpaceID, ImGuiDockNodeFlags.None);
-                ImGuiDockBuilder.igDockBuilderSetNodeSize(DockSpaceID, ImGui.GetMainViewport().Size);
+                if(__FirstFrame){
+                    __FirstFrame = false;
 
-                ImGuiDockBuilder.igDockBuilderSplitNode(DockSpaceID, ImGuiDir.Right, 0.15f, out uint dockid_right, out uint dockid_left);
+                    ImGuiDockBuilder.igDockBuilderRemoveNode(DockSpaceID); 
+                    ImGuiDockBuilder.igDockBuilderAddNode(DockSpaceID, ImGuiDockNodeFlags.None);
+                    ImGuiDockBuilder.igDockBuilderSetNodeSize(DockSpaceID, ImGui.GetMainViewport().Size);
 
-                ImGuiDockBuilder.igDockBuilderSplitNode(dockid_left, ImGuiDir.Up, 0.75f, out uint dockid_up, out uint dockid_down);
+                    ImGuiDockBuilder.igDockBuilderSplitNode(DockSpaceID, ImGuiDir.Right, 0.15f, out uint dockid_right, out uint dockid_left);
 
-                ImGuiDockBuilder.igDockBuilderSplitNode(dockid_down, ImGuiDir.Right, 0.15f, out uint dockid_down_right, out uint dockid_down_left);
+                    ImGuiDockBuilder.igDockBuilderSplitNode(dockid_left, ImGuiDir.Up, 0.75f, out uint dockid_up, out uint dockid_down);
 
-                ImGuiDockBuilder.igDockBuilderDockWindow("###SceneView", dockid_up);
+                    ImGuiDockBuilder.igDockBuilderSplitNode(dockid_down, ImGuiDir.Right, 0.15f, out uint dockid_down_right, out uint dockid_down_left);
+
+                    ImGuiDockBuilder.igDockBuilderDockWindow("###SceneView", dockid_up);
+                    
+                    ImGuiDockBuilder.igDockBuilderDockWindow("###Inspector", dockid_right);
+                    
+                    ImGuiDockBuilder.igDockBuilderDockWindow("###Hierarchy", dockid_down_right);
+                    
+                    ImGuiDockBuilder.igDockBuilderDockWindow("###Assets", dockid_down_left);
+                    ImGuiDockBuilder.igDockBuilderDockWindow("###Console", dockid_down_left);
+                    
+                    ImGuiDockBuilder.igDockBuilderFinish(DockSpaceID);
+                }
                 
-                ImGuiDockBuilder.igDockBuilderDockWindow("###Inspector", dockid_right);
+                Update_SceneView();
                 
-                ImGuiDockBuilder.igDockBuilderDockWindow("###Hierarchy", dockid_down_right);
+                Update_Inspector();
+
+                Update_Hierarchy();
                 
-                ImGuiDockBuilder.igDockBuilderDockWindow("###Assets", dockid_down_left);
-                ImGuiDockBuilder.igDockBuilderDockWindow("###Console", dockid_down_left);
+                Update_Assets();
                 
-                ImGuiDockBuilder.igDockBuilderFinish(DockSpaceID);
+                Update_Console();
+                
+                Update_Config();
+
+                if(__ShowImGUIDemo){ ImGui.ShowDemoWindow(ref __ShowImGUIDemo); }
             }
-            
-            Update_SceneView();
-            
-            Update_Inspector();
-
-            Update_Hierarchy();
-            
-            Update_Assets();
-            
-            Update_Console();
-
-            if(__ShowImGUIDemo){ ImGui.ShowDemoWindow(ref __ShowImGUIDemo); }
         
         ImGUI.FrameEnd();
     }

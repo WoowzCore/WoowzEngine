@@ -20,7 +20,21 @@ public static class Window{
     }
 
     public static void UpdateTitle(){
-        MainWindow.Title = $"WoowzEngineEditor - {(WEE.Interface.ActiveScene != null ? WEE.Interface.__SceneFilePath : "Не открыта сцена")}";
+        string Title = "WoowzEngineEditor";
+
+        if(!WEE.Interface.__IsProjectLoaded){
+            Title += " - Добро пожаловать!";
+        }else{
+            Title += $" | {WEE.Interface.Config!.Name}";
+            
+            if(WEE.Interface.ActiveScene == null){
+                Title += " - Не выбрана сцена";
+            }else{
+                Title += $" - {WEE.Interface.__SceneFilePath}";
+            }
+        }
+        
+        MainWindow.Title = Title;
     }
     
     // ----------------------------------------------------------------------
