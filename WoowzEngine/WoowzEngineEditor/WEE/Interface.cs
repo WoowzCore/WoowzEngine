@@ -76,6 +76,8 @@ public static class Interface{
 
         Style.TabBorderSize = 1;
         
+        WEE.Prefs.Load();
+        
         Start_Console();
     }
     
@@ -97,9 +99,18 @@ public static class Interface{
     
     public static void Update_Launcher(){
         ImGui.SetNextWindowPos(ImGui.GetMainViewport().GetCenter(), ImGuiCond.Always, new Vector2(0.5f, 0.5f));
-        ImGui.SetNextWindowSize(new Vector2(400, 250));
 
-        if(ImGui.Begin("Загрузчик", ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoCollapse)){
+        if(ImGui.Begin("Загрузчик", ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoCollapse)){
+            if(!string.IsNullOrEmpty(Prefs.LastConfigPath) && File.Exists(Prefs.LastConfigPath)){
+                ImGui.TextColored(new Vector4(0.4f, 1, 0.4f, 1), "Последний проект:");
+                if(ImGui.Button($"{Path.GetFileName(Prefs.LastConfigPath)}###RecentProject", new Vector2(-1, 40))){
+                    __ConfigPath = Prefs.LastConfigPath;
+                    Config = EditorConfig.Load(__ConfigPath);
+                    OnProjectLoaded();
+                }
+                ImGui.Separator();
+            }
+            
             ImGui.Text("Добро пожаловать в WoowzEngineEditor");
             ImGui.Separator();
             ImGui.Spacing();
@@ -153,6 +164,8 @@ public static class Interface{
 
     private static void OnProjectLoaded(){
         __IsProjectLoaded = true;
+        Prefs.LastConfigPath = __ConfigPath;
+        Prefs.Save();
     }
     
     // ----------------------------------------------------------------------
@@ -203,10 +216,20 @@ public static class Interface{
                 
                 if(ImGui.MenuItem("Закрыть сцену", "", false, ActiveScene != null)){ CloseScene(); }
                 if(ImGui.MenuItem("Выйти", "Alt+F4")){ WEE.Window.MainWindow.Close(); }
+                
+                ImGui.Separator();
+
+                foreach(string ScenePath in Prefs.RecentScenes.ToList()){
+                    if(ImGui.MenuItem(Path.GetFileName(ScenePath))){
+                        __LoadScene(ScenePath);
+                    }
+                    if(ImGui.IsItemHovered()){ ImGui.SetTooltip(ScenePath); }
+                }
+                
                 ImGui.EndMenu();
             }
 
-            if(ImGui.BeginMenu("Редактировать")){
+            if(ImGui.BeginMenu("Редактировать", false)){
                 if(ImGui.MenuItem("Отменить", "Ctrl+Z")){  }
                 if(ImGui.MenuItem("Вернуть", "Ctrl+Y")){  }
                 ImGui.EndMenu();
@@ -239,6 +262,7 @@ public static class Interface{
 
                 ImGui.SetNextItemWidth(300);
                 ImGui.InputText("##SceneNameInput", ref ActiveScene.Name, 128);
+                if(ImGui.IsItemHovered()){ ImGui.SetTooltip("Название сцены"); }
                 
                 ImGui.SameLine();
                 ImGui.TextDisabled("|");
@@ -249,6 +273,7 @@ public static class Interface{
             System.Numerics.Vector2 TextSize = ImGui.CalcTextSize(MenuText);
             ImGui.SameLine(ImGui.GetWindowWidth() - TextSize.X - 10);
             ImGui.TextDisabled(MenuText);
+            if(ImGui.IsItemHovered()){ ImGui.SetTooltip("FPS стороны редактора"); }
             ImGui.EndMainMenuBar();
         }
     }
@@ -316,6 +341,8 @@ public static class Interface{
             
             __SceneFilePath = Path;
             SelectedEntity = null;
+            
+            Prefs.AddRecentScene(Path);
             WL.Logger.Info($"Сцена загружена: {Path}");
         }catch(Exception e){
             WL.Logger.Error($"Ошибка загрузки: {e.Message + "\n" + e.StackTrace}");
@@ -355,6 +382,7 @@ public static class Interface{
 
                     WEE.Editor.SceneViewCamera.IsOrthographic = Is2DView;
                 }
+                if(ImGui.IsItemHovered()){ ImGui.SetTooltip("Переключить перспективу камеры"); }
 
                 ImGui.SameLine();
                 ImGui.TextDisabled("|");
@@ -387,6 +415,7 @@ public static class Interface{
                 if(ImGui.Button("Сброс")){
                     WEE.Editor.SceneViewCamera.Position = WEE.Editor.SceneViewCamera.Rotation = new Vector3F();
                 }
+                if(ImGui.IsItemHovered()){ ImGui.SetTooltip("Сбросить позицию и поворот камеры на дефолтные значения"); }
 
                 ImGui.SameLine();
                 ImGui.TextDisabled("|");
@@ -396,6 +425,7 @@ public static class Interface{
                 if(ImGui.ColorEdit3("##Background", ref BackgroundColor__, ImGuiColorEditFlags.NoInputs | ImGuiColorEditFlags.NoLabel)){
                     BackgroundColor = new Color4B((byte)(BackgroundColor__.X * 255), (byte)(BackgroundColor__.Y * 255), (byte)(BackgroundColor__.Z * 255));
                 }
+                if(ImGui.IsItemHovered()){ ImGui.SetTooltip("Цвет заднего фона"); }
             } ImGui.EndChild();
 
             System.Numerics.Vector2 __SceneViewport = ImGui.GetContentRegionAvail();
@@ -434,17 +464,17 @@ public static class Interface{
                             SelectedEntity.SetTransformDirty();
                         }
 
-                        System.Numerics.Vector3 Scale = new Vector3(SelectedEntity.Transform.Scale.X, SelectedEntity.Transform.Scale.Y, SelectedEntity.Transform.Scale.Z);
-
-                        if(ImGui.DragFloat3("Размер", ref Scale, 0.1f)){
-                            SelectedEntity.Transform.Scale = new Vector3F(Scale.X, Scale.Y, Scale.Z);
-                            SelectedEntity.SetTransformDirty();
-                        }
-
                         System.Numerics.Vector3 Rotation = new Vector3(SelectedEntity.Transform.Rotation.X, SelectedEntity.Transform.Rotation.Y, SelectedEntity.Transform.Rotation.Z);
 
                         if(ImGui.DragFloat3("Поворот", ref Rotation, 0.1f)){
                             SelectedEntity.Transform.Rotation = new Vector3F(Rotation.X, Rotation.Y, Rotation.Z);
+                            SelectedEntity.SetTransformDirty();
+                        }
+                        
+                        System.Numerics.Vector3 Scale = new Vector3(SelectedEntity.Transform.Scale.X, SelectedEntity.Transform.Scale.Y, SelectedEntity.Transform.Scale.Z);
+
+                        if(ImGui.DragFloat3("Размер", ref Scale, 0.1f)){
+                            SelectedEntity.Transform.Scale = new Vector3F(Scale.X, Scale.Y, Scale.Z);
                             SelectedEntity.SetTransformDirty();
                         }
                     }

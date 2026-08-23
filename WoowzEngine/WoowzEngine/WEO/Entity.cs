@@ -9,6 +9,8 @@ public class Entity : WLI.Serializable, WLI.Hierarchical<Entity>{
 
     public HierarchyNode<Entity> Node{ get; }
     public readonly Transform    Transform;
+    
+    public Scene? Scene{ get; internal set; }
 
     private readonly List<Component> __Components = [];
     
@@ -60,6 +62,8 @@ public class Entity : WLI.Serializable, WLI.Hierarchical<Entity>{
     }
 
     public void Destroy(){
+        
+        
         foreach(HierarchyNode<Entity> Child in Node.Children.ToList()){
             Child.Owner.Destroy();
         }

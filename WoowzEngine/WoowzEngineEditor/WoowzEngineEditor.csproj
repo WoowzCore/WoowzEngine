@@ -9,6 +9,16 @@
         <Platforms>AnyCPU</Platforms>
         
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        
+        <!-- для того что-бы был 1 файл -->
+        <PublishSingleFile>true</PublishSingleFile>
+        <SelfContained>true</SelfContained>
+        <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+
+        <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+        <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
+        
+        <EnableCompressionInSingleFile>false</EnableCompressionInSingleFile>
     </PropertyGroup>
 
     <ItemGroup>
