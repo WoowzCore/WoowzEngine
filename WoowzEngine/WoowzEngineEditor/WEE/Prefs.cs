@@ -7,16 +7,14 @@ public static class Prefs{
 
     private static string PrefsPath => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ".weeprefs");
 
-    public static Dictionary<string, object> Serialize() => new Dictionary<string, object>(){
+    public static Dictionary<string, object?> __Pack() => new Dictionary<string, object?>{
         ["LastConfigPath"] = LastConfigPath,
-        ["RecentScenes"] = RecentScenes.Cast<object>().ToList()
+        ["RecentScenes"  ] = RecentScenes
     };
 
-    public static void Deserialize(Dictionary<string, object> Data){
-        if(Data.TryGetValue("LastConfigPath", out object? V_LastConfigPath__)){ LastConfigPath = V_LastConfigPath__.ToString()!; }
-        if(Data.TryGetValue("RecentScenes", out object? V_RecentScenes__) && V_RecentScenes__ is List<object> V_RecentScenes) {
-            RecentScenes = V_RecentScenes.Select(x => x.ToString()!).ToList();
-        }
+    public static void __Unpack(Dictionary<string, object?> Data){
+        LastConfigPath = WL.Packer.Get(Data, "LastConfigPath", LastConfigPath)!;
+        RecentScenes   = WL.Packer.Get<List<string>>(Data, "RecentScenes", [])!;
     }
 
     public static void AddRecentScene(string Path){
@@ -29,7 +27,7 @@ public static class Prefs{
 
     public static void Save(){
         try{
-            File.WriteAllText(PrefsPath, WL.Serializer.ToJson(Serialize()));   
+            File.WriteAllText(PrefsPath, WL.String.ToJSON(__Pack()));
         }catch(Exception e){
             WL.Logger.Warn("ERROR TODO... " + e.Message);
         }
@@ -38,7 +36,7 @@ public static class Prefs{
     public static void Load(){
         if(!File.Exists(PrefsPath)){ return; }
         try{
-            Deserialize(WL.Serializer.FromJson(File.ReadAllText(PrefsPath)));
+            __Unpack((Dictionary<string, object?>)WL.String.FromJSON(File.ReadAllText(PrefsPath))!);
         }catch(Exception e){
             WL.Logger.Warn("ERROR TODO 2... " + e.Message);
         }

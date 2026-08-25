@@ -18,39 +18,45 @@ public static class I_Hierarchy{
                     List<Entity> AllEntities = WEE.Interface.CurrentScene.AllEntity.ToList();
                     ImGui.TextDisabled($"Всего: {AllEntities.Count}, Корней: {WEE.Interface.CurrentScene.Roots.Count()}");
 
-                    if(ImGui.BeginChild("HierarchyList")){
-                        foreach(Entity Entity in WEE.Interface.CurrentScene.Roots.ToList()){
-                            if(Entity.Node.Parent == null){
-                                DrawEntityNode(Entity);
-                            }
-                        }
-
-                        if(ImGui.IsMouseDown(0) && ImGui.IsWindowHovered()){
-                            WEE.Interface.CurrentEntity = null;
-                        }
-
-                        if(ImGui.BeginPopupContextWindow("HierarchyContext", ImGuiPopupFlags.MouseButtonRight | ImGuiPopupFlags.NoOpenOverItems)){
-                            if(ImGui.MenuItem("Создать Entity")){
-                                Entity NewEntity = new Entity();
-                                WEE.Interface.CurrentScene.Add(NewEntity);
-                                WEE.Interface.CurrentEntity = NewEntity;
-                            }
-                            ImGui.EndPopup();
-                        }
-
-                        if(ImGui.BeginDragDropTarget()){
-                            unsafe{
-                                ImGuiPayloadPtr Payload = ImGui.AcceptDragDropPayload("ENTITY_HIERARCHY");
-                                if(Payload.NativePtr != null && __DraggedEntity != null){
-                                    __DraggedEntity.Node.SetParent(null);
+                    try{
+                        if(ImGui.BeginChild("HierarchyList")){
+                            foreach(Entity Entity in WEE.Interface.CurrentScene.Roots.ToList()){
+                                if(Entity.Node.Parent == null){
+                                    DrawEntityNode(Entity);
                                 }
                             }
-                            ImGui.EndDragDropTarget();
+
+                            if(ImGui.IsMouseDown(0) && ImGui.IsWindowHovered()){
+                                WEE.Interface.CurrentEntity = null;
+                            }
+
+                            if(ImGui.BeginPopupContextWindow("HierarchyContext", ImGuiPopupFlags.MouseButtonRight | ImGuiPopupFlags.NoOpenOverItems)){
+                                if(ImGui.MenuItem("Создать Entity")){
+                                    Entity NewEntity = new Entity();
+                                    WEE.Interface.CurrentScene.Add(NewEntity);
+                                    WEE.Interface.CurrentEntity = NewEntity;
+                                }
+
+                                ImGui.EndPopup();
+                            }
+
+                            if(ImGui.BeginDragDropTarget()){
+                                unsafe{
+                                    ImGuiPayloadPtr Payload = ImGui.AcceptDragDropPayload("ENTITY_HIERARCHY");
+                                    if(Payload.NativePtr != null && __DraggedEntity != null){
+                                        __DraggedEntity.Node.SetParent(null);
+                                    }
+                                }
+
+                                ImGui.EndDragDropTarget();
+                            }
                         }
-                    } ImGui.EndChild();
+                    }finally{
+                        ImGui.EndChild();
+                    }
                 }
             }catch(Exception e){
-                WL.Logger.Warn("TODO HIERARCHY " + e.Message);
+                WL.Logger.Warn("TODO HIERARCHY " + e.Message + "\n" + e.StackTrace);
             }
         } ImGui.End();
     }

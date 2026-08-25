@@ -28,21 +28,21 @@ public static class I_Inspector{
                     if(ImGui.CollapsingHeader("Transform", ImGuiTreeNodeFlags.DefaultOpen)){
                         Vector3 Position = new Vector3(WEE.Interface.CurrentEntity.Transform.Position.X, WEE.Interface.CurrentEntity.Transform.Position.Y, WEE.Interface.CurrentEntity.Transform.Position.Z);
 
-                        if(ImGui.DragFloat3("Позиция", ref Position, 0.1f)){
+                        if(ImGui.DragFloat3("Позиция", ref Position, 0.1f, 0, 0, "%g")){
                             WEE.Interface.CurrentEntity.Transform.Position = new Vector3F(Position.X, Position.Y, Position.Z);
                             WEE.Interface.CurrentEntity.SetTransformDirty();
                         }
 
                         Vector3 Rotation = new Vector3(WEE.Interface.CurrentEntity.Transform.Rotation.X, WEE.Interface.CurrentEntity.Transform.Rotation.Y, WEE.Interface.CurrentEntity.Transform.Rotation.Z);
 
-                        if(ImGui.DragFloat3("Поворот", ref Rotation, 0.1f)){
+                        if(ImGui.DragFloat3("Поворот", ref Rotation, 0.1f, 0, 0, "%g")){
                             WEE.Interface.CurrentEntity.Transform.Rotation = new Vector3F(Rotation.X, Rotation.Y, Rotation.Z);
                             WEE.Interface.CurrentEntity.SetTransformDirty();
                         }
                         
                         Vector3 Scale = new Vector3(WEE.Interface.CurrentEntity.Transform.Scale.X, WEE.Interface.CurrentEntity.Transform.Scale.Y, WEE.Interface.CurrentEntity.Transform.Scale.Z);
 
-                        if(ImGui.DragFloat3("Размер", ref Scale, 0.1f)){
+                        if(ImGui.DragFloat3("Размер", ref Scale, 0.1f, 0, 0, "%g")){
                             WEE.Interface.CurrentEntity.Transform.Scale = new Vector3F(Scale.X, Scale.Y, Scale.Z);
                             WEE.Interface.CurrentEntity.SetTransformDirty();
                         }

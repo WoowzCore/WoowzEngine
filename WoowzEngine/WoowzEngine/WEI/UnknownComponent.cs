@@ -7,23 +7,23 @@ public class UnknownComponent : WEI.Component{
     [WEEMultilineString(500)]
     [WEESave] public string RawJSONData = "";
 
-    public override Dictionary<string, object> Serialize(){
+    public override Dictionary<string, object?> __Pack(){
         try{
-            Dictionary<string, object> Data = WL.Serializer.FromJson(RawJSONData);
-            Data[WL.Serializer.__Type] = OriginalType;
+            Dictionary<string, object?> Data = (Dictionary<string, object?>)WL.String.FromJSON(RawJSONData)!;
+            Data[WL.Packer.PackType] = OriginalType;
             return Data;
         }catch(Exception e){
-            return new Dictionary<string, object>(){
-                [WL.Serializer.__Type] = OriginalType,
-                ["__Error"] = e.Message,
-                ["__Raw"] = RawJSONData
+            return new Dictionary<string, object?>{
+                [WL.Packer.PackType] = OriginalType,
+                ["JSONError"] = e.Message,
+                ["JSONData"] = RawJSONData
             };
         }
     }
     
-    public override void Deserialize(Dictionary<string, object> Data){
-        if(Data.TryGetValue(WL.Serializer.__Type, out object? V_Type)){ OriginalType = V_Type.ToString()!; }
+    public override void __Unpack(Dictionary<string, object?> Data){
+        OriginalType = WL.Packer.Get(Data, WL.Packer.PackType, "")!;
         
-        RawJSONData = WL.Serializer.ToJson(Data);
+        RawJSONData = WL.String.ToJSON(Data);
     }
 }

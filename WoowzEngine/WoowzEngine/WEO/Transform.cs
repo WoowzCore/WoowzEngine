@@ -2,7 +2,7 @@
 
 namespace WEO;
 
-public class Transform : WLI.Serializable{
+public class Transform : WLI.Packable{
     public Vector3F Position = new Vector3F(0, 0, 0);
     public Vector3F Rotation = new Vector3F(0, 0, 0);
     public Vector3F Scale    = new Vector3F(1, 1, 1);
@@ -32,24 +32,16 @@ public class Transform : WLI.Serializable{
         return __WorldMatrix;
     }
     
-    public Dictionary<string, object> Serialize() => new Dictionary<string, object>{
-        ["Position"] = Position.Serialize(),
-        ["Rotation"] = Rotation.Serialize(),
-        ["Scale"   ] = Scale.Serialize()
+    public Dictionary<string, object?> __Pack() => new Dictionary<string, object?>{
+        ["Position"] = Position,
+        ["Rotation"] = Rotation,
+        ["Scale"   ] = Scale
     };
     
-    public void Deserialize(Dictionary<string, object> Data){
-        if(Data.TryGetValue("Position", out object? Position__) && Position__ is Dictionary<string, object> PositionD__){
-            Position.Deserialize(PositionD__);
-        }
-        
-        if(Data.TryGetValue("Rotation", out object? Rotation__) && Rotation__ is Dictionary<string, object> RotationD__){
-            Rotation.Deserialize(RotationD__);
-        }
-        
-        if(Data.TryGetValue("Scale", out object? Scale__) && Scale__ is Dictionary<string, object> ScaleD__){
-            Scale.Deserialize(ScaleD__);
-        }
+    public void __Unpack(Dictionary<string, object?> Data){
+        Position = WL.Packer.Get(Data, "Position", new Vector3F());
+        Rotation = WL.Packer.Get(Data, "Rotation", new Vector3F());
+        Scale    = WL.Packer.Get(Data, "Scale"   , new Vector3F());
 
         IsDirty = true;
     }

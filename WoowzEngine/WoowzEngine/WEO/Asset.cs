@@ -2,7 +2,7 @@
 
 namespace WEO;
 
-public struct Asset<T> : WLI.Serializable where T : class{
+public struct Asset<T> : WLI.Packable where T : class{
     [WEESave] public string Key;
     
     public int __ID = -1;
@@ -38,20 +38,19 @@ public struct Asset<T> : WLI.Serializable where T : class{
         return WE.Asset.Resolve<T>(__ID);
     }
 
-    public Dictionary<string, object> Serialize(){
-        Dictionary<string, object> Data = new Dictionary<string, object>();
-        if(Linked){ Data["Key"] = Key; }
-        else{ Data["NotLinked"] = true; }
+    public Dictionary<string, object?> __Pack(){
+        Dictionary<string, object?> Data = new Dictionary<string, object?>();
+        if(Linked){ Data["Key"] = Key; }else{ Data["NotLinked"] = true; }
 
         return Data;
     }
     
-    public void Deserialize(Dictionary<string, object> Data){
-        if(WL.Serializer.Get<bool>(Data, "NotLinked")){
+    public void __Unpack(Dictionary<string, object?> Data){
+        if(WL.Packer.Get<bool>(Data, "NotLinked", false)){
             // пустота
         }else{
             Linked = true;
-            Key = WL.Serializer.Get<string>(Data, "Key", "")!;
+            Key = WL.Packer.Get<string>(Data, "Key", Key)!;
             if(!string.IsNullOrEmpty(Key)){ __ID = WE.Asset.GetID(Key); }
         }
     }
