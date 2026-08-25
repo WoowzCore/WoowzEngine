@@ -1,4 +1,5 @@
-﻿using WEO;
+﻿using WEE_Interface;
+using WEO;
 using WLI_Input;
 using WLO.Math;
 
@@ -15,9 +16,9 @@ public static class Editor{
     }
 
     public static void UpdateCamera(){
-        if(WEE.Interface.ActiveScene == null){ return; }
+        if(WEE.Interface.CurrentScene == null){ return; }
 
-        if(WEE.Interface.FocusSceneView){
+        if(I_View.FocusSceneView){
             UpdateCameraControls();    
         }
     }

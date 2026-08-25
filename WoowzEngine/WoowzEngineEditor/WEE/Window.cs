@@ -1,4 +1,6 @@
-﻿namespace WEE;
+﻿using WEE_Interface;
+
+namespace WEE;
 
 public static class Window{
     public static void Start(){
@@ -28,10 +30,10 @@ public static class Window{
         }else{
             Title += $" | {WEE.Interface.Config!.Name}";
             
-            if(WEE.Interface.ActiveScene == null){
+            if(WEE.Interface.CurrentScene == null){
                 Title += " - Не выбрана сцена";
             }else{
-                Title += $" - {WEE.Interface.__SceneFilePath}";
+                Title += $" - {I_Menu.__SceneFilePath}";
             }
         }
         

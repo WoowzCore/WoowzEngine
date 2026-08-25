@@ -1,4 +1,5 @@
-﻿using WEEO;
+﻿using WEE_Interface;
+using WEEO;
 using WEO_Component;
 using WEO;
 using WLI_Render;
@@ -29,7 +30,7 @@ public static class Render{
     public static GLRenderView SceneFramebuffer = null!;
 
     public static void SceneRender(){
-        Vector2I TargetSize = WEE.Interface.SceneViewSize;
+        Vector2I TargetSize = I_View.SceneViewSize;
 
         if(TargetSize.X <= 0 || TargetSize.Y <= 0){ return; }
 
@@ -48,7 +49,7 @@ public static class Render{
         
         WE.Render.API.FrameStart();
             
-            WE.Render.API.Clear(WEE.Interface.BackgroundColor);
+            WE.Render.API.Clear(I_View.BackgroundColor);
                 
             __RENDERTESTRENDER();
             
@@ -177,6 +178,6 @@ void main() {
     public static void __RENDERTESTRENDER(){
         WE.Render.API.DepthTest = true;
         
-        WEE.Interface.ActiveScene?.Render(WEE.Editor.SceneViewCamera, __UNIFORM_VPROJ, __UNIFORM_MPROJ, __UNIFORM_COLOR);
+        WEE.Interface.CurrentScene?.Render(WEE.Editor.SceneViewCamera, __UNIFORM_VPROJ, __UNIFORM_MPROJ, __UNIFORM_COLOR);
     }
 }
