@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Numerics;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using ImGuiNET;
 using NativeFileDialogSharp;
 using WEEO;
@@ -16,6 +17,8 @@ using WoowzLib.Interface.ImGUI;
 namespace WEE;
 
 // todo, NativeFileDialogSharp
+
+// TODO, РАЗДЕЛИТЬ СКРИПТ ОТДЕЛЬНО КАЖДОЕ ОКОШКО В ОТДЕЛЬНЫЙ СКРИПТ (займусь этим сейчас наверное.....)
 
 public static class Interface{
     public static void Start(){
@@ -326,19 +329,6 @@ public static class Interface{
             string JSON = File.ReadAllText(Path);
             ActiveScene?.Clear();
             ActiveScene = Scene.LoadFromJSON(JSON);
-
-            // MEGA TODO!
-            if(ActiveScene != null!){
-                foreach(var Entity in ActiveScene.AllEntity.ToList()){
-                    var __MESHRENDERERS = Entity.GetAllComponents().OfType<CMeshRenderer>().ToList();
-                    
-                    foreach(var Renderer in __MESHRENDERERS){
-                        Renderer.Mesh = WEE.Render.__MESH;
-                        Renderer.Program = WEE.Render.__PROGRAM;
-                    }
-                }
-            }
-            
             __SceneFilePath = Path;
             SelectedEntity = null;
             
@@ -512,12 +502,7 @@ public static class Interface{
                             if(ImGui.MenuItem(ComponentType.Name)){
                                 MethodInfo Method = typeof(Entity).GetMethod("AddComponent")!;
                                 MethodInfo Generic = Method.MakeGenericMethod(ComponentType);
-                                object? Component = Generic.Invoke(SelectedEntity, null);
-                                
-                                if(Component is CMeshRenderer CMR){
-                                    CMR.Mesh = WEE.Render.__MESH;
-                                    CMR.Program = WEE.Render.__PROGRAM;
-                                }
+                                Generic.Invoke(SelectedEntity, null);
                             }
                         }
                         
@@ -541,16 +526,92 @@ public static class Interface{
             string Label = Field.Name;
             object Value = Field.GetValue(Component)!;
 
-            if(Field.FieldType == typeof(float)){
+            Type FieldType = Field.FieldType;
+
+            if(FieldType.IsGenericType && FieldType.GetGenericTypeDefinition() == typeof(WEO.Asset<>)){
+                Type AssetTargetType = FieldType.GetGenericArguments()[0];
+
+                string CurrentKey = (string)FieldType.GetField("Key")!.GetValue(Value)! ?? "";
+                bool IsLinked = (bool)FieldType.GetField("Linked")!.GetValue(Value)!;
+                
+                ImGui.BeginGroup();
+
+                    float AvailableWidth = ImGui.GetContentRegionAvail().X;
+                    float LabelWidth = ImGui.CalcTextSize(Label).X + 20;
+                    const float ButtonWidth = 35;
+                    
+                    ImGui.SetNextItemWidth(AvailableWidth - LabelWidth - ButtonWidth - ImGui.GetStyle().ItemSpacing.X * 2);
+
+                    string TempKey = CurrentKey;
+                    if(ImGui.InputText($"##in_{Label}", ref TempKey, 256)){
+                        ConstructorInfo? Constructor = FieldType.GetConstructor([typeof(string)]);
+                        Field.SetValue(Component, Constructor!.Invoke([TempKey]));
+                    }
+
+                    if(!string.IsNullOrEmpty(CurrentKey) && ImGui.BeginDragDropSource()){
+                        IntPtr Ptr = Marshal.StringToHGlobalAnsi(CurrentKey);
+                        ImGui.SetDragDropPayload("ASSET_KEY", Ptr, (uint)CurrentKey.Length + 1);
+                        Marshal.FreeHGlobal(Ptr);
+
+                        ImGui.Text($"Передать ассет: {CurrentKey}");
+                        ImGui.EndDragDropSource();
+                    }
+
+                    if(ImGui.BeginDragDropTarget()){
+                        unsafe{
+                            ImGuiPayloadPtr Payload = ImGui.AcceptDragDropPayload("ASSET_KEY");
+                            if(Payload.NativePtr != null){
+                                string DroppedKey = Marshal.PtrToStringAnsi(Payload.Data)!;
+
+                                bool IsValidType = WE.Asset.GetKeysForType(AssetTargetType).Contains(DroppedKey);
+
+                                if(IsValidType){
+                                    if(ImGui.IsMouseReleased(ImGuiMouseButton.Left)){
+                                        ConstructorInfo? Constructor = FieldType.GetConstructor([typeof(string)]);
+                                        Field.SetValue(Component, Constructor!.Invoke([DroppedKey]));
+                                    }
+                                    
+                                    ImGui.GetWindowDrawList().AddRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), ImGui.GetColorU32(new Vector4(0.2f, 1, 0.2f, 1)), 4.0f);
+                                }else{
+                                    ImGui.SetTooltip($"Недопустимый тип! Ожидается: {AssetTargetType.Name}");
+                                    ImGui.GetWindowDrawList().AddRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), ImGui.GetColorU32(new Vector4(1, 0.2f, 0.2f, 1)), 4);
+                                }
+                            }
+                        }
+                        ImGui.EndDragDropTarget();
+                    }
+                    
+                    ImGui.SameLine();
+                    if(ImGui.Button("...", new Vector2(ButtonWidth, 0))){
+                        ImGui.OpenPopup("AssetPicker");
+                    }
+                    
+                    ImGui.SameLine();
+                    ImGui.Text(Label);
+                    
+                ImGui.EndGroup();
+
+                if(ImGui.IsItemHovered()){ ImGui.SetTooltip($"Тип: {AssetTargetType.Name}"); }
+
+                if(ImGui.BeginPopup("AssetPicker")){
+                    foreach(string Key in WE.Asset.GetKeysForType(AssetTargetType).OrderBy(K => K)){
+                        if(ImGui.Selectable(Key, Key == CurrentKey)){
+                            ConstructorInfo? Constructor = FieldType.GetConstructor([typeof(string)]);
+                            Field.SetValue(Component, Constructor!.Invoke([Key]));
+                        }
+                    }
+                    ImGui.EndPopup();
+                }
+            }else if(FieldType == typeof(float)){
                 float V = (float)Value;
                 if(ImGui.DragFloat(Label, ref V, 0.1f)){ Field.SetValue(Component, V); }
-            }else if(Field.FieldType == typeof(int)){
+            }else if(FieldType == typeof(int)){
                 int V = (int)Value;
                 if(ImGui.DragInt(Label, ref V)){ Field.SetValue(Component, V); }
-            }else if(Field.FieldType == typeof(bool)){
+            }else if(FieldType == typeof(bool)){
                 bool V = (bool)Value;
                 if(ImGui.Checkbox(Label, ref V)){ Field.SetValue(Component, V); }
-            }else if(Field.FieldType == typeof(string)){
+            }else if(FieldType == typeof(string)){
                 string V = (string)Value ?? "";
 
                 WEEMultilineString? MultilineAttribute = Field.GetCustomAttribute<WEEMultilineString>();
@@ -565,13 +626,13 @@ public static class Interface{
                         Field.SetValue(Component, V);
                     }
                 }
-            }else if(Field.FieldType == typeof(Vector3F)){
+            }else if(FieldType == typeof(Vector3F)){
                 Vector3F V = (Vector3F)Value;
                 System.Numerics.Vector3 SysV = new Vector3(V.X, V.Y, V.Z);
                 if(ImGui.DragFloat3(Label, ref SysV, 0.1f)){
                     Field.SetValue(Component, new Vector3F(SysV.X, SysV.Y, SysV.Z));
                 }
-            }else if(Field.FieldType == typeof(Color4B)){
+            }else if(FieldType == typeof(Color4B)){
                 Color4B V = (Color4B)Value;
                 System.Numerics.Vector4 SysV = new Vector4(V.R / 255f, V.G / 255f, V.B / 255f, V.A / 255f);
                 if(ImGui.ColorEdit4(Label, ref SysV)){
@@ -699,8 +760,117 @@ public static class Interface{
         if(!__ShowAssets){ return; }
 
         if(ImGui.Begin("Ресурсы###Assets", ref __ShowAssets)){
-            ImGui.Text("FILES");
+            List<Type> AssetTypes = WE.Asset.RegisteredTypes.OrderBy(T => T.Name).ToList();
+
+            if(AssetTypes.Count == 0){
+                ImGui.TextDisabled("Нет зарегистрированных ресурсов");
+            }else{
+                foreach(Type Type in AssetTypes){
+                    ImGui.PushID(Type.FullName); 
+                    
+                        ImGui.Spacing();
+                        ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(1, 0.8f, 0.4f, 1));
+                        ImGui.Text(Type.Name.ToUpper());
+                        ImGui.PopStyleColor();
+                        ImGui.Separator();
+                        ImGui.Spacing();
+
+                        List<string> Keys = WE.Asset.GetKeysForType(Type).OrderBy(k => k).ToList();
+
+                        const float IconSize = 128;
+                        float Padding = ImGui.GetStyle().ItemSpacing.X;
+
+                        float windowVisibleRightEdge = ImGui.GetCursorScreenPos().X + ImGui.GetContentRegionAvail().X;
+
+                        for(int i = 0; i < Keys.Count; i++){
+                            string Key = Keys[i];
+                            int ID = WE.Asset.GetID(Key);
+
+                            ImGui.PushID(Key);
+
+                                ImGui.BeginGroup();
+                                    Vector2 CursorPosition = ImGui.GetCursorScreenPos();
+                                    ImGui.InvisibleButton("##btn", new Vector2(IconSize, IconSize));
+
+                                    if(ImGui.BeginDragDropSource()){
+                                        IntPtr Ptr = Marshal.StringToHGlobalAnsi(Key);
+                                        ImGui.SetDragDropPayload("ASSET_KEY", Ptr, (uint)Key.Length + 1);
+                                        Marshal.FreeHGlobal(Ptr);
+                                        
+                                        ImGui.Text($"Перетаскивание ассета: {Key}");
+                                        ImGui.EndDragDropSource();
+                                    }
+                                    
+                                    bool IsHovered = ImGui.IsItemHovered();
+                                    bool IsActive = ImGui.IsItemActive();
+
+                                    uint Column = ImGui.GetColorU32(IsActive ? ImGuiCol.HeaderActive : IsHovered ? ImGuiCol.HeaderHovered : ImGuiCol.FrameBg);
+
+                                    ImGui.GetWindowDrawList().AddRectFilled(CursorPosition, new Vector2(CursorPosition.X + IconSize, CursorPosition.Y + IconSize), Column, 4.0f);
+
+                                    RenderTextScrolling($"[{ID}] {Key}", IconSize, IsHovered);
+                                ImGui.EndGroup();
+
+                                float CurrentItemRightEdge = ImGui.GetItemRectMax().X;
+                                float NextItemRightEdge = CurrentItemRightEdge + Padding + IconSize;
+
+                                if(i + 1 < Keys.Count && NextItemRightEdge < windowVisibleRightEdge){
+                                    ImGui.SameLine();
+                                }
+
+                            ImGui.PopID();
+                        }
+
+                        ImGui.Spacing();
+                        
+                    ImGui.PopID();
+                }
+            }
         } ImGui.End();
+    }
+    
+    public static void RenderTextScrolling(string text, float maxWidth, bool isHovered){
+        Vector2 pos = ImGui.GetCursorScreenPos();
+        Vector2 textSize = ImGui.CalcTextSize(text);
+        var drawList = ImGui.GetWindowDrawList();
+
+        // Определяем границы отрисовки (ClipRect)
+        Vector2 clipMin = pos;
+        Vector2 clipMax = new Vector2(pos.X + maxWidth, pos.Y + ImGui.GetTextLineHeightWithSpacing());
+
+        if (textSize.X <= maxWidth)
+        {
+            // Текст помещается — просто рисуем
+            drawList.AddText(pos, ImGui.GetColorU32(ImGuiCol.Text), text);
+        }
+        else
+        {
+            if (isHovered)
+            {
+                // Бегущая строка (Sin анимация)
+                float diff = textSize.X - maxWidth;
+                float speed = 2.0f;
+                float offset = (MathF.Sin((float)ImGui.GetTime() * speed) * 0.5f + 0.5f) * diff;
+
+                drawList.PushClipRect(clipMin, clipMax, true);
+                drawList.AddText(new Vector2(pos.X - offset, pos.Y), ImGui.GetColorU32(ImGuiCol.Text), text);
+                drawList.PopClipRect();
+            }
+            else
+            {
+                // Текст слишком длинный — обрезаем с многоточием
+                string truncated = text;
+                while (truncated.Length > 1 && ImGui.CalcTextSize(truncated + "...").X > maxWidth)
+                {
+                    truncated = truncated.Substring(0, truncated.Length - 1);
+                }
+                drawList.AddText(pos, ImGui.GetColorU32(ImGuiCol.TextDisabled), truncated + "...");
+            }
+        }
+
+        // Важно: AddText не двигает курсор ImGui, поэтому добавляем невидимый элемент,
+        // чтобы следующий объект ImGui не наложился на этот текст.
+        ImGui.Dummy(new Vector2(maxWidth, ImGui.GetTextLineHeightWithSpacing()));
     }
 
     // ----------------------------------------------------------------------
