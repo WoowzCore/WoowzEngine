@@ -40,7 +40,7 @@ public static class Render{
             SceneFramebuffer.Destroy();
             SceneFramebuffer = GLRenderView.Create(WE.Render.API, TargetSize);
             
-            WEE.Editor.SceneViewCamera.Aspect = TargetSize.Aspect;
+            WEE.Editor.ViewCamera.Aspect = TargetSize.Aspect;
         }
         
         WE.Render.API.CRenderView = SceneFramebuffer;
@@ -178,6 +178,6 @@ void main() {
     public static void __RENDERTESTRENDER(){
         WE.Render.API.DepthTest = true;
         
-        WEE.Interface.CurrentScene?.Render(WEE.Editor.SceneViewCamera, __UNIFORM_VPROJ, __UNIFORM_MPROJ, __UNIFORM_COLOR);
+        WEE.Interface.CurrentScene?.Render(WEE.Editor.ViewCamera, __UNIFORM_VPROJ, __UNIFORM_MPROJ, __UNIFORM_COLOR);
     }
 }

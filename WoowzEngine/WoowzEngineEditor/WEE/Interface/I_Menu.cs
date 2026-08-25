@@ -2,6 +2,7 @@
 using ImGuiNET;
 using NativeFileDialogSharp;
 using WEO;
+using WLO.Math;
 
 namespace WEE_Interface;
 
@@ -101,6 +102,11 @@ public static class I_Menu{
         WEE.Interface.CurrentScene?.Clear();
         WEE.Interface.CurrentEntity = null;
         WEE.Interface.CurrentScene = null;
+
+        I_View.BackgroundColor         = new Color4B(200, 200, 200);
+        WEE.Editor.ViewCamera.Position = new Vector3F();
+        WEE.Editor.ViewCamera.Rotation = new Vector3F();
+        I_View.Is2DView                = false;
     }
 
     private static void SaveSceneAs(){
@@ -136,6 +142,13 @@ public static class I_Menu{
     private static void __SaveScene(string Path) {
         if(WEE.Interface.CurrentScene == null){ return; }
         try{
+            WEE.Interface.CurrentScene.__EditorInfo = new Scene.EditorInfo{
+                BackgroundColor = I_View.BackgroundColor,
+                CameraPosition = WEE.Editor.ViewCamera.Position,
+                CameraRotation = WEE.Editor.ViewCamera.Rotation,
+                CameraPerspective = !I_View.Is2DView
+            };
+            
             string JSON = WEE.Interface.CurrentScene.SaveToJSON();
             File.WriteAllText(Path, JSON);
             __SceneFilePath = Path;
@@ -154,6 +167,13 @@ public static class I_Menu{
             
             WEE.Interface.CurrentScene = Scene.LoadFromJSON(JSON);
             __SceneFilePath = Path;
+
+            if(WEE.Interface.CurrentScene.__EditorInfo.HasValue){
+                I_View.BackgroundColor         =  WEE.Interface.CurrentScene.__EditorInfo.Value.BackgroundColor;
+                WEE.Editor.ViewCamera.Position =  WEE.Interface.CurrentScene.__EditorInfo.Value.CameraPosition;
+                WEE.Editor.ViewCamera.Rotation =  WEE.Interface.CurrentScene.__EditorInfo.Value.CameraRotation;
+                I_View.Is2DView                = !WEE.Interface.CurrentScene.__EditorInfo.Value.CameraPerspective;
+            }
             
             WEE.Prefs.AddRecentScene(Path);
             WL.Logger.Info($"Сцена загружена: {Path}");

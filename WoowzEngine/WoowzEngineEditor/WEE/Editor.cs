@@ -6,7 +6,7 @@ using WLO.Math;
 namespace WEE;
 
 public static class Editor{
-    public static Camera SceneViewCamera = new Camera();
+    public static Camera ViewCamera = new Camera();
 
     public static float CameraSpeed       = 1   ;
     public static float CameraSensitivity = 0.5f;
@@ -31,16 +31,16 @@ public static class Editor{
         if(Mouse.IsButtonDown(Mouse.Button.Right)){
             Vector2I MouseDelta = Mouse.Delta;
 
-            SceneViewCamera.Rotation.Y += MouseDelta.X * CameraSensitivity * DT;
-            SceneViewCamera.Rotation.X += MouseDelta.Y * CameraSensitivity * DT;
+            ViewCamera.Rotation.Y += MouseDelta.X * CameraSensitivity * DT;
+            ViewCamera.Rotation.X += MouseDelta.Y * CameraSensitivity * DT;
         }
 
         Vector3F MoveDirection = new Vector3F();
 
-        if(Keyboard.IsKeyDown(Keyboard.Key.W)){ MoveDirection += SceneViewCamera.Forward; }
-        if(Keyboard.IsKeyDown(Keyboard.Key.S)){ MoveDirection -= SceneViewCamera.Forward; }
-        if(Keyboard.IsKeyDown(Keyboard.Key.D)){ MoveDirection += SceneViewCamera.Right; }
-        if(Keyboard.IsKeyDown(Keyboard.Key.A)){ MoveDirection -= SceneViewCamera.Right; }
+        if(Keyboard.IsKeyDown(Keyboard.Key.W)){ MoveDirection += ViewCamera.Forward; }
+        if(Keyboard.IsKeyDown(Keyboard.Key.S)){ MoveDirection -= ViewCamera.Forward; }
+        if(Keyboard.IsKeyDown(Keyboard.Key.D)){ MoveDirection += ViewCamera.Right; }
+        if(Keyboard.IsKeyDown(Keyboard.Key.A)){ MoveDirection -= ViewCamera.Right; }
         
         if(Keyboard.IsKeyDown(Keyboard.Key.Space   )){ MoveDirection += new Vector3F(0, 1, 0); }
         if(Keyboard.IsKeyDown(Keyboard.Key.ControlL)){ MoveDirection -= new Vector3F(0, 1, 0); }
@@ -50,7 +50,7 @@ public static class Editor{
         if(Keyboard.IsKeyDown(Keyboard.Key.ShiftL)){ CameraSpeed__ = 5; }
 
         if(MoveDirection.Length > 0){
-            SceneViewCamera.Position += MoveDirection.Normalized * CameraSpeed__ * 5 * DT;
+            ViewCamera.Position += MoveDirection.Normalized * CameraSpeed__ * 5 * DT;
         }
     }
 }

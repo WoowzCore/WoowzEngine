@@ -9,7 +9,14 @@ public static class I_View{
 
     public static Vector2I SceneViewSize{ get; private set; }
 
-    public static bool Is2DView = false;
+    private static bool __Is2DView = false;
+    public static bool Is2DView{
+        get => __Is2DView;
+        set{
+            __Is2DView = value;
+            WEE.Editor.ViewCamera.IsOrthographic = __Is2DView;
+        }
+    }
 
     public static Color4B BackgroundColor = new Color4B(200, 200, 200);
     
@@ -31,11 +38,7 @@ public static class I_View{
 
                 string ModeText = Is2DView ? "2D" : "3D";
 
-                if(ImGui.Button(ModeText, new Vector2(100, 20))){
-                    Is2DView = !Is2DView;
-
-                    WEE.Editor.SceneViewCamera.IsOrthographic = Is2DView;
-                }
+                if(ImGui.Button(ModeText, new Vector2(100, 20))){ Is2DView = !Is2DView; }
                 if(ImGui.IsItemHovered()){ ImGui.SetTooltip("Переключить перспективу камеры"); }
 
                 ImGui.SameLine();
@@ -44,10 +47,10 @@ public static class I_View{
 
                 ImGui.TextDisabled("Позиция:");
                 ImGui.SameLine();
-                Vector3 CameraPosition = new Vector3(WEE.Editor.SceneViewCamera.Position.X, WEE.Editor.SceneViewCamera.Position.Y, WEE.Editor.SceneViewCamera.Position.Z);
+                Vector3 CameraPosition = new Vector3(WEE.Editor.ViewCamera.Position.X, WEE.Editor.ViewCamera.Position.Y, WEE.Editor.ViewCamera.Position.Z);
                 ImGui.SetNextItemWidth(200);
                 if(ImGui.DragFloat3("##CamPos", ref CameraPosition, 0.1f)){
-                    WEE.Editor.SceneViewCamera.Position = new Vector3F(CameraPosition.X, CameraPosition.Y, CameraPosition.Z);
+                    WEE.Editor.ViewCamera.Position = new Vector3F(CameraPosition.X, CameraPosition.Y, CameraPosition.Z);
                 }
 
                 ImGui.SameLine();
@@ -56,10 +59,10 @@ public static class I_View{
 
                 ImGui.TextDisabled("Поворот:");
                 ImGui.SameLine();
-                Vector3 CameraRotation = new Vector3(WEE.Editor.SceneViewCamera.Rotation.X, WEE.Editor.SceneViewCamera.Rotation.Y, WEE.Editor.SceneViewCamera.Rotation.Z);
+                Vector3 CameraRotation = new Vector3(WEE.Editor.ViewCamera.Rotation.X, WEE.Editor.ViewCamera.Rotation.Y, WEE.Editor.ViewCamera.Rotation.Z);
                 ImGui.SetNextItemWidth(200);
                 if(ImGui.DragFloat3("##CamRos", ref CameraRotation, 0.1f)){
-                    WEE.Editor.SceneViewCamera.Rotation = new Vector3F(CameraRotation.X, CameraRotation.Y, CameraRotation.Z);
+                    WEE.Editor.ViewCamera.Rotation = new Vector3F(CameraRotation.X, CameraRotation.Y, CameraRotation.Z);
                 }
 
                 ImGui.SameLine();
@@ -67,7 +70,7 @@ public static class I_View{
                 ImGui.SameLine();
 
                 if(ImGui.Button("Сброс")){
-                    WEE.Editor.SceneViewCamera.Position = WEE.Editor.SceneViewCamera.Rotation = new Vector3F();
+                    WEE.Editor.ViewCamera.Position = WEE.Editor.ViewCamera.Rotation = new Vector3F();
                 }
                 if(ImGui.IsItemHovered()){ ImGui.SetTooltip("Сбросить позицию и поворот камеры на дефолтные значения"); }
 

@@ -1,99 +1,130 @@
 {
-  "Name": "WoowzCoreTestSceneV.1",
-  "Entities": [
-    {
-      "Name": "TRIANGLE",
-      "Transform": {
-        "Position": {
-          "__Type": "WLO.Math.Vector3F",
-          "X": -1,
-          "Y": 0,
-          "Z": 0
-        },
-        "Rotation": {
-          "__Type": "WLO.Math.Vector3F",
-          "X": 0,
-          "Y": 0,
-          "Z": 0
-        },
-        "Scale": {
-          "__Type": "WLO.Math.Vector3F",
-          "X": 1,
-          "Y": 1,
-          "Z": 1
-        }
-      },
-      "Components": [
-        {
-          "__Type": "WEO_Component.CMeshRenderer, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
-          "Mesh": {
-            "Key": "Triangle",
-            "__Type": "WEO.Asset\u00601[[WLI.GPU.Mesh, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+  "Name": {
+    "Value": "WoowzCoreTestSceneV.1",
+    "__Type": "System.String"
+  },
+  "Entities": {
+    "Items": [
+      {
+        "Name": "TRIANGLE",
+        "Transform": {
+          "Position": {
+            "__Type": "WLO.Math.Vector3F",
+            "X": -1,
+            "Y": 0,
+            "Z": 0
           },
-          "Program": {
-            "Key": "DefaultShader",
-            "__Type": "WEO.Asset\u00601[[WLI.GPU.Program, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          "Rotation": {
+            "__Type": "WLO.Math.Vector3F",
+            "X": 0,
+            "Y": 0,
+            "Z": 0
           },
-          "Color": {
-            "__Type": "WLO.Math.Color4B",
-            "Value": 4278190335
-          },
-          "Active": {
-            "Value": true,
-            "__Type": "System.Boolean"
+          "Scale": {
+            "__Type": "WLO.Math.Vector3F",
+            "X": 1,
+            "Y": 1,
+            "Z": 1
           }
-        }
-      ],
-      "Hierarchy": {
-        "Children": []
+        },
+        "Components": [
+          {
+            "__Type": "WEO_Component.CMeshRenderer, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+            "Mesh": {
+              "Key": "Triangle",
+              "__Type": "WEO.Asset\u00601[[WLI.GPU.Mesh, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+            },
+            "Program": {
+              "Key": "DefaultShader",
+              "__Type": "WEO.Asset\u00601[[WLI.GPU.Program, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+            },
+            "Color": {
+              "__Type": "WLO.Math.Color4B",
+              "Value": 4278190335
+            },
+            "Active": {
+              "Value": true,
+              "__Type": "System.Boolean"
+            }
+          }
+        ],
+        "Hierarchy": {
+          "Children": []
+        },
+        "__Type": "WEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+      },
+      {
+        "Name": "CUBE",
+        "Transform": {
+          "Position": {
+            "__Type": "WLO.Math.Vector3F",
+            "X": 1,
+            "Y": 0,
+            "Z": 0
+          },
+          "Rotation": {
+            "__Type": "WLO.Math.Vector3F",
+            "X": 0,
+            "Y": 0,
+            "Z": 0
+          },
+          "Scale": {
+            "__Type": "WLO.Math.Vector3F",
+            "X": 1,
+            "Y": 1,
+            "Z": 1
+          }
+        },
+        "Components": [
+          {
+            "__Type": "WEO_Component.CMeshRenderer, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+            "Mesh": {
+              "Key": "Cube",
+              "__Type": "WEO.Asset\u00601[[WLI.GPU.Mesh, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+            },
+            "Program": {
+              "Key": "DefaultShader",
+              "__Type": "WEO.Asset\u00601[[WLI.GPU.Program, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+            },
+            "Color": {
+              "__Type": "WLO.Math.Color4B",
+              "Value": 4294901760
+            },
+            "Active": {
+              "Value": true,
+              "__Type": "System.Boolean"
+            }
+          }
+        ],
+        "Hierarchy": {
+          "Children": []
+        },
+        "__Type": "WEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
       }
+    ],
+    "__Type": "List"
+  },
+  "__EditorInfo": {
+    "BackgroundColor": {
+      "__Type": "WLO.Math.Color4B",
+      "Value": 4291348680
     },
-    {
-      "Name": "CUBE",
-      "Transform": {
-        "Position": {
-          "__Type": "WLO.Math.Vector3F",
-          "X": 1,
-          "Y": 0,
-          "Z": 0
-        },
-        "Rotation": {
-          "__Type": "WLO.Math.Vector3F",
-          "X": 0,
-          "Y": 0,
-          "Z": 0
-        },
-        "Scale": {
-          "__Type": "WLO.Math.Vector3F",
-          "X": 1,
-          "Y": 1,
-          "Z": 1
-        }
-      },
-      "Components": [
-        {
-          "__Type": "WEO_Component.CMeshRenderer, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
-          "Mesh": {
-            "Key": "Cube",
-            "__Type": "WEO.Asset\u00601[[WLI.GPU.Mesh, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
-          },
-          "Program": {
-            "Key": "DefaultShader",
-            "__Type": "WEO.Asset\u00601[[WLI.GPU.Program, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
-          },
-          "Color": {
-            "__Type": "WLO.Math.Color4B",
-            "Value": 4294901760
-          },
-          "Active": {
-            "Value": true,
-            "__Type": "System.Boolean"
-          }
-        }
-      ],
-      "Hierarchy": {
-        "Children": []
-      }
-    }
-  ]
+    "CameraPosition": {
+      "__Type": "WLO.Math.Vector3F",
+      "X": -2.5132313,
+      "Y": -0.31338483,
+      "Z": 3.3226771
+    },
+    "CameraRotation": {
+      "__Type": "WLO.Math.Vector3F",
+      "X": -0.07508091,
+      "Y": 0.6475765,
+      "Z": 0
+    },
+    "CameraPerspective": {
+      "Value": true,
+      "__Type": "System.Boolean"
+    },
+    "__Type": "WEO.Scene\u002BEditorInfo, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+  }
 }
