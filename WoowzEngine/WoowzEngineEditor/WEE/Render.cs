@@ -18,27 +18,34 @@ public static class Render{
             UseThisLogger = WL.Logger.CurrentLogger
         });
         
-        SceneFramebuffer = GLRenderView.Create(WE.Render.API, new Vector2I(800, 600));
+        RecreateSceneFrameBuffer(new Vector2I(800, 600));
     }
     
     public static void Stop(){
         WE.Render.Stop();
     }
-
+    
     // ----------------------------------------------------------------------
 
     public static GLRenderView SceneFramebuffer = null!;
 
+    private static void RecreateSceneFrameBuffer(Vector2I Size){
+        if(SceneFramebuffer != null!){ SceneFramebuffer.Destroy(); }
+        SceneFramebuffer = GLRenderView.Create(WE.Render.API, Size, [
+            GLRenderView.LayerConfig.Color(),
+            GLRenderView.LayerConfig.Depth(true)
+        ]);
+    }
+    
     public static void SceneRender(){
         Vector2I TargetSize = I_View.SceneViewSize;
 
         if(TargetSize.X <= 0 || TargetSize.Y <= 0){ return; }
 
         if(TargetSize.X > 0 && TargetSize.Y > 0 && 
-           (TargetSize.X != SceneFramebuffer.ResultTexture!.Size.X || 
-            TargetSize.Y != SceneFramebuffer.ResultTexture!.Size.Y)){
-            SceneFramebuffer.Destroy();
-            SceneFramebuffer = GLRenderView.Create(WE.Render.API, TargetSize);
+           (TargetSize.X != SceneFramebuffer.TextureColor0!.Size.X || 
+            TargetSize.Y != SceneFramebuffer.TextureColor0!.Size.Y)){
+            RecreateSceneFrameBuffer(TargetSize);
             
             WEE.Editor.ViewCamera.Aspect = TargetSize.Aspect;
         }

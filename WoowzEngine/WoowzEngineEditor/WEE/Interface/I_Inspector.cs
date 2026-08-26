@@ -13,7 +13,7 @@ public static class I_Inspector{
     public static void Update(){
         if(!WEE.Interface.WindowInspectorActive){ return; }
 
-        if(ImGui.Begin("Просмотр###Inspector", ref WEE.Interface.WindowInspectorActive)){
+        if(ImGui.Begin("Инспектор###Inspector", ref WEE.Interface.WindowInspectorActive)){
             try{
                 if(WEE.Interface.CurrentEntity == null){
                     ImGui.TextDisabled("Выберите объект в иерархии...");
@@ -208,8 +208,14 @@ public static class I_Inspector{
             }else if(FieldType == typeof(Vector3F)){
                 Vector3F V = (Vector3F)Value;
                 Vector3 SysV = new Vector3(V.X, V.Y, V.Z);
-                if(ImGui.DragFloat3(Label, ref SysV, 0.1f)){
+                if(ImGui.DragFloat3(Label, ref SysV, 0.1f, 0, 0, "%g")){
                     Field.SetValue(Component, new Vector3F(SysV.X, SysV.Y, SysV.Z));
+                }
+            }else if(FieldType == typeof(Vector2F)){
+                Vector2F V = (Vector2F)Value;
+                Vector2 SysV = new Vector2(V.X, V.Y);
+                if(ImGui.DragFloat2(Label, ref SysV, 0.1f, 0, 0, "%g")){
+                    Field.SetValue(Component, new Vector2F(SysV.X, SysV.Y));
                 }
             }else if(FieldType == typeof(Color4B)){
                 Color4B V = (Color4B)Value;

@@ -107,6 +107,7 @@ public static class I_Menu{
         WEE.Editor.ViewCamera.Position = new Vector3F();
         WEE.Editor.ViewCamera.Rotation = new Vector3F();
         I_View.Is2DView                = false;
+        WEE.Editor.CameraSpeed         = 1;
     }
 
     private static void SaveSceneAs(){
@@ -146,7 +147,8 @@ public static class I_Menu{
                 BackgroundColor = I_View.BackgroundColor,
                 CameraPosition = WEE.Editor.ViewCamera.Position,
                 CameraRotation = WEE.Editor.ViewCamera.Rotation,
-                CameraPerspective = !I_View.Is2DView
+                CameraPerspective = !I_View.Is2DView,
+                CameraSpeed = WEE.Editor.CameraSpeed
             };
             
             string JSON = WEE.Interface.CurrentScene.SaveToJSON();
@@ -173,6 +175,7 @@ public static class I_Menu{
                 WEE.Editor.ViewCamera.Position =  WEE.Interface.CurrentScene.__EditorInfo.Value.CameraPosition;
                 WEE.Editor.ViewCamera.Rotation =  WEE.Interface.CurrentScene.__EditorInfo.Value.CameraRotation;
                 I_View.Is2DView                = !WEE.Interface.CurrentScene.__EditorInfo.Value.CameraPerspective;
+                WEE.Editor.CameraSpeed         =  WEE.Interface.CurrentScene.__EditorInfo.Value.CameraSpeed;
             }
             
             WEE.Prefs.AddRecentScene(Path);

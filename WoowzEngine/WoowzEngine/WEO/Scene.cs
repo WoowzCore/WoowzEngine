@@ -95,18 +95,22 @@ public class Scene : WLI.Packable{
     public void Render(Camera Camera, int Uniform_ViewProjection, int Uniform_ModelProjection, int Uniform_Color){
         PRender.Render(this, Camera, Uniform_ViewProjection, Uniform_ModelProjection, Uniform_Color);
     }
+    
+    // ----------------------------------------------------------------------
 
     public struct EditorInfo : WLI.Packable{
         public Color4B  BackgroundColor;
         public Vector3F CameraPosition;
         public Vector3F CameraRotation;
         public bool     CameraPerspective;
+        public float    CameraSpeed;
 
         public Dictionary<string, object?> __Pack() => new Dictionary<string, object?>{
             ["BackgroundColor"  ] = BackgroundColor,
             ["CameraPosition"   ] = CameraPosition,
             ["CameraRotation"   ] = CameraRotation,
-            ["CameraPerspective"] = CameraPerspective
+            ["CameraPerspective"] = CameraPerspective,
+            ["CameraSpeed"      ] = CameraSpeed
         };
         
         public void __Unpack(Dictionary<string, object?> Data){
@@ -114,6 +118,7 @@ public class Scene : WLI.Packable{
             CameraPosition    = WL.Packer.Get<Vector3F>(Data, "CameraPosition", CameraPosition);
             CameraRotation    = WL.Packer.Get<Vector3F>(Data, "CameraRotation", CameraRotation);
             CameraPerspective = WL.Packer.Get<bool    >(Data, "CameraPerspective", CameraPerspective);
+            CameraSpeed       = WL.Packer.Get<float   >(Data, "CameraSpeed", CameraSpeed);
         }
     }
 }

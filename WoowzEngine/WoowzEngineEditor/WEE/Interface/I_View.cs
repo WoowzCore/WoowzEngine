@@ -18,12 +18,14 @@ public static class I_View{
         }
     }
 
+    public static bool ShowDepth = false;
+
     public static Color4B BackgroundColor = new Color4B(200, 200, 200);
     
     public static void Update(){
         if(!WEE.Interface.WindowViewActive){ return; }
 
-        if(ImGui.Begin("Просмотр сцены###View", ref WEE.Interface.WindowViewActive)){
+        if(ImGui.Begin("Просмотр###View", ref WEE.Interface.WindowViewActive)){
 
             FocusSceneView = ImGui.IsWindowFocused(ImGuiFocusedFlags.RootAndChildWindows);
 
@@ -49,7 +51,7 @@ public static class I_View{
                 ImGui.SameLine();
                 Vector3 CameraPosition = new Vector3(WEE.Editor.ViewCamera.Position.X, WEE.Editor.ViewCamera.Position.Y, WEE.Editor.ViewCamera.Position.Z);
                 ImGui.SetNextItemWidth(200);
-                if(ImGui.DragFloat3("##CamPos", ref CameraPosition, 0.1f)){
+                if(ImGui.DragFloat3("##CameraPosition", ref CameraPosition, 0.1f, 0, 0, "%g")){
                     WEE.Editor.ViewCamera.Position = new Vector3F(CameraPosition.X, CameraPosition.Y, CameraPosition.Z);
                 }
 
@@ -61,9 +63,18 @@ public static class I_View{
                 ImGui.SameLine();
                 Vector3 CameraRotation = new Vector3(WEE.Editor.ViewCamera.Rotation.X, WEE.Editor.ViewCamera.Rotation.Y, WEE.Editor.ViewCamera.Rotation.Z);
                 ImGui.SetNextItemWidth(200);
-                if(ImGui.DragFloat3("##CamRos", ref CameraRotation, 0.1f)){
+                if(ImGui.DragFloat3("##CameraRotation", ref CameraRotation, 0.1f, 0, 0, "%g")){
                     WEE.Editor.ViewCamera.Rotation = new Vector3F(CameraRotation.X, CameraRotation.Y, CameraRotation.Z);
                 }
+
+                ImGui.SameLine();
+                ImGui.TextDisabled("|");
+                ImGui.SameLine();
+                
+                ImGui.TextDisabled("Скорость:");
+                ImGui.SameLine();
+                ImGui.SetNextItemWidth(50);
+                ImGui.DragFloat("##CameraSpeed", ref WEE.Editor.CameraSpeed, 0.1f, 0.001f, 1000, "%g");
 
                 ImGui.SameLine();
                 ImGui.TextDisabled("|");
@@ -71,6 +82,7 @@ public static class I_View{
 
                 if(ImGui.Button("Сброс")){
                     WEE.Editor.ViewCamera.Position = WEE.Editor.ViewCamera.Rotation = new Vector3F();
+                    WEE.Editor.CameraSpeed = 1;
                 }
                 if(ImGui.IsItemHovered()){ ImGui.SetTooltip("Сбросить позицию и поворот камеры на дефолтные значения"); }
 
@@ -79,10 +91,18 @@ public static class I_View{
                 ImGui.SameLine();
 
                 Vector3 BackgroundColor__ = new Vector3(BackgroundColor.R / 255f, BackgroundColor.G / 255f, BackgroundColor.B / 255f);
-                if(ImGui.ColorEdit3("##Background", ref BackgroundColor__, ImGuiColorEditFlags.NoInputs | ImGuiColorEditFlags.NoLabel)){
+                if(ImGui.ColorEdit3("##BackgroundColor", ref BackgroundColor__, ImGuiColorEditFlags.NoInputs | ImGuiColorEditFlags.NoLabel)){
                     BackgroundColor = new Color4B((byte)(BackgroundColor__.X * 255), (byte)(BackgroundColor__.Y * 255), (byte)(BackgroundColor__.Z * 255));
                 }
                 if(ImGui.IsItemHovered()){ ImGui.SetTooltip("Цвет заднего фона"); }
+                
+                ImGui.SameLine();
+                ImGui.TextDisabled("|");
+                ImGui.SameLine();
+                
+                string FrameText = ShowDepth ? "Глубина" : "Цвет";
+
+                if(ImGui.Button(FrameText, new Vector2(100, 20))){ ShowDepth = !ShowDepth; }
             } ImGui.EndChild();
 
             Vector2 __SceneViewport = ImGui.GetContentRegionAvail();
@@ -91,7 +111,15 @@ public static class I_View{
             SceneViewSize = new Vector2I((int)__SceneViewport.X, (int)__SceneViewport.Y);
 
             if(WEE.Interface.CurrentScene != null){
-                ImGui.Image((IntPtr)WEE.Render.SceneFramebuffer.ResultTexture!.ID, __SceneViewport, new Vector2(0, 1), new Vector2(1, 0));
+                uint TextureID;
+
+                if(ShowDepth){
+                    TextureID = WEE.Render.SceneFramebuffer.TextureDepth!.ID;
+                }else{
+                    TextureID = WEE.Render.SceneFramebuffer.TextureColor0!.ID;
+                }
+                
+                ImGui.Image((IntPtr)TextureID, __SceneViewport, new Vector2(0, 1), new Vector2(1, 0));
             }
         } ImGui.End();
     }

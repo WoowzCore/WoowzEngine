@@ -90,14 +90,15 @@
       "PackType": "TWLO.Math.Color4B, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
     },
     "CameraPosition": {
-      "XYZ": "T0,20477909|0,6141341|2,0460892",
+      "XYZ": "T-2,2124183|0,1668763|3,3630016",
       "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
     },
     "CameraRotation": {
-      "XYZ": "T0,30167142|0,00723397|0",
+      "XYZ": "T0,05420495|0,6057573|0",
       "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
     },
     "CameraPerspective": "Z1",
+    "CameraSpeed": "F1",
     "PackType": "TWEO.Scene\u002BEditorInfo, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
   },
   "PackType": "TWEO.Scene, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
