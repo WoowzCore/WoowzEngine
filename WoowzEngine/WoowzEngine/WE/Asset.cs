@@ -43,7 +43,7 @@ public static class Asset{
     
     public static WEO.Asset<T> Register<T>(string Key, Func<T> Factory, bool IsDynamic = false) where T : class{
         if(string.IsNullOrEmpty(Key)){ throw new ExceptionWE("todo, ключ не может быть пустой"); }
-        if(GetID(Key) != -1){ throw new ExceptionWE("todo, такой id уже есть"); }
+        if(GetID(Key) != -1){ throw new ExceptionWE($"todo, такой id [{Key}] уже есть"); }
 
         int ID = __IDToKey.Count;
         __KeyToID[Key] = ID;
@@ -77,6 +77,8 @@ public static class Asset{
             }
 
         #endregion
+        
+        WL.Logger.Info($"Зарегистрирован ресурс: {Key} [{ID}]");
         
         return new Asset<T>(ID);
     }

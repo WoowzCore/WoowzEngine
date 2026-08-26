@@ -1,5 +1,5 @@
 {
   "Name": "TWoowzCore",
-  "GameDLLPath": "T",
+  "GameDLLPath": "TW:\\Other\\WoowzCore\\WoowzCore\\WoowzCore\\bin\\Debug\\net8.0\\WoowzCore.dll",
   "PackType": "TWEEO.EditorConfig, WoowzEngineEditor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
 }

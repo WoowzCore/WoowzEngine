@@ -92,8 +92,8 @@ public class Scene : WLI.Packable{
 
     // ----------------------------------------------------------------------
     
-    public void Render(Camera Camera, int Uniform_ViewProjection, int Uniform_ModelProjection, int Uniform_Color){
-        PRender.Render(this, Camera, Uniform_ViewProjection, Uniform_ModelProjection, Uniform_Color);
+    public void Render(Camera Camera){
+        PRender.Render(this, Camera);
     }
     
     // ----------------------------------------------------------------------

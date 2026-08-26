@@ -3,6 +3,7 @@ using WEI.Editor;
 using WEO;
 using WEO.Processor;
 using WLI.GPU;
+using WLO.GPU;
 using WLO.Math;
 
 namespace WEO_Component;
@@ -18,13 +19,15 @@ public class CMeshRenderer : RenderComponent{
         if(!Active){ return; }
 
         Mesh?    Mesh__    = Mesh   .Resolve();
-        Program? Program__ = Program.Resolve();
+        GLProgram? Program__ = Program.Resolve() as GLProgram;
         
         if(Mesh__ == null || Program__ == null){ return; }
         
-        Program__.SetUniformM4F(PRender.TODO_Uniform_ViewProjection, PRender.ViewProjection);
-        Program__.SetUniformM4F(PRender.TODO_Uniform_ModelProjection, Owner.Transform.GetWorldMatrix());
-        Program__.SetUniformV3F(PRender.TODO_Uniform_Color, new Vector3F(Color.R / 255f, Color.G / 255f, Color.B / 255f));
+        //TODO, надо сделать какую-то runtime кеширование uniforms, или что-то такоееееее я хзззз, что-бы такой хунёй не маятся
+        
+        Program__.SetUniformM4F(Program__.GetUniform("uViewProjection"), PRender.ViewProjection);
+        Program__.SetUniformM4F(Program__.GetUniform("uModelProjection"), Owner.Transform.GetWorldMatrix());
+        Program__.SetUniformV3F(Program__.GetUniform("uColor"), new Vector3F(Color.R / 255f, Color.G / 255f, Color.B / 255f));
         
         WE.Render.API.Draw(Mesh__, Program__);
     }

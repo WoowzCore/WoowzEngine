@@ -1,5 +1,6 @@
 ﻿using WEE_Interface;
 using WEEO;
+using WEI.Editor;
 using WLI_Render;
 using WLI.GPU;
 using WLO;
@@ -56,7 +57,9 @@ public static class Render{
             
             WE.Render.API.Clear(I_View.BackgroundColor);
                 
-            __RENDERTESTRENDER();
+            WE.Render.API.DepthTest = true;
+        
+            WEE.Interface.CurrentScene?.Render(WEE.Editor.ViewCamera);
             
         WE.Render.API.FrameStop();
     }
@@ -84,11 +87,8 @@ public static class Render{
     // ----------------------------------------------------------------------
     // TODO, TEST RENDER
 
-    private static int __UNIFORM_VPROJ;
-    private static int __UNIFORM_MPROJ;
-    private static int __UNIFORM_COLOR;
-    
-    public static void __STARTTESTRENDER(){
+    [WEERunOnInit]
+    public static void __CREATEDEFAULTS(){
         GLProgram __PROGRAM = (GLProgram)WE.Render.API.CreateProgram(
             // language=GLSL
             WE.Render.API.CreateShader(Shader.Type.Vertex, @"
@@ -126,10 +126,6 @@ void main() {
 }")
         );
 
-        __UNIFORM_VPROJ = __PROGRAM.GetUniform("uViewProjection");
-        __UNIFORM_MPROJ = __PROGRAM.GetUniform("uModelProjection");
-        __UNIFORM_COLOR = __PROGRAM.GetUniform("uColor");
-
         VertexLayout VL = new VertexLayout(
             new VertexAttribute("aPosition", 3, VertexAttribute.AttributeType.Float),
             new VertexAttribute("aNormal", 3, VertexAttribute.AttributeType.Float),
@@ -157,11 +153,5 @@ void main() {
         WE.Asset.Register("Quad", () => __MESH_QUAD);
         WE.Asset.Register("Cube", () => __MESH_CUBE);
         WE.Asset.Register("DefaultShader", () => __PROGRAM);
-    }
-
-    public static void __RENDERTESTRENDER(){
-        WE.Render.API.DepthTest = true;
-        
-        WEE.Interface.CurrentScene?.Render(WEE.Editor.ViewCamera, __UNIFORM_VPROJ, __UNIFORM_MPROJ, __UNIFORM_COLOR);
     }
 }

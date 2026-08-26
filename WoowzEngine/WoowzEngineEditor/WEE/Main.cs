@@ -12,7 +12,7 @@ public static class Main{
             WEE.Interface.Start();
             
             WEE.Window.ConnectEvents();
-            WEE.Render.__STARTTESTRENDER();
+            WEE.Render.__CREATEDEFAULTS();
             WEE.Cycle.Start();
         }catch(Exception e){
             throw new ExceptionWEE("Произошла ошибка при запуске Main!", e);
