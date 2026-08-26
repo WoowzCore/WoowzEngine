@@ -9,7 +9,7 @@ public static class I_Assets{
         if(!WEE.Interface.WindowAssetsActive){ return; }
 
         if(ImGui.Begin("Ресурсы###Assets", ref WEE.Interface.WindowAssetsActive)){
-            List<Type> AssetTypes = WE.Asset.RegisteredTypes.OrderBy(T => T.Name).ToList();
+            List<Type> AssetTypes = WE.Asset.ExplicitTypes.OrderBy(T => T.Name).ToList();
 
             if(AssetTypes.Count == 0){
                 ImGui.TextDisabled("Нет зарегистрированных ресурсов");

@@ -7,22 +7,36 @@ public static class Asset{
     private static readonly Dictionary<string, int>   __KeyToID   = [];
     private static readonly List<string>              __IDToKey   = [];
     private static readonly Dictionary<int, Provider> __Providers = [];
-
+    
     private static readonly Dictionary<Type, List<string>> __TypeRegistry = [];
+    private static readonly Dictionary<Type, List<string>> __ExplicitTypeRegistry = [];
+
+    private static readonly Dictionary<Type, int> __Fallbacks = [];
     
     public static IReadOnlyList<string> AllKeys => __IDToKey;
-
     public static IEnumerable<Type> RegisteredTypes => __TypeRegistry.Keys;
+    public static IEnumerable<Type> ExplicitTypes => __ExplicitTypeRegistry.Keys;
     
     public static void Clear(){
         __KeyToID.Clear();
         __IDToKey.Clear();
         __Providers.Clear();
         __TypeRegistry.Clear();
+        __ExplicitTypeRegistry.Clear();
+        __Fallbacks.Clear();
     }
 
+    public static void SetNotFound<T>(string FallbackKey) where T : class => __Fallbacks[typeof(T)] = GetID(FallbackKey);
+    
     public static IReadOnlyList<string> GetKeysForType(Type TargetType){
         if (__TypeRegistry.TryGetValue(TargetType, out List<string>? Keys)) {
+            return Keys;
+        }
+        return [];
+    }
+    
+    public static IReadOnlyList<string> GetKeysForExplicitType(Type TargetType){
+        if (__ExplicitTypeRegistry.TryGetValue(TargetType, out List<string>? Keys)) {
             return Keys;
         }
         return [];
@@ -53,8 +67,15 @@ public static class Asset{
 
         #region Запись типа
 
-            Type? CurrentType = typeof(T);
+            Type ExplicitType = typeof(T);
         
+
+            if(!__ExplicitTypeRegistry.TryGetValue(ExplicitType, out List<string>? ExplicitList)){
+                ExplicitList = [];
+                __ExplicitTypeRegistry[ExplicitType] = ExplicitList;
+            }
+            ExplicitList.Add(Key);
+            
             void AddKeyToType(Type Type, string Key){
                 if(!__TypeRegistry.TryGetValue(Type, out List<string>? List)){
                     List = [];
@@ -64,15 +85,14 @@ public static class Asset{
                 if(!List.Contains(Key)){ List.Add(Key); }
             }
             
+            Type? CurrentType = ExplicitType;
             while(CurrentType != null){
                 AddKeyToType(CurrentType, Key);
 
                 CurrentType = CurrentType.BaseType;
             }
-
-            CurrentType = typeof(T);
             
-            foreach(Type Interface in CurrentType.GetInterfaces()){
+            foreach(Type Interface in ExplicitType.GetInterfaces()){
                 AddKeyToType(Interface, Key);
             }
 
@@ -85,8 +105,19 @@ public static class Asset{
     
     public static T? Resolve<T>(int ID) where T : class{
         if(__Providers.TryGetValue(ID, out Provider? Provider)){
-            return Provider.Get() as T;
+            T? Object = Provider.Get() as T;
+            if(Object != null){ return Object; }
         }
+
+        if(__Fallbacks.TryGetValue(typeof(T), out int Fallback)){
+            if(Fallback != -1 && __Providers.TryGetValue(Fallback, out Provider? FallbackProvider)){
+                T? FallbackObject = FallbackProvider.Get() as T;
+                if(FallbackObject != null){ return FallbackObject; }
+            }
+
+            WL.Logger.Warn($"todo, не указан fallback для ресурсов типа [{typeof(T).Name}]!");
+        }
+        
         return null;
     }
     
