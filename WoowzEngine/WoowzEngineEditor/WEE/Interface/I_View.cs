@@ -84,7 +84,7 @@ public static class I_View{
                     WEE.Editor.ViewCamera.Position = WEE.Editor.ViewCamera.Rotation = new Vector3F();
                     WEE.Editor.CameraSpeed = 1;
                 }
-                if(ImGui.IsItemHovered()){ ImGui.SetTooltip("Сбросить позицию и поворот камеры на дефолтные значения"); }
+                if(ImGui.IsItemHovered()){ ImGui.SetTooltip("Сбросить настройки камеры на дефолтные значения"); }
 
                 ImGui.SameLine();
                 ImGui.TextDisabled("|");

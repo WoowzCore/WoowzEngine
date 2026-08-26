@@ -1,13 +1,11 @@
 ﻿using WEE_Interface;
 using WEEO;
-using WEO_Component;
-using WEO;
 using WLI_Render;
 using WLI.GPU;
+using WLO;
 using WLO.GPU;
 using WLO.Math;
 using WLO.Render;
-using WoowzLib.Render.WLO;
 
 namespace WEE;
 
@@ -85,99 +83,78 @@ public static class Render{
     
     // ----------------------------------------------------------------------
     // TODO, TEST RENDER
-    
-    public static GLProgram __PROGRAM;
-    public static GLMesh    __MESH_TRIANGLE;
-    public static GLMesh    __MESH_CUBE;
 
     private static int __UNIFORM_VPROJ;
     private static int __UNIFORM_MPROJ;
     private static int __UNIFORM_COLOR;
     
     public static void __STARTTESTRENDER(){
-        __PROGRAM = (GLProgram)WE.Render.API.CreateProgram(
+        GLProgram __PROGRAM = (GLProgram)WE.Render.API.CreateProgram(
             // language=GLSL
             WE.Render.API.CreateShader(Shader.Type.Vertex, @"
 #version 330 core
-layout (location = 0) in vec3 aPos;
-layout (location = 1) in vec4 aColor;
+layout (location = 0) in vec3 aPosition;
+layout (location = 1) in vec3 aNormal;
+layout (location = 2) in vec3 aUV;
+layout (location = 3) in vec4 aColor;
+layout (location = 4) in uint aID;
 
 uniform mat4 uViewProjection;
 uniform mat4 uModelProjection;
 
-out vec4 vColor;
+out vec3 vNormal;
 
 void main() {
-    gl_Position = uViewProjection * uModelProjection * vec4(aPos, 1.0);
-    vColor = aColor;
+    gl_Position = uViewProjection * uModelProjection * vec4(aPosition, 1.0);
+    vNormal = mat3(uModelProjection) * aNormal;
 }"),
             // language=GLSL
             WE.Render.API.CreateShader(Shader.Type.Fragment, @"
 #version 330 core
-in vec4 vColor;
-out vec4 FragColor;
+in vec3 vNormal;
+out vec4 fColor;
 
 uniform vec3 uColor;
 
 void main() {
-    FragColor = vec4(uColor.rgb, vColor.a);
+    vec3 LightDirection = normalize(vec3(0.5, 1, 0.3));
+    vec3 Norm = normalize(vNormal);
+    float Diff = max(dot(Norm, LightDirection), 0);
+    float Ambient = 0.2;
+    float Light = Ambient + Diff;
+    fColor = vec4(uColor * Light, 1);
 }")
         );
 
         __UNIFORM_VPROJ = __PROGRAM.GetUniform("uViewProjection");
         __UNIFORM_MPROJ = __PROGRAM.GetUniform("uModelProjection");
         __UNIFORM_COLOR = __PROGRAM.GetUniform("uColor");
-        
-        __MESH_TRIANGLE = (GLMesh)WE.Render.API.CreateMesh(
-            new VertexLayout(
-                new VertexAttribute("aPos", 3, VertexAttribute.AttributeType.Float),
-                new VertexAttribute("aColor", 4, VertexAttribute.AttributeType.Byte, true)    
-            ), [
-                new Vertex(new Vector2F(-0.5f, -0.5f), new Color4B(255, 255, 255, 255)),
-                new Vertex(new Vector2F(0.5f, -0.5f), new Color4B(255, 255, 255, 255)),
-                new Vertex(new Vector2F(0.0f, 0.5f), new Color4B(255, 255, 255, 255))
-            ]
+
+        VertexLayout VL = new VertexLayout(
+            new VertexAttribute("aPosition", 3, VertexAttribute.AttributeType.Float),
+            new VertexAttribute("aNormal", 3, VertexAttribute.AttributeType.Float),
+            new VertexAttribute("aUV", 2, VertexAttribute.AttributeType.Float),
+            new VertexAttribute("aColor", 4, VertexAttribute.AttributeType.UByte, true),
+            new VertexAttribute("aID", 1, VertexAttribute.AttributeType.UInt)
         );
-
-        Vertex[] GetCubeVertices(){
-            Color4B w = new Color4B(255, 255, 255, 255);
-            float s = 0.5f; // Половина размера (от -0.5 до 0.5)
-
-            return [
-                // Front face (Z+)
-                new Vertex(new Vector3F(-s, -s,  s), w), new Vertex(new Vector3F( s, -s,  s), w), new Vertex(new Vector3F( s,  s,  s), w),
-                new Vertex(new Vector3F( s,  s,  s), w), new Vertex(new Vector3F(-s,  s,  s), w), new Vertex(new Vector3F(-s, -s,  s), w),
-
-                // Back face (Z-)
-                new Vertex(new Vector3F(-s, -s, -s), w), new Vertex(new Vector3F(-s,  s, -s), w), new Vertex(new Vector3F( s,  s, -s), w),
-                new Vertex(new Vector3F( s,  s, -s), w), new Vertex(new Vector3F( s, -s, -s), w), new Vertex(new Vector3F(-s, -s, -s), w),
-
-                // Left face (X-)
-                new Vertex(new Vector3F(-s,  s,  s), w), new Vertex(new Vector3F(-s,  s, -s), w), new Vertex(new Vector3F(-s, -s, -s), w),
-                new Vertex(new Vector3F(-s, -s, -s), w), new Vertex(new Vector3F(-s, -s,  s), w), new Vertex(new Vector3F(-s,  s,  s), w),
-
-                // Right face (X+)
-                new Vertex(new Vector3F( s,  s,  s), w), new Vertex(new Vector3F( s, -s,  s), w), new Vertex(new Vector3F( s, -s, -s), w),
-                new Vertex(new Vector3F( s, -s, -s), w), new Vertex(new Vector3F( s,  s, -s), w), new Vertex(new Vector3F( s,  s,  s), w),
-
-                // Top face (Y+)
-                new Vertex(new Vector3F(-s,  s, -s), w), new Vertex(new Vector3F(-s,  s,  s), w), new Vertex(new Vector3F( s,  s,  s), w),
-                new Vertex(new Vector3F( s,  s,  s), w), new Vertex(new Vector3F( s,  s, -s), w), new Vertex(new Vector3F(-s,  s, -s), w),
-
-                // Bottom face (Y-)
-                new Vertex(new Vector3F(-s, -s, -s), w), new Vertex(new Vector3F( s, -s, -s), w), new Vertex(new Vector3F( s, -s,  s), w),
-                new Vertex(new Vector3F( s, -s,  s), w), new Vertex(new Vector3F(-s, -s,  s), w), new Vertex(new Vector3F(-s, -s, -s), w)
-            ];
-        }
         
-        __MESH_CUBE = (GLMesh)WE.Render.API.CreateMesh(
-            new VertexLayout(
-                new VertexAttribute("aPos", 3, VertexAttribute.AttributeType.Float),
-                new VertexAttribute("aColor", 4, VertexAttribute.AttributeType.Byte, true)
-            ), GetCubeVertices()
+        GeometryData TRIANGLE = WL.Geometry.CreateTriangle();
+        GLMesh __MESH_TRIANGLE = (GLMesh)WE.Render.API.CreateMesh(
+            VL, TRIANGLE.Vertices.ToArray(), TRIANGLE.Indices.ToArray()
+        );
+        
+        GeometryData QUAD = WL.Geometry.CreateQuad();
+        GLMesh __MESH_QUAD = (GLMesh)WE.Render.API.CreateMesh(
+            VL, QUAD.Vertices.ToArray(), QUAD.Indices.ToArray()
+        );
+        
+        GeometryData CUBE = WL.Geometry.CreateCube();
+        GLMesh __MESH_CUBE = (GLMesh)WE.Render.API.CreateMesh(
+            VL, CUBE.Vertices.ToArray(), CUBE.Indices.ToArray()
         );
 
         WE.Asset.Register("Triangle", () => __MESH_TRIANGLE);
+        WE.Asset.Register("Quad", () => __MESH_QUAD);
         WE.Asset.Register("Cube", () => __MESH_CUBE);
         WE.Asset.Register("DefaultShader", () => __PROGRAM);
     }

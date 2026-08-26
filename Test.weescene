@@ -82,6 +82,47 @@
         "PackType": "TWLO.HierarchyNode\u00601[[WEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
       },
       "PackType": "TWEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+    },
+    {
+      "Name": "TQuad",
+      "Transform": {
+        "Position": {
+          "XYZ": "T-0,25|1|0",
+          "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+        },
+        "Rotation": {
+          "XYZ": "T0|0|0",
+          "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+        },
+        "Scale": {
+          "XYZ": "T1|1|1",
+          "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+        },
+        "PackType": "TWEO.Transform, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+      },
+      "Components": [
+        {
+          "Mesh": {
+            "Key": "TQuad",
+            "PackType": "TWEO.Asset\u00601[[WLI.GPU.Mesh, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          },
+          "Program": {
+            "Key": "TDefaultShader",
+            "PackType": "TWEO.Asset\u00601[[WLI.GPU.Program, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          },
+          "Color": {
+            "RGBA": "T0|255|0|255",
+            "PackType": "TWLO.Math.Color4B, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          },
+          "Active": "Z1",
+          "PackType": "TWEO_Component.CMeshRenderer, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+        }
+      ],
+      "Hierarchy": {
+        "Children": [],
+        "PackType": "TWLO.HierarchyNode\u00601[[WEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+      },
+      "PackType": "TWEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
     }
   ],
   "EditorInfo": {
@@ -90,11 +131,11 @@
       "PackType": "TWLO.Math.Color4B, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
     },
     "CameraPosition": {
-      "XYZ": "T-2,2124183|0,1668763|3,3630016",
+      "XYZ": "T0,106151596|1,8636092|2,3536983",
       "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
     },
     "CameraRotation": {
-      "XYZ": "T0,05420495|0,6057573|0",
+      "XYZ": "T0,5157917|-0,008553946|0",
       "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
     },
     "CameraPerspective": "Z1",

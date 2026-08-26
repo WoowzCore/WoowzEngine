@@ -33,10 +33,21 @@ public static class I_Inspector{
                             WEE.Interface.CurrentEntity.SetTransformDirty();
                         }
 
-                        Vector3 Rotation = new Vector3(WEE.Interface.CurrentEntity.Transform.Rotation.X, WEE.Interface.CurrentEntity.Transform.Rotation.Y, WEE.Interface.CurrentEntity.Transform.Rotation.Z);
-
+                        const float RadToDeg = 180f / System.MathF.PI;
+                        const float DegToRad = System.MathF.PI / 180;
+                        
+                        Vector3 Rotation = new Vector3(
+                            WEE.Interface.CurrentEntity.Transform.Rotation.X * RadToDeg,
+                            WEE.Interface.CurrentEntity.Transform.Rotation.Y * RadToDeg,
+                            WEE.Interface.CurrentEntity.Transform.Rotation.Z * RadToDeg
+                        );
+                        
                         if(ImGui.DragFloat3("Поворот", ref Rotation, 0.1f, 0, 0, "%g")){
-                            WEE.Interface.CurrentEntity.Transform.Rotation = new Vector3F(Rotation.X, Rotation.Y, Rotation.Z);
+                            WEE.Interface.CurrentEntity.Transform.Rotation = new Vector3F(
+                                Rotation.X * DegToRad,
+                                Rotation.Y * DegToRad,
+                                Rotation.Z * DegToRad
+                            );
                             WEE.Interface.CurrentEntity.SetTransformDirty();
                         }
                         
