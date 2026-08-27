@@ -1,7 +1,6 @@
 ﻿using WEI;
 using WEI.Editor;
 using WEO;
-using WEO.Processor;
 using WLI.GPU;
 using WLO.GPU;
 using WLO.Math;
@@ -32,9 +31,8 @@ public class CMeshRenderer : RenderComponent{
             Program = Program__,
             
             Uniforms = [
-                UniformValue.CreateM4F(0, PRender.ViewProjection),
-                UniformValue.CreateM4F(1, Owner.Transform.GetWorldMatrix()),
-                UniformValue.CreateV3F(2, new Vector3F(Color.R / 255f, Color.G / 255f, Color.B / 255f))
+                UniformValue.CreateM4F(0, Owner.Transform.GetWorldMatrix()),
+                UniformValue.CreateV3F(1, new Vector3F(Color.R / 255f, Color.G / 255f, Color.B / 255f))
             ]
         });
     }
