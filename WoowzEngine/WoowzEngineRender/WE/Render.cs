@@ -1,5 +1,6 @@
 ﻿using WLI;
 using WLO;
+using WLO.Render;
 using WLO.Render.Hardware;
 
 namespace WE;
@@ -38,6 +39,8 @@ public static class Render{
             API = new OpenGL(ProcessLoader, new OpenGL.StartParameters{
                 DebugLogger = Parameters__.DebugLogger
             }, true);
+
+            Queue = new GLRenderQueue(API);
             
             Log(LogType_Initialization, "WoowzEngineRender запущен!");
             
@@ -65,4 +68,6 @@ public static class Render{
     }
 
     public static OpenGL API{ get; private set; } = null!;
+
+    public static GLRenderQueue Queue{ get; private set; } = null!;
 }

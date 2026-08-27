@@ -10,7 +10,7 @@ public static class PRender{
         ViewProjection = Camera.GetProjectionMatrix() * Camera.GetViewMatrix();
 
         foreach(Entity E in Scene.AllEntity){
-            E.GetComponent<RenderComponent>()?.OnRender();
+            E.GetComponent<RenderComponent>()?.OnRender(Camera.Position);
         }
     }
 }

@@ -55,6 +55,8 @@ public static class Render{
         
             WEE.Interface.CurrentScene?.Render(WEE.Editor.ViewCamera);
             
+            WE.Render.Queue.Render();
+            
         WE.Render.API.FrameStop();
     }
     
