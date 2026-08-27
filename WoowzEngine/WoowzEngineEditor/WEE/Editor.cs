@@ -35,6 +35,13 @@ public static class Editor{
             ViewCamera.Rotation.X += MouseDelta.Y * CameraSensitivity * DT;
         }
 
+        float RotationSpeed = 2 * DT; 
+
+        if(Keyboard.IsKeyDown(Keyboard.Key.Left )){ ViewCamera.Rotation.Y -= RotationSpeed; }
+        if(Keyboard.IsKeyDown(Keyboard.Key.Right)){ ViewCamera.Rotation.Y += RotationSpeed; }
+        if(Keyboard.IsKeyDown(Keyboard.Key.Up   )){ ViewCamera.Rotation.X -= RotationSpeed; }
+        if(Keyboard.IsKeyDown(Keyboard.Key.Down )){ ViewCamera.Rotation.X += RotationSpeed; }
+        
         Vector3F MoveDirection = new Vector3F();
 
         if(Keyboard.IsKeyDown(Keyboard.Key.W)){ MoveDirection += ViewCamera.Forward; }

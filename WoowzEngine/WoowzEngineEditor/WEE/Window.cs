@@ -33,7 +33,7 @@ public static class Window{
             if(WEE.Interface.CurrentScene == null){
                 Title += " - Не выбрана сцена";
             }else{
-                Title += $" - {I_Menu.__SceneFilePath}";
+                Title += $" - {(I_Menu.__SceneFilePath == null! ? "Не указано куда сохранять." : I_Menu.__SceneFilePath)}";
             }
         }
         

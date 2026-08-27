@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using ImGuiNET;
 using NativeFileDialogSharp;
+using WEI.Editor;
 using WEO;
 using WLO.Math;
 
@@ -103,6 +104,8 @@ public static class I_Menu{
         WEE.Interface.CurrentEntity = null;
         WEE.Interface.CurrentScene = null;
 
+        __SceneFilePath = null!;
+        
         I_View.BackgroundColor         = new Color4B(200, 200, 200);
         WEE.Editor.ViewCamera.Position = new Vector3F();
         WEE.Editor.ViewCamera.Rotation = new Vector3F();
@@ -180,6 +183,8 @@ public static class I_Menu{
             
             WEE.Prefs.AddRecentScene(Path);
             WL.Logger.Info($"Сцена загружена: {Path}");
+            
+            WEE.Registry.RunMethods<WEERunOnSceneLoad>(WEE.Interface.CurrentScene);
         }catch(Exception e){
             WL.Logger.Error($"Ошибка загрузки: {e.Message + "\n" + e.StackTrace}");
         }

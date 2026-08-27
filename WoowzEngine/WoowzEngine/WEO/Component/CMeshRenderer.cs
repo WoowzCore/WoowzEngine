@@ -12,8 +12,8 @@ public class CMeshRenderer : RenderComponent{
     [WEESave] public Asset<Mesh   > Mesh   ;
     [WEESave] public Asset<Program> Program;
 
-    [WEESave] private Color4B Color = new Color4B(255, 255, 255);
-    [WEESave] private bool Active = true;
+    [WEESave] public Color4B Color = new Color4B(255, 255, 255);
+    [WEESave] public bool Active = true;
     
     public override void OnRender(){
         if(!Active){ return; }

@@ -1,0 +1,22 @@
+{
+  "Name": "TForTest",
+  "Entities": [],
+  "EditorInfo": {
+    "BackgroundColor": {
+      "RGBA": "T200|200|200|255",
+      "PackType": "TWLO.Math.Color4B, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+    },
+    "CameraPosition": {
+      "XYZ": "T-0,259932|-0,58825094|1,3630196",
+      "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+    },
+    "CameraRotation": {
+      "XYZ": "T0,01667025|0,26278812|0",
+      "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+    },
+    "CameraPerspective": "Z1",
+    "CameraSpeed": "F1",
+    "PackType": "TWEO.Scene\u002BEditorInfo, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+  },
+  "PackType": "TWEO.Scene, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+}

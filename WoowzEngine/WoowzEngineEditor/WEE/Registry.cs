@@ -24,26 +24,31 @@ public static class Registry{
                 WL.Logger.Info($"Зарегистрирован компонент: {Type.FullName} из {Assembly.GetName().Name}");
             }
         }
-        
-        RunInitMethods(Assembly);
     }
 
-    private static void RunInitMethods(Assembly Assembly){
-        foreach(Type Type in Assembly.GetTypes()){
-            MethodInfo[] Methods = Type.GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
+    public static void RunMethods<T>(params object[] Args) where T : Attribute{
+        WL.Logger.Debug($"Поиск и выполнение методов с атрибутом [{typeof(T).Name}]...");
 
-            foreach(MethodInfo Method in Methods){
-                if(Method.GetCustomAttribute<WEERunOnInit>() != null){
-                    try{
-                        if(Method.GetParameters().Length == 0){
-                            WL.Logger.Debug($"Выполнение WEERunOnInit: {Type.Name}.{Method.Name}");
-                            Method.Invoke(null, null);
-                        }else{
-                            WL.Logger.Warn($"todo, Метод {Type.Name}.{Method.Name} помечен [WEERunOnInit], но имеет параметры и не может быть вызван.");  
+
+        foreach(Assembly Assembly in ScannedAssemblies){
+            foreach(Type Type in Assembly.GetTypes()){
+                MethodInfo[] Methods = Type.GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
+
+                foreach(MethodInfo Method in Methods){
+                    if(Method.GetCustomAttribute<T>() != null){
+                        try{
+                            ParameterInfo[] Parameters = Method.GetParameters();
+                            
+                            if(Parameters.Length == Args.Length){
+                                WL.Logger.Debug($"Вызов [{typeof(T).Name}]: {Type.Name}.{Method.Name}");
+                                Method.Invoke(null, Args);
+                            }else{
+                                WL.Logger.Warn($"todo, Метод {Type.Name}.{Method.Name} помечен [{typeof(T).Name}], но имеет параметры и не может быть вызван.");
+                            }
+                        }catch(Exception e){
+                            e = e.InnerException ?? e;
+                            WL.Logger.Error($"todo, Ошибка при выполнении [{typeof(T).Name}] в {Type.Name}.{Method.Name}: {e.Message} {e.StackTrace}");
                         }
-                    }catch(Exception e){
-                        Exception ie = e.InnerException!;
-                        WL.Logger.Error($"todo, Ошибка при выполнении [WEERunOnInit] в {Type.Name}.{Method.Name}: {e.Message} {e.StackTrace}\n{ie.Message} {ie.StackTrace}");   
                     }
                 }
             }
@@ -66,5 +71,7 @@ public static class Registry{
         if(GameAssembly != null){
             ScanAssembly(GameAssembly);
         }
+        
+        RunMethods<WEERunOnInit>();
     }
 }
