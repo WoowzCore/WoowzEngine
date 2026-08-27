@@ -1,10 +1,5 @@
 ﻿using WEE_Interface;
 using WEEO;
-using WEI.Editor;
-using WLI_Render;
-using WLI.GPU;
-using WLO;
-using WLO.GPU;
 using WLO.Math;
 using WLO.Render;
 
@@ -26,13 +21,13 @@ public static class Render{
     
     // ----------------------------------------------------------------------
 
-    public static GLRenderView SceneFramebuffer = null!;
+    public static GLView SceneView = null!;
 
     private static void RecreateSceneFrameBuffer(Vector2I Size){
-        if(SceneFramebuffer != null!){ SceneFramebuffer.Destroy(); }
-        SceneFramebuffer = GLRenderView.Create(WE.Render.API, Size, [
-            GLRenderView.LayerConfig.Color(),
-            GLRenderView.LayerConfig.Depth(true)
+        if(SceneView != null!){ SceneView.Destroy(); }
+        SceneView = GLView.Create(WE.Render.API, Size, [
+            GLView.LayerConfig.Color(),
+            GLView.LayerConfig.Depth(true)
         ]);
     }
     
@@ -42,22 +37,21 @@ public static class Render{
         if(TargetSize.X <= 0 || TargetSize.Y <= 0){ return; }
 
         if(TargetSize.X > 0 && TargetSize.Y > 0 && 
-           (TargetSize.X != SceneFramebuffer.TextureColor0!.Size.X || 
-            TargetSize.Y != SceneFramebuffer.TextureColor0!.Size.Y)){
+           (TargetSize.X != SceneView.TextureColor0!.Size.X || 
+            TargetSize.Y != SceneView.TextureColor0!.Size.Y)){
             RecreateSceneFrameBuffer(TargetSize);
             
             WEE.Editor.ViewCamera.Aspect = TargetSize.Aspect;
         }
         
-        WE.Render.API.CRenderView = SceneFramebuffer;
+        WE.Render.API.Pool.SetView(SceneView);
         
-        WE.Render.API.CRenderView.Viewport = TargetSize;
+        WE.Render.API.Pool.GetView().Viewport = TargetSize;
         
         WE.Render.API.FrameStart();
-            
             WE.Render.API.Clear(I_View.BackgroundColor);
                 
-            WE.Render.API.DepthTest = true;
+            WE.Render.API.Pool.SetDepthTest(true);
         
             WEE.Interface.CurrentScene?.Render(WEE.Editor.ViewCamera);
             
@@ -68,12 +62,11 @@ public static class Render{
         try{
             SceneRender();
             
-            WE.Render.API.CRenderView = null!;
+            WE.Render.API.Pool.SetView(null);
             
-            WE.Render.API.CRenderView.Viewport = WEE.Window.MainWindow.Size;
+            WE.Render.API.Pool.GetView().Viewport = WEE.Window.MainWindow.Size;
             
             WE.Render.API.FrameStart();
-            
                 WE.Render.API.Clear(new Color4B(50, 25, 25));
                 
                 WEE.Interface.Render();

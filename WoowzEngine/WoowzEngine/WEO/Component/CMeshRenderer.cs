@@ -18,7 +18,7 @@ public class CMeshRenderer : RenderComponent{
     public override void OnRender(){
         if(!Active){ return; }
 
-        Mesh?    Mesh__    = Mesh   .Resolve();
+        GLMesh?    Mesh__    = Mesh   .Resolve() as GLMesh;
         GLProgram? Program__ = Program.Resolve() as GLProgram;
         
         if(Mesh__ == null || Program__ == null){ return; }

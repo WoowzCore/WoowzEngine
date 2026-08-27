@@ -114,9 +114,9 @@ public static class I_View{
                 uint TextureID;
 
                 if(ShowDepth){
-                    TextureID = WEE.Render.SceneFramebuffer.TextureDepth!.ID;
+                    TextureID = WEE.Render.SceneView.TextureDepth!.ID;
                 }else{
-                    TextureID = WEE.Render.SceneFramebuffer.TextureColor0!.ID;
+                    TextureID = WEE.Render.SceneView.TextureColor0!.ID;
                 }
                 
                 ImGui.Image((IntPtr)TextureID, __SceneViewport, new Vector2(0, 1), new Vector2(1, 0));
