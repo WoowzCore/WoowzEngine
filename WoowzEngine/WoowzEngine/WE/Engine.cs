@@ -5,6 +5,7 @@ namespace WE;
 public static class Engine{
     public static void Start(){
         try{
+            WE.Asset.__Start();
             WE.Window.__Start();
         }catch(Exception e){
             Stop();

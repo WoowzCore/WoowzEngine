@@ -7,7 +7,7 @@ namespace WEE_Interface;
 
 public static class I_Launcher{
     private static string __NewProjectName      = "New Project";
-    private const  string __ConfigFileExtension = "weeconfig";
+    private const  string __ConfigFileExtension = "wee_config";
     
     public static void Update(){
         ImGui.SetNextWindowPos(ImGui.GetMainViewport().GetCenter(), ImGuiCond.Always, new Vector2(0.5f, 0.5f));

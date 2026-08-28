@@ -1,5 +1,4 @@
 ﻿using WEO;
-using WLI.GPU;
 
 namespace WE;
 
@@ -117,6 +116,17 @@ public static class Asset{
         }
         
         return null;
+    }
+
+    public static void __Start(){
+        WL.Loader.UpdateRegister(
+            typeof(WLO.Loader.OBJ),
+            typeof(WLO.Loader.FBX),
+            typeof(WLO.Loader.PNG),
+            typeof(WLO.Loader.JPG),
+            typeof(WLO.Loader.BMP),
+            typeof(WLO.Loader.TGA)
+        );
     }
     
     public class Provider{

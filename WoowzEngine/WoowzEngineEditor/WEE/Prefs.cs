@@ -5,7 +5,7 @@ public static class Prefs{
     public static List<string> RecentScenes   = [];
     private const int          MaxRecentCount = 10;
 
-    private static string PrefsPath => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ".weeprefs");
+    private static string PrefsPath => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ".wee_prefs");
 
     public static Dictionary<string, object?> __Pack() => new Dictionary<string, object?>{
         ["LastConfigPath"] = LastConfigPath,

@@ -9,7 +9,7 @@ namespace WEE_Interface;
 
 public static class I_Menu{
     public static string __SceneFilePath      = null!;
-    private const string __SceneFileExtension = "weescene";
+    private const string __SceneFileExtension = "we_scene";
     
     public static void Update(){
         if(ImGui.BeginMainMenuBar()){

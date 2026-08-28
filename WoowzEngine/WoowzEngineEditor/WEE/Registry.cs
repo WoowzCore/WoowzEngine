@@ -47,7 +47,7 @@ public static class Registry{
                             }
                         }catch(Exception e){
                             e = e.InnerException ?? e;
-                            WL.Logger.Error($"todo, Ошибка при выполнении [{typeof(T).Name}] в {Type.Name}.{Method.Name}: {e.Message} {e.StackTrace}");
+                            WL.Logger.Error($"todo, Ошибка при выполнении [{typeof(T).Name}] в {Type.Name}.{Method.Name}:\n{e.Message} {e.StackTrace}");
                         }
                     }
                 }

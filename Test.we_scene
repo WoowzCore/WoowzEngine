@@ -1,0 +1,813 @@
+{
+  "Name": "TSCENETESTV.1AGAIN",
+  "Entities": [
+    {
+      "Name": "TTriangle",
+      "Transform": {
+        "Position": {
+          "XYZ": "T-1|0|-5",
+          "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+        },
+        "Rotation": {
+          "XYZ": "T-0,7853982|0|0",
+          "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+        },
+        "Scale": {
+          "XYZ": "T10|10|1",
+          "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+        },
+        "PackType": "TWEO.Transform, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+      },
+      "Components": [
+        {
+          "Mesh": {
+            "Key": "TMesh/Triangle",
+            "PackType": "TWEO.Asset\u00601[[WLI.GPU.Mesh, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          },
+          "Program": {
+            "Key": "TShader/Default",
+            "PackType": "TWEO.Asset\u00601[[WLI.GPU.Program, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          },
+          "Texture": {
+            "Key": "TTexture/Pavel",
+            "PackType": "TWEO.Asset\u00601[[WLI.GPU.Texture, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          },
+          "Color": {
+            "RGBA": "T255|255|255|255",
+            "PackType": "TWLO.Math.Color4B, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          },
+          "Active": "Z1",
+          "PackType": "TWEO_Component.CMeshRenderer, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+        }
+      ],
+      "Hierarchy": {
+        "Children": [],
+        "PackType": "TWLO.HierarchyNode\u00601[[WEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+      },
+      "PackType": "TWEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+    },
+    {
+      "Name": "TCube",
+      "Transform": {
+        "Position": {
+          "XYZ": "T1|0|0",
+          "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+        },
+        "Rotation": {
+          "XYZ": "T0|0|0",
+          "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+        },
+        "Scale": {
+          "XYZ": "T1|1|1",
+          "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+        },
+        "PackType": "TWEO.Transform, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+      },
+      "Components": [
+        {
+          "Mesh": {
+            "Key": "TMesh/Cube",
+            "PackType": "TWEO.Asset\u00601[[WLI.GPU.Mesh, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          },
+          "Program": {
+            "Key": "TShader/Test",
+            "PackType": "TWEO.Asset\u00601[[WLI.GPU.Program, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          },
+          "Texture": {
+            "NotLinked": "Z1",
+            "PackType": "TWEO.Asset\u00601[[WLI.GPU.Texture, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          },
+          "Color": {
+            "RGBA": "T0|0|255|255",
+            "PackType": "TWLO.Math.Color4B, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          },
+          "Active": "Z1",
+          "PackType": "TWEO_Component.CMeshRenderer, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+        }
+      ],
+      "Hierarchy": {
+        "Children": [],
+        "PackType": "TWLO.HierarchyNode\u00601[[WEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+      },
+      "PackType": "TWEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+    },
+    {
+      "Name": "TQuad",
+      "Transform": {
+        "Position": {
+          "XYZ": "T-0,25|1|0",
+          "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+        },
+        "Rotation": {
+          "XYZ": "T0|0|0",
+          "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+        },
+        "Scale": {
+          "XYZ": "T1|1|1",
+          "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+        },
+        "PackType": "TWEO.Transform, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+      },
+      "Components": [
+        {
+          "Mesh": {
+            "Key": "TMesh/Quad",
+            "PackType": "TWEO.Asset\u00601[[WLI.GPU.Mesh, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          },
+          "Program": {
+            "Key": "TShader/Default",
+            "PackType": "TWEO.Asset\u00601[[WLI.GPU.Program, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          },
+          "Texture": {
+            "Key": "TTexture/Error",
+            "PackType": "TWEO.Asset\u00601[[WLI.GPU.Texture, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          },
+          "Color": {
+            "RGBA": "T255|255|255|255",
+            "PackType": "TWLO.Math.Color4B, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          },
+          "Active": "Z1",
+          "PackType": "TWEO_Component.CMeshRenderer, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+        }
+      ],
+      "Hierarchy": {
+        "Children": [],
+        "PackType": "TWLO.HierarchyNode\u00601[[WEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+      },
+      "PackType": "TWEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+    },
+    {
+      "Name": "TQuad",
+      "Transform": {
+        "Position": {
+          "XYZ": "T-0,25|1|0",
+          "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+        },
+        "Rotation": {
+          "XYZ": "T-1,5707964|0|0",
+          "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+        },
+        "Scale": {
+          "XYZ": "T1|1|1",
+          "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+        },
+        "PackType": "TWEO.Transform, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+      },
+      "Components": [
+        {
+          "Mesh": {
+            "Key": "TMesh/Quad",
+            "PackType": "TWEO.Asset\u00601[[WLI.GPU.Mesh, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          },
+          "Program": {
+            "Key": "TShader/Default",
+            "PackType": "TWEO.Asset\u00601[[WLI.GPU.Program, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          },
+          "Texture": {
+            "Key": "TTexture/Error",
+            "PackType": "TWEO.Asset\u00601[[WLI.GPU.Texture, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          },
+          "Color": {
+            "RGBA": "T255|255|255|255",
+            "PackType": "TWLO.Math.Color4B, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          },
+          "Active": "Z1",
+          "PackType": "TWEO_Component.CMeshRenderer, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+        }
+      ],
+      "Hierarchy": {
+        "Children": [],
+        "PackType": "TWLO.HierarchyNode\u00601[[WEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+      },
+      "PackType": "TWEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+    },
+    {
+      "Name": "TQuad",
+      "Transform": {
+        "Position": {
+          "XYZ": "T-0,25|1|0",
+          "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+        },
+        "Rotation": {
+          "XYZ": "T0|1,5707964|0",
+          "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+        },
+        "Scale": {
+          "XYZ": "T1|1|1",
+          "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+        },
+        "PackType": "TWEO.Transform, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+      },
+      "Components": [
+        {
+          "Mesh": {
+            "Key": "TMesh/Quad",
+            "PackType": "TWEO.Asset\u00601[[WLI.GPU.Mesh, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          },
+          "Program": {
+            "Key": "TShader/Default",
+            "PackType": "TWEO.Asset\u00601[[WLI.GPU.Program, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          },
+          "Texture": {
+            "Key": "TTexture/Error",
+            "PackType": "TWEO.Asset\u00601[[WLI.GPU.Texture, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          },
+          "Color": {
+            "RGBA": "T255|255|255|255",
+            "PackType": "TWLO.Math.Color4B, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          },
+          "Active": "Z1",
+          "PackType": "TWEO_Component.CMeshRenderer, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+        }
+      ],
+      "Hierarchy": {
+        "Children": [],
+        "PackType": "TWLO.HierarchyNode\u00601[[WEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+      },
+      "PackType": "TWEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+    },
+    {
+      "Name": "TNewModels",
+      "Transform": {
+        "Position": {
+          "XYZ": "T10|0|0",
+          "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+        },
+        "Rotation": {
+          "XYZ": "T0|0|0",
+          "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+        },
+        "Scale": {
+          "XYZ": "T1|1|1",
+          "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+        },
+        "PackType": "TWEO.Transform, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+      },
+      "Components": [],
+      "Hierarchy": {
+        "Children": [
+          {
+            "Name": "TArrow",
+            "Transform": {
+              "Position": {
+                "XYZ": "T0|0|0",
+                "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+              },
+              "Rotation": {
+                "XYZ": "T0|0|0",
+                "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+              },
+              "Scale": {
+                "XYZ": "T1|1|1",
+                "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+              },
+              "PackType": "TWEO.Transform, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+            },
+            "Components": [
+              {
+                "Mesh": {
+                  "Key": "TMesh/Arrow",
+                  "PackType": "TWEO.Asset\u00601[[WLI.GPU.Mesh, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                },
+                "Program": {
+                  "Key": "TShader/Test",
+                  "PackType": "TWEO.Asset\u00601[[WLI.GPU.Program, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                },
+                "Texture": {
+                  "NotLinked": "Z1",
+                  "PackType": "TWEO.Asset\u00601[[WLI.GPU.Texture, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                },
+                "Color": {
+                  "RGBA": "T255|255|255|255",
+                  "PackType": "TWLO.Math.Color4B, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                },
+                "Active": "Z1",
+                "PackType": "TWEO_Component.CMeshRenderer, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+              }
+            ],
+            "Hierarchy": {
+              "Children": [],
+              "PackType": "TWLO.HierarchyNode\u00601[[WEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+            },
+            "PackType": "TWEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          },
+          {
+            "Name": "TCar",
+            "Transform": {
+              "Position": {
+                "XYZ": "T6|0|-2",
+                "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+              },
+              "Rotation": {
+                "XYZ": "T-1,5707964|0|0",
+                "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+              },
+              "Scale": {
+                "XYZ": "T0,1|0,1|0,1",
+                "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+              },
+              "PackType": "TWEO.Transform, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+            },
+            "Components": [
+              {
+                "Mesh": {
+                  "Key": "TMesh/Car",
+                  "PackType": "TWEO.Asset\u00601[[WLI.GPU.Mesh, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                },
+                "Program": {
+                  "Key": "TShader/Test",
+                  "PackType": "TWEO.Asset\u00601[[WLI.GPU.Program, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                },
+                "Texture": {
+                  "NotLinked": "Z1",
+                  "PackType": "TWEO.Asset\u00601[[WLI.GPU.Texture, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                },
+                "Color": {
+                  "RGBA": "T255|255|255|255",
+                  "PackType": "TWLO.Math.Color4B, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                },
+                "Active": "Z1",
+                "PackType": "TWEO_Component.CMeshRenderer, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+              }
+            ],
+            "Hierarchy": {
+              "Children": [],
+              "PackType": "TWLO.HierarchyNode\u00601[[WEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+            },
+            "PackType": "TWEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          },
+          {
+            "Name": "TCoral",
+            "Transform": {
+              "Position": {
+                "XYZ": "T17|2|0",
+                "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+              },
+              "Rotation": {
+                "XYZ": "T0|0|0",
+                "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+              },
+              "Scale": {
+                "XYZ": "T5|5|5",
+                "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+              },
+              "PackType": "TWEO.Transform, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+            },
+            "Components": [
+              {
+                "Mesh": {
+                  "Key": "TMesh/Coral",
+                  "PackType": "TWEO.Asset\u00601[[WLI.GPU.Mesh, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                },
+                "Program": {
+                  "Key": "TShader/Test",
+                  "PackType": "TWEO.Asset\u00601[[WLI.GPU.Program, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                },
+                "Texture": {
+                  "NotLinked": "Z1",
+                  "PackType": "TWEO.Asset\u00601[[WLI.GPU.Texture, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                },
+                "Color": {
+                  "RGBA": "T255|255|255|255",
+                  "PackType": "TWLO.Math.Color4B, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                },
+                "Active": "Z1",
+                "PackType": "TWEO_Component.CMeshRenderer, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+              }
+            ],
+            "Hierarchy": {
+              "Children": [],
+              "PackType": "TWLO.HierarchyNode\u00601[[WEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+            },
+            "PackType": "TWEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          },
+          {
+            "Name": "TCubeHuman",
+            "Transform": {
+              "Position": {
+                "XYZ": "T27|-2|0",
+                "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+              },
+              "Rotation": {
+                "XYZ": "T-1,5707964|0|1,5707964",
+                "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+              },
+              "Scale": {
+                "XYZ": "T0,5|0,5|0,5",
+                "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+              },
+              "PackType": "TWEO.Transform, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+            },
+            "Components": [
+              {
+                "Mesh": {
+                  "Key": "TMesh/CubeHuman",
+                  "PackType": "TWEO.Asset\u00601[[WLI.GPU.Mesh, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                },
+                "Program": {
+                  "Key": "TShader/Test",
+                  "PackType": "TWEO.Asset\u00601[[WLI.GPU.Program, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                },
+                "Texture": {
+                  "NotLinked": "Z1",
+                  "PackType": "TWEO.Asset\u00601[[WLI.GPU.Texture, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                },
+                "Color": {
+                  "RGBA": "T255|255|255|255",
+                  "PackType": "TWLO.Math.Color4B, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                },
+                "Active": "Z1",
+                "PackType": "TWEO_Component.CMeshRenderer, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+              }
+            ],
+            "Hierarchy": {
+              "Children": [],
+              "PackType": "TWLO.HierarchyNode\u00601[[WEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+            },
+            "PackType": "TWEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          },
+          {
+            "Name": "THuman",
+            "Transform": {
+              "Position": {
+                "XYZ": "T32|0|0",
+                "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+              },
+              "Rotation": {
+                "XYZ": "T0|0|0",
+                "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+              },
+              "Scale": {
+                "XYZ": "T2|2|2",
+                "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+              },
+              "PackType": "TWEO.Transform, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+            },
+            "Components": [
+              {
+                "Mesh": {
+                  "Key": "TMesh/Human",
+                  "PackType": "TWEO.Asset\u00601[[WLI.GPU.Mesh, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                },
+                "Program": {
+                  "Key": "TShader/Test",
+                  "PackType": "TWEO.Asset\u00601[[WLI.GPU.Program, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                },
+                "Texture": {
+                  "NotLinked": "Z1",
+                  "PackType": "TWEO.Asset\u00601[[WLI.GPU.Texture, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                },
+                "Color": {
+                  "RGBA": "T255|255|255|255",
+                  "PackType": "TWLO.Math.Color4B, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                },
+                "Active": "Z1",
+                "PackType": "TWEO_Component.CMeshRenderer, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+              }
+            ],
+            "Hierarchy": {
+              "Children": [],
+              "PackType": "TWLO.HierarchyNode\u00601[[WEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+            },
+            "PackType": "TWEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          },
+          {
+            "Name": "TPear",
+            "Transform": {
+              "Position": {
+                "XYZ": "T36,9|0,4|1,2",
+                "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+              },
+              "Rotation": {
+                "XYZ": "T0|0|0",
+                "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+              },
+              "Scale": {
+                "XYZ": "T0,025|0,025|0,025",
+                "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+              },
+              "PackType": "TWEO.Transform, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+            },
+            "Components": [
+              {
+                "Mesh": {
+                  "Key": "TMesh/Pear",
+                  "PackType": "TWEO.Asset\u00601[[WLI.GPU.Mesh, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                },
+                "Program": {
+                  "Key": "TShader/Test",
+                  "PackType": "TWEO.Asset\u00601[[WLI.GPU.Program, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                },
+                "Texture": {
+                  "NotLinked": "Z1",
+                  "PackType": "TWEO.Asset\u00601[[WLI.GPU.Texture, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                },
+                "Color": {
+                  "RGBA": "T255|255|255|255",
+                  "PackType": "TWLO.Math.Color4B, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                },
+                "Active": "Z1",
+                "PackType": "TWEO_Component.CMeshRenderer, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+              }
+            ],
+            "Hierarchy": {
+              "Children": [],
+              "PackType": "TWLO.HierarchyNode\u00601[[WEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+            },
+            "PackType": "TWEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          },
+          {
+            "Name": "TPlatonic",
+            "Transform": {
+              "Position": {
+                "XYZ": "T44,1|2,7|-0,3",
+                "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+              },
+              "Rotation": {
+                "XYZ": "T0|0|0",
+                "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+              },
+              "Scale": {
+                "XYZ": "T0,0125|0,0125|0,0125",
+                "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+              },
+              "PackType": "TWEO.Transform, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+            },
+            "Components": [
+              {
+                "Mesh": {
+                  "Key": "TMesh/Platonic",
+                  "PackType": "TWEO.Asset\u00601[[WLI.GPU.Mesh, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                },
+                "Program": {
+                  "Key": "TShader/Default",
+                  "PackType": "TWEO.Asset\u00601[[WLI.GPU.Program, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                },
+                "Texture": {
+                  "Key": "TTexture/Pavel",
+                  "PackType": "TWEO.Asset\u00601[[WLI.GPU.Texture, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                },
+                "Color": {
+                  "RGBA": "T255|255|255|255",
+                  "PackType": "TWLO.Math.Color4B, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                },
+                "Active": "Z1",
+                "PackType": "TWEO_Component.CMeshRenderer, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+              }
+            ],
+            "Hierarchy": {
+              "Children": [],
+              "PackType": "TWLO.HierarchyNode\u00601[[WEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+            },
+            "PackType": "TWEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          },
+          {
+            "Name": "TSkySphere",
+            "Transform": {
+              "Position": {
+                "XYZ": "T52,7|2,7|-0,3",
+                "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+              },
+              "Rotation": {
+                "XYZ": "T0|0|0",
+                "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+              },
+              "Scale": {
+                "XYZ": "T2|2|2",
+                "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+              },
+              "PackType": "TWEO.Transform, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+            },
+            "Components": [
+              {
+                "Mesh": {
+                  "Key": "TMesh/SkySphere",
+                  "PackType": "TWEO.Asset\u00601[[WLI.GPU.Mesh, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                },
+                "Program": {
+                  "Key": "TShader/Test",
+                  "PackType": "TWEO.Asset\u00601[[WLI.GPU.Program, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                },
+                "Texture": {
+                  "NotLinked": "Z1",
+                  "PackType": "TWEO.Asset\u00601[[WLI.GPU.Texture, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                },
+                "Color": {
+                  "RGBA": "T255|255|255|255",
+                  "PackType": "TWLO.Math.Color4B, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                },
+                "Active": "Z1",
+                "PackType": "TWEO_Component.CMeshRenderer, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+              }
+            ],
+            "Hierarchy": {
+              "Children": [],
+              "PackType": "TWLO.HierarchyNode\u00601[[WEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+            },
+            "PackType": "TWEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          },
+          {
+            "Name": "TSphere",
+            "Transform": {
+              "Position": {
+                "XYZ": "T57,7|2,6|0",
+                "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+              },
+              "Rotation": {
+                "XYZ": "T0|0|0",
+                "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+              },
+              "Scale": {
+                "XYZ": "T1|1|1",
+                "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+              },
+              "PackType": "TWEO.Transform, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+            },
+            "Components": [
+              {
+                "Mesh": {
+                  "Key": "TMesh/Sphere",
+                  "PackType": "TWEO.Asset\u00601[[WLI.GPU.Mesh, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                },
+                "Program": {
+                  "Key": "TShader/Default",
+                  "PackType": "TWEO.Asset\u00601[[WLI.GPU.Program, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                },
+                "Texture": {
+                  "Key": "TTexture/Error",
+                  "PackType": "TWEO.Asset\u00601[[WLI.GPU.Texture, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                },
+                "Color": {
+                  "RGBA": "T255|255|255|255",
+                  "PackType": "TWLO.Math.Color4B, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                },
+                "Active": "Z1",
+                "PackType": "TWEO_Component.CMeshRenderer, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+              }
+            ],
+            "Hierarchy": {
+              "Children": [],
+              "PackType": "TWLO.HierarchyNode\u00601[[WEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+            },
+            "PackType": "TWEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          },
+          {
+            "Name": "TSphereFlat",
+            "Transform": {
+              "Position": {
+                "XYZ": "T60,4|2,6|0",
+                "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+              },
+              "Rotation": {
+                "XYZ": "T0|0|0",
+                "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+              },
+              "Scale": {
+                "XYZ": "T1|1|1",
+                "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+              },
+              "PackType": "TWEO.Transform, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+            },
+            "Components": [
+              {
+                "Mesh": {
+                  "Key": "TMesh/SphereFlat",
+                  "PackType": "TWEO.Asset\u00601[[WLI.GPU.Mesh, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                },
+                "Program": {
+                  "Key": "TShader/Default",
+                  "PackType": "TWEO.Asset\u00601[[WLI.GPU.Program, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                },
+                "Texture": {
+                  "Key": "TTexture/Error",
+                  "PackType": "TWEO.Asset\u00601[[WLI.GPU.Texture, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                },
+                "Color": {
+                  "RGBA": "T255|255|255|255",
+                  "PackType": "TWLO.Math.Color4B, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                },
+                "Active": "Z1",
+                "PackType": "TWEO_Component.CMeshRenderer, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+              }
+            ],
+            "Hierarchy": {
+              "Children": [],
+              "PackType": "TWLO.HierarchyNode\u00601[[WEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+            },
+            "PackType": "TWEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          },
+          {
+            "Name": "TSphereWireframe",
+            "Transform": {
+              "Position": {
+                "XYZ": "T63|2,6|0",
+                "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+              },
+              "Rotation": {
+                "XYZ": "T0|0|0",
+                "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+              },
+              "Scale": {
+                "XYZ": "T1|1|1",
+                "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+              },
+              "PackType": "TWEO.Transform, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+            },
+            "Components": [
+              {
+                "Mesh": {
+                  "Key": "TMesh/SphereWireframe",
+                  "PackType": "TWEO.Asset\u00601[[WLI.GPU.Mesh, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                },
+                "Program": {
+                  "Key": "TShader/Test",
+                  "PackType": "TWEO.Asset\u00601[[WLI.GPU.Program, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                },
+                "Texture": {
+                  "Key": "T",
+                  "PackType": "TWEO.Asset\u00601[[WLI.GPU.Texture, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                },
+                "Color": {
+                  "RGBA": "T255|255|255|255",
+                  "PackType": "TWLO.Math.Color4B, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                },
+                "Active": "Z1",
+                "PackType": "TWEO_Component.CMeshRenderer, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+              }
+            ],
+            "Hierarchy": {
+              "Children": [],
+              "PackType": "TWLO.HierarchyNode\u00601[[WEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+            },
+            "PackType": "TWEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          },
+          {
+            "Name": "TTeapot",
+            "Transform": {
+              "Position": {
+                "XYZ": "T67,8|2,6|0",
+                "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+              },
+              "Rotation": {
+                "XYZ": "T0|0|0",
+                "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+              },
+              "Scale": {
+                "XYZ": "T0,03|0,03|0,03",
+                "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+              },
+              "PackType": "TWEO.Transform, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+            },
+            "Components": [
+              {
+                "Mesh": {
+                  "Key": "TMesh/Teapot",
+                  "PackType": "TWEO.Asset\u00601[[WLI.GPU.Mesh, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                },
+                "Program": {
+                  "Key": "TShader/Test",
+                  "PackType": "TWEO.Asset\u00601[[WLI.GPU.Program, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                },
+                "Texture": {
+                  "Key": "T",
+                  "PackType": "TWEO.Asset\u00601[[WLI.GPU.Texture, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                },
+                "Color": {
+                  "RGBA": "T255|255|255|255",
+                  "PackType": "TWLO.Math.Color4B, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                },
+                "Active": "Z1",
+                "PackType": "TWEO_Component.CMeshRenderer, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+              }
+            ],
+            "Hierarchy": {
+              "Children": [],
+              "PackType": "TWLO.HierarchyNode\u00601[[WEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+            },
+            "PackType": "TWEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          }
+        ],
+        "PackType": "TWLO.HierarchyNode\u00601[[WEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+      },
+      "PackType": "TWEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+    }
+  ],
+  "EditorInfo": {
+    "BackgroundColor": {
+      "RGBA": "T0|0|0|255",
+      "PackType": "TWLO.Math.Color4B, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+    },
+    "CameraPosition": {
+      "XYZ": "T33,102177|4,947377|39,384106",
+      "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+    },
+    "CameraRotation": {
+      "XYZ": "T0,039434955|6,3674827|0",
+      "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+    },
+    "CameraPerspective": "Z1",
+    "CameraSpeed": "F1",
+    "PackType": "TWEO.Scene\u002BEditorInfo, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+  },
+  "PackType": "TWEO.Scene, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+}
