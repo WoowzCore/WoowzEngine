@@ -17,7 +17,9 @@ public class Scene : WLI.Packable{
     public bool Add(Entity Entity){
         if(!__Registry.Add(Entity)){ return false; }
 
-        Entity.Node.OnChildAdded += OnChildAddedToEntity;
+        Entity.Scene = this;
+        
+        Entity.Node.OnChildAdded    += OnChildAddedToEntity;
         Entity.Node.OnParentChanged += OnEntityParentChanged;
 
         foreach(HierarchyNode<Entity> Child in Entity.Node.Children.ToList()){
@@ -30,9 +32,11 @@ public class Scene : WLI.Packable{
     public bool Remove(Entity Entity){
         if(!__Registry.Contains(Entity)){ return false; }
 
+        Entity.Scene = null;
+        
         __Registry.Remove(Entity);
 
-        Entity.Node.OnChildAdded -= OnChildAddedToEntity;
+        Entity.Node.OnChildAdded    -= OnChildAddedToEntity;
         Entity.Node.OnParentChanged -= OnEntityParentChanged;
         
         foreach(HierarchyNode<Entity> Child in Entity.Node.Children.ToList()){

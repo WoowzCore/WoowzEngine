@@ -11,6 +11,7 @@ namespace WEO_Component;
 public class CMeshRenderer : RenderComponent{
     [WEESave] public Asset<Mesh   > Mesh   ;
     [WEESave] public Asset<Program> Program;
+    [WEESave] public Asset<Texture> Texture;
 
     [WEESave] public Color4B Color = new Color4B(255, 255, 255);
     [WEESave] public bool Active = true;
@@ -18,8 +19,9 @@ public class CMeshRenderer : RenderComponent{
     public override void OnRender(Vector3F CameraPosition){
         if(!Active){ return; }
 
-        GLMesh?    Mesh__    = Mesh   .Resolve() as GLMesh;
-        GLProgram? Program__ = Program.Resolve() as GLProgram;
+        GLMesh?      Mesh__    = Mesh   .Resolve() as GLMesh;
+        GLProgram?   Program__ = Program.Resolve() as GLProgram;
+        GLTexture2D? Texture__ = Texture.Resolve() as GLTexture2D;
         
         if(Mesh__ == null || Program__ == null){ return; }
         
@@ -27,8 +29,9 @@ public class CMeshRenderer : RenderComponent{
             DistanceToCamera = (ActualPosition - CameraPosition).Length,
             IsTransparent =  IsTransparent,
             
-            Mesh = Mesh__,
-            Program = Program__,
+            Mesh      = Mesh__,
+            Program   = Program__,
+            Texture2D = Texture__,
             
             Uniforms = [
                 UniformValue.CreateM4F(0, Owner.Transform.GetWorldMatrix()),

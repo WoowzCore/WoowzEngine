@@ -105,14 +105,12 @@ public static class Asset{
     
     public static T? Resolve<T>(int ID) where T : class{
         if(__Providers.TryGetValue(ID, out Provider? Provider)){
-            T? Object = Provider.Get() as T;
-            if(Object != null){ return Object; }
+            if(Provider.Get() is T Object){ return Object; }
         }
 
         if(__Fallbacks.TryGetValue(typeof(T), out int Fallback)){
             if(Fallback != -1 && __Providers.TryGetValue(Fallback, out Provider? FallbackProvider)){
-                T? FallbackObject = FallbackProvider.Get() as T;
-                if(FallbackObject != null){ return FallbackObject; }
+                if(FallbackProvider.Get() is T FallbackObject){ return FallbackObject; }
             }
 
             WL.Logger.Warn($"todo, не указан fallback для ресурсов типа [{typeof(T).Name}]!");

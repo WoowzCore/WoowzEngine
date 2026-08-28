@@ -13,6 +13,8 @@
         <ProjectReference Include="..\..\..\WoowzLib\WoowzLib\WoowzLib.Window.GLFW\WoowzLib.Window.GLFW.csproj" />
         <ProjectReference Include="..\..\..\WoowzLib\WoowzLib\WoowzLib.Logger\WoowzLib.Logger.csproj" />
         <ProjectReference Include="..\WoowzEngineRender\WoowzEngineRender.csproj" />
+        <ProjectReference Include="..\..\..\WoowzLib\WoowzLib\WoowzLib.Loader.Image\WoowzLib.Loader.Image.csproj" />
+        <ProjectReference Include="..\..\..\WoowzLib\WoowzLib\WoowzLib.Loader.Geometry\WoowzLib.Loader.Geometry.csproj" />
     </ItemGroup>
 
 </Project>

@@ -21,22 +21,22 @@ public static class I_Menu{
                 
                 ImGui.Separator();
 
-                if(ImGui.MenuItem("Открыть", "Ctrl+O")){
+                if(ImGui.MenuItem("Открыть")){
                     OpenScene();
                 }
                 
-                if(ImGui.MenuItem("Сохранить", "Ctrl+S", false, WEE.Interface.CurrentScene != null)){
+                if(ImGui.MenuItem("Сохранить", "", false, WEE.Interface.CurrentScene != null)){
                     SaveScene();
                 }
                 
-                if(ImGui.MenuItem("Сохранить как", "Ctrl+Shift+S", false, WEE.Interface.CurrentScene != null)){
+                if(ImGui.MenuItem("Сохранить как", "", false, WEE.Interface.CurrentScene != null)){
                     SaveSceneAs();
                 }
                 
                 ImGui.Separator();
                 
                 if(ImGui.MenuItem("Закрыть сцену", "", false, WEE.Interface.CurrentScene != null)){ CloseScene(); }
-                if(ImGui.MenuItem("Выйти", "Alt+F4")){ WEE.Window.MainWindow.Close(); }
+                if(ImGui.MenuItem("Выйти", "")){ WEE.Window.MainWindow.Close(); }
                 
                 ImGui.Separator();
 
@@ -51,8 +51,8 @@ public static class I_Menu{
             }
 
             if(ImGui.BeginMenu("Редактировать", false)){
-                if(ImGui.MenuItem("Отменить", "Ctrl+Z")){  }
-                if(ImGui.MenuItem("Вернуть", "Ctrl+Y")){  }
+                if(ImGui.MenuItem("Отменить")){  }
+                if(ImGui.MenuItem("Вернуть")){  }
                 ImGui.EndMenu();
             }
             

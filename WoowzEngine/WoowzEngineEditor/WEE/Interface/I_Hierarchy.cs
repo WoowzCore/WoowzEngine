@@ -102,6 +102,16 @@ public static class I_Hierarchy{
                 NewEntity.Node.SetParent(Entity.Node);
                 WEE.Interface.CurrentEntity = NewEntity;
             }
+
+            if(ImGui.MenuItem("Дублировать")){
+                Entity NewEntity = Entity.Duplicate();
+                if(Entity.Node.Parent != null){
+                    NewEntity.Node.SetParent(Entity.Node.Parent);
+                }else{
+                    WEE.Interface.CurrentScene?.Add(NewEntity);
+                }
+                WEE.Interface.CurrentEntity = NewEntity;
+            }
             if(ImGui.MenuItem("Удалить")){ Entity.Destroy(); }
             ImGui.EndPopup();
         }

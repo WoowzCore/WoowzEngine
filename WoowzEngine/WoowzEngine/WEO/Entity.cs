@@ -65,17 +65,52 @@ public class Entity : WLI.Packable, WLI.Hierarchical<Entity>{
     }
 
     public void Destroy(){
-        
-        
-        foreach(HierarchyNode<Entity> Child in Node.Children.ToList()){
-            Child.Owner.Destroy();
-        }
+        foreach(HierarchyNode<Entity> Child in Node.Children.ToList()){ Child.Owner.Destroy(); }
+
+        Scene?.Remove(this);
         
         Node.SetParent(null);
+
+        foreach(Component Component in __Components){
+            Component.Owner = null!;
+        }
         
         __Components.Clear();
+        
+        Scene = null;
     }
 
+    // ----------------------------------------------------------------------
+
+    public void SetFrom(Entity Other){
+        Transform.SetFrom(Other.Transform);
+        
+        __Components.Clear();
+        foreach(Component OtherComponent in Other.__Components){
+            Component NewComponent = (Component)Activator.CreateInstance(OtherComponent.GetType())!;
+            NewComponent.Owner = this;
+
+            WL.Packer.Unpack(NewComponent, WL.Packer.Pack(OtherComponent) as Dictionary<string, object>);
+            
+            __Components.Add(NewComponent);
+        }
+
+        foreach(HierarchyNode<Entity> Children in Other.Node.Children){
+            Entity DuplicateChild = Children.Owner.Duplicate();
+            DuplicateChild.Node.SetParent(Node);
+        }
+    }
+    
+    public Entity Duplicate(){
+        Entity Duplicate = new Entity(Name);
+
+        Duplicate.SetFrom(this);
+        
+        return Duplicate;
+    }
+    
+    // ----------------------------------------------------------------------
+    
     public Dictionary<string, object?> __Pack() => new Dictionary<string, object?>{
         ["Name"      ] = Name,
         ["Transform" ] = Transform,

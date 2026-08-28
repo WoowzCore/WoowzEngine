@@ -32,6 +32,16 @@ public class Transform : WLI.Packable{
         return __WorldMatrix;
     }
     
+    // ----------------------------------------------------------------------
+
+    public void SetFrom(Transform Other){
+        Position = Other.Position;
+        Rotation = Other.Rotation;
+        Scale    = Other.Scale;
+    }
+    
+    // ----------------------------------------------------------------------
+    
     public Dictionary<string, object?> __Pack() => new Dictionary<string, object?>{
         ["Position"] = Position,
         ["Rotation"] = Rotation,
