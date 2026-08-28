@@ -668,7 +668,7 @@
           "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
         },
         "Scale": {
-          "XYZ": "T1,2784432|1,3720417|1,2361567",
+          "XYZ": "T1,1036133|1,160264|1,3262546",
           "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
         },
         "PackType": "TWEO.Transform, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
@@ -851,6 +851,96 @@
         "PackType": "TWLO.HierarchyNode\u00601[[WEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
       },
       "PackType": "TWEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+    },
+    {
+      "Name": "TTriangle",
+      "Transform": {
+        "Position": {
+          "XYZ": "T-12,4|0|-5",
+          "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+        },
+        "Rotation": {
+          "XYZ": "T-1,5707964|0|0",
+          "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+        },
+        "Scale": {
+          "XYZ": "T10|10|1",
+          "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+        },
+        "PackType": "TWEO.Transform, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+      },
+      "Components": [
+        {
+          "Mesh": {
+            "Key": "TMesh/Triangle",
+            "PackType": "TWEO.Asset\u00601[[WLI.GPU.Mesh, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          },
+          "Program": {
+            "Key": "TShader/Default",
+            "PackType": "TWEO.Asset\u00601[[WLI.GPU.Program, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          },
+          "Texture": {
+            "Key": "TTexture/Cat",
+            "PackType": "TWEO.Asset\u00601[[WLI.GPU.Texture, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          },
+          "Color": {
+            "RGBA": "T255|255|255|255",
+            "PackType": "TWLO.Math.Color4B, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          },
+          "Active": "Z1",
+          "PackType": "TWEO_Component.CMeshRenderer, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+        }
+      ],
+      "Hierarchy": {
+        "Children": [],
+        "PackType": "TWLO.HierarchyNode\u00601[[WEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+      },
+      "PackType": "TWEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+    },
+    {
+      "Name": "TTriangle",
+      "Transform": {
+        "Position": {
+          "XYZ": "T-12,4|0|-12,5",
+          "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+        },
+        "Rotation": {
+          "XYZ": "T-1,5707964|0|1,5707964",
+          "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+        },
+        "Scale": {
+          "XYZ": "T10|10|1",
+          "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+        },
+        "PackType": "TWEO.Transform, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+      },
+      "Components": [
+        {
+          "Mesh": {
+            "Key": "TMesh/Triangle",
+            "PackType": "TWEO.Asset\u00601[[WLI.GPU.Mesh, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          },
+          "Program": {
+            "Key": "TShader/Default",
+            "PackType": "TWEO.Asset\u00601[[WLI.GPU.Program, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          },
+          "Texture": {
+            "Key": "TTexture/Bom",
+            "PackType": "TWEO.Asset\u00601[[WLI.GPU.Texture, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          },
+          "Color": {
+            "RGBA": "T255|255|255|255",
+            "PackType": "TWLO.Math.Color4B, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          },
+          "Active": "Z1",
+          "PackType": "TWEO_Component.CMeshRenderer, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+        }
+      ],
+      "Hierarchy": {
+        "Children": [],
+        "PackType": "TWLO.HierarchyNode\u00601[[WEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+      },
+      "PackType": "TWEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
     }
   ],
   "EditorInfo": {
@@ -859,17 +949,17 @@
       "PackType": "TWLO.Math.Color4B, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
     },
     "CameraPosition": {
-      "XYZ": "T-2,3003361|1,7804005|7,5954356",
+      "XYZ": "T-0,27925703|6,0036297|19,788538",
       "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
     },
     "CameraRotation": {
-      "XYZ": "T0,1848917|6,507079|0",
+      "XYZ": "T-0,011564504|6,112471|0",
       "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
     },
     "CameraPerspective": "Z1",
     "CameraSpeed": "F1",
     "CreationTime": "L639235303249196046",
-    "LastSaveTime": "L639235309114573376",
+    "LastSaveTime": "L639235331474913638",
     "PackType": "TWEO.Scene\u002BEditorInfo, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
   },
   "PackType": "TWEO.Scene, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
