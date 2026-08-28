@@ -109,7 +109,7 @@ public static class I_Assets{
             Matrix4F Translation = Matrix4F.CreateTranslation(-Bounds.Center);
 
             float MaxDimension = System.Math.Max(Bounds.Size.X, System.Math.Max(Bounds.Size.Y, Bounds.Size.Z));
-            float ScaleFactor = (MaxDimension > 0.0001f) ? (4 / MaxDimension) : 1;
+            float ScaleFactor = (MaxDimension > 0.0001f) ? (3 / MaxDimension) : 1;
             Matrix4F Scale = Matrix4F.CreateScale(new Vector3F(ScaleFactor, ScaleFactor, ScaleFactor));
 
             Matrix4F Rotation = Matrix4F.CreateRotationY(__PreviewRotation);

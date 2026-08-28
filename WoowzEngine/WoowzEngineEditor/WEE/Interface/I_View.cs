@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using ImGuiNET;
+using WEO;
 using WLO.Math;
 
 namespace WEE_Interface;
@@ -8,6 +9,8 @@ public static class I_View{
     public static bool FocusSceneView{ get; private set; }
 
     public static Vector2I SceneViewSize{ get; private set; }
+
+    public static Vector2I ViewMousePosition;
 
     private static bool __Is2DView = false;
     public static bool Is2DView{
@@ -18,7 +21,10 @@ public static class I_View{
         }
     }
 
-    public static bool ShowDepth = false;
+    public enum ShowWhatType{
+        Scene, Depth, Picking
+    }
+    public static ShowWhatType ShowWhat = ShowWhatType.Scene;
 
     public static Color4B BackgroundColor = new Color4B(200, 200, 200);
     
@@ -29,8 +35,10 @@ public static class I_View{
 
             FocusSceneView = ImGui.IsWindowFocused(ImGuiFocusedFlags.RootAndChildWindows);
 
-            if(ImGui.BeginChild("SceneToolbar", new Vector2(0, 30), ImGuiChildFlags.Borders, ImGuiWindowFlags.NoScrollbar)){
-                ImGui.SameLine();
+            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8, 0)); 
+            if(ImGui.BeginChild("SceneToolbar", new Vector2(0, 35), ImGuiChildFlags.Borders, ImGuiWindowFlags.NoScrollbar)){
+                ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 5); 
+                ImGui.Indent(5);
 
                 ImGui.Text($"({SceneViewSize.W}x{SceneViewSize.H}), R-FPS: {WEE.Cycle.Render_DTI.FPS:F1}");
 
@@ -40,14 +48,14 @@ public static class I_View{
 
                 string ModeText = Is2DView ? "2D" : "3D";
 
-                if(ImGui.Button(ModeText, new Vector2(100, 20))){ Is2DView = !Is2DView; }
+                if(ImGui.Button(ModeText, new Vector2(50, 20))){ Is2DView = !Is2DView; }
                 if(ImGui.IsItemHovered()){ ImGui.SetTooltip("Переключить перспективу камеры"); }
 
                 ImGui.SameLine();
                 ImGui.TextDisabled("|");
                 ImGui.SameLine();
 
-                ImGui.TextDisabled("Позиция:");
+                ImGui.TextDisabled("Поз.:");
                 ImGui.SameLine();
                 Vector3 CameraPosition = new Vector3(WEE.Editor.ViewCamera.Position.X, WEE.Editor.ViewCamera.Position.Y, WEE.Editor.ViewCamera.Position.Z);
                 ImGui.SetNextItemWidth(200);
@@ -59,7 +67,7 @@ public static class I_View{
                 ImGui.TextDisabled("|");
                 ImGui.SameLine();
 
-                ImGui.TextDisabled("Поворот:");
+                ImGui.TextDisabled("Пов.:");
                 ImGui.SameLine();
                 Vector3 CameraRotation = new Vector3(WEE.Editor.ViewCamera.Rotation.X, WEE.Editor.ViewCamera.Rotation.Y, WEE.Editor.ViewCamera.Rotation.Z);
                 ImGui.SetNextItemWidth(200);
@@ -71,7 +79,7 @@ public static class I_View{
                 ImGui.TextDisabled("|");
                 ImGui.SameLine();
                 
-                ImGui.TextDisabled("Скорость:");
+                ImGui.TextDisabled("Скор.:");
                 ImGui.SameLine();
                 ImGui.SetNextItemWidth(50);
                 ImGui.DragFloat("##CameraSpeed", ref WEE.Editor.CameraSpeed, 0.1f, 0.001f, 1000, "%g");
@@ -99,11 +107,21 @@ public static class I_View{
                 ImGui.SameLine();
                 ImGui.TextDisabled("|");
                 ImGui.SameLine();
-                
-                string FrameText = ShowDepth ? "Глубина" : "Цвет";
 
-                if(ImGui.Button(FrameText, new Vector2(100, 20))){ ShowDepth = !ShowDepth; }
+                ImGui.SetNextItemWidth(100);
+                if(ImGui.BeginCombo("##ShowWhat", ShowWhat switch{
+                    ShowWhatType.Scene => "Сцена",
+                    ShowWhatType.Depth => "Глубина",
+                    ShowWhatType.Picking => "ID"
+                })){
+                    if(ImGui.Selectable("Сцена", ShowWhat == ShowWhatType.Scene)){ ShowWhat = ShowWhatType.Scene; }
+                    if(ImGui.Selectable("Глубина", ShowWhat == ShowWhatType.Depth)){ ShowWhat = ShowWhatType.Depth; }
+                    if(ImGui.Selectable("ID", ShowWhat == ShowWhatType.Picking)){ ShowWhat = ShowWhatType.Picking; }
+                    
+                    ImGui.EndCombo();
+                }
             } ImGui.EndChild();
+            ImGui.PopStyleVar();
 
             Vector2 __SceneViewport = ImGui.GetContentRegionAvail();
             __SceneViewport.X = System.Math.Max(1, __SceneViewport.X);
@@ -111,16 +129,55 @@ public static class I_View{
             SceneViewSize = new Vector2I((int)__SceneViewport.X, (int)__SceneViewport.Y);
 
             if(WEE.Interface.CurrentScene != null){
-                uint TextureID;
-
-                if(ShowDepth){
-                    TextureID = WEE.Render.SceneView.TextureDepth!.ID;
-                }else{
-                    TextureID = WEE.Render.SceneView.TextureColor0!.ID;
-                }
+                uint TextureID = ShowWhat switch{
+                    ShowWhatType.Scene => WEE.Render.SceneView.TextureColor0!.ID,
+                    ShowWhatType.Depth => WEE.Render.SceneView.TextureDepth!.ID,
+                    ShowWhatType.Picking => WEE.Render.PickingView.TextureColor0!.ID
+                };
                 
                 ImGui.Image((IntPtr)TextureID, __SceneViewport, new Vector2(0, 1), new Vector2(1, 0));
+                Vector2 ImagePositionMin = ImGui.GetItemRectMin();
+                ViewMousePosition = new Vector2I(
+                    (int)(WEE.Control.MousePosition.X - ImagePositionMin.X),
+                    (int)(WEE.Control.MousePosition.Y - ImagePositionMin.Y)
+                );
             }
         } ImGui.End();
+    }
+
+    private const uint __IDColor_Mask24     = 0xFFFFFFu;
+    private const uint __IDColor_Multiplier = 0x5BF037u;
+    private const uint __IDColor_Inverse    = 0xA6C587u;
+
+    public static Color4B IDToColor(uint ID){
+        if(ID == 0){ return Color4B.Black; }
+
+        uint X = (ID * __IDColor_Multiplier) & __IDColor_Mask24;
+
+        byte R = (byte)((X >> 0 ) & 0xFF);
+        byte G = (byte)((X >> 8 ) & 0xFF);
+        byte B = (byte)((X >> 16) & 0xFF);
+
+        return new Color4B(R, G, B, 255);
+    }
+
+    public static uint ColorToID(Color4B Color){
+        if(Color.R == 0 && Color.G == 0 && Color.B == 0){ return 0; }
+
+        uint X = ((uint)Color.R << 0) | ((uint)Color.G << 8) | ((uint)Color.B << 16);
+
+        return (X * __IDColor_Inverse) & __IDColor_Mask24;
+    }
+    
+    public static void ClickToView(){
+        if(ViewMousePosition.X < 0 || ViewMousePosition.Y < 0 || ViewMousePosition.X > SceneViewSize.X || ViewMousePosition.Y > SceneViewSize.Y){ return; }
+
+        // flip y
+        Vector2I PickPosition = new Vector2I(ViewMousePosition.X, SceneViewSize.Y - ViewMousePosition.Y);
+        
+        Color4B Color = WEE.Render.PickingView.GetRect(new Rect2I(PickPosition, new Vector2I(1, 1)))[0];
+        uint ID = ColorToID(Color);
+        
+        WEE.Interface.CurrentEntity = ID != 0 ? Entity.GetFromID(ID) : null;
     }
 }

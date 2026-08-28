@@ -7,53 +7,60 @@ public struct Asset<T> : WLI.Packable where T : class{
     
     public int __ID = -1;
 
-    public  bool Linked;
-    private T    __Cache;
-    
+    public  bool       UseCache;
+    private readonly T __Cache;
+
     public Asset(string Key){
         this.Key = Key;
         __ID = WE.Asset.GetID(Key);
-        Linked = true;
+        UseCache = false;
         __Cache = null!;
     }
 
     public Asset(int ID){
         Key = WE.Asset.GetKey(ID);
         __ID = ID;
-        Linked = true;
+        UseCache = false;
         __Cache = null!;
     }
 
-    public Asset(T NotLinked){
+    public Asset(T Cache){
         Key = "";
-        Linked = false;
-        __Cache = NotLinked;
+        UseCache = true;
+        __Cache = Cache;
     }
     
     public T? Resolve(){
-        if(!Linked){ return __Cache; }
+        if(UseCache){ return __Cache; }
 
-        // le govno, тут надо добавить проверку ещё по ключу, но я боюсь что сожрёт оптимизацию
-        if(__ID == -1 && !string.IsNullOrEmpty(Key)){ __ID = WE.Asset.GetID(Key); }
+        if(string.IsNullOrEmpty(Key)){ return WE.Asset.Resolve<T>(-1); }
+
+        if(__ID == -1 /*|| WE.Asset.GetKey(__ID) != Key*/){ __ID = WE.Asset.GetID(Key); }
+        
         return WE.Asset.Resolve<T>(__ID);
     }
 
     public Dictionary<string, object?> __Pack(){
         Dictionary<string, object?> Data = new Dictionary<string, object?>();
-        if(Linked){ Data["Key"] = Key; }else{ Data["NotLinked"] = true; }
+        if(UseCache){ Data["UseCache"] = true; }else{ Data["Key"] = Key ?? ""; }
 
         return Data;
     }
     
     public void __Unpack(Dictionary<string, object?> Data){
-        if(WL.Packer.Get<bool>(Data, "NotLinked", false)){
-            // пустота
+        if(WL.Packer.Get<bool>(Data, "UseCache", false)){
+            UseCache = true;
         }else{
-            Linked = true;
-            Key = WL.Packer.Get<string>(Data, "Key", Key)!;
-            if(!string.IsNullOrEmpty(Key)){ __ID = WE.Asset.GetID(Key); }
+            UseCache = false;
+            
+            Key = WL.Packer.Get<string>(Data, "Key", "")!;
+            if(string.IsNullOrEmpty(Key)){
+                __ID = -1;
+            }else{
+                __ID = WE.Asset.GetID(Key);
+            }
         }
     }
 
-    public override string ToString() => $"Asset({(Linked ? (string.IsNullOrEmpty(Key) ? "Пустой" : $"\"{Key}\" ({__ID})") : (__Cache != null ? $"Связан с [{__Cache}]" : "Не связан"))})";
+    public override string ToString() => $"Asset({(!UseCache ? (string.IsNullOrEmpty(Key) ? "Пустой" : $"\"{Key}\" ({__ID})") : (__Cache != null ? $"Связан с [{__Cache}]" : "Не связан"))})";
 }

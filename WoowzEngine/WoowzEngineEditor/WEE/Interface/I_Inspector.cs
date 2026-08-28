@@ -121,8 +121,8 @@ public static class I_Inspector{
             if(FieldType.IsGenericType && FieldType.GetGenericTypeDefinition() == typeof(WEO.Asset<>)){
                 Type AssetTargetType = FieldType.GetGenericArguments()[0];
 
-                string CurrentKey = (string)FieldType.GetField("Key")!.GetValue(Value)! ?? "";
-                bool IsLinked = (bool)FieldType.GetField("Linked")!.GetValue(Value)!;
+                string CurrentKey = (string)(FieldType.GetField("Key")!.GetValue(Value) ?? "");
+                bool   UseCache   = (bool)FieldType.GetField("UseCache")!.GetValue(Value)!;
                 
                 ImGui.BeginGroup();
 

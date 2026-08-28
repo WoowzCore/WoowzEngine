@@ -15,19 +15,18 @@ public static class I_Console{
             if(ImGui.Button("Очистить")){ __FullLogBuffer = ""; }
             ImGui.SameLine();
             if(ImGui.Button("Тестовое сообщение")){ WL.Logger.Debug("Тестовое сообщение"); }
+            
             ImGui.Separator();
 
-            float FooterHeightToReverse = ImGui.GetStyle().ItemSpacing.Y + ImGui.GetFrameHeightWithSpacing();
+            if(ImGui.BeginChild("ScrollingRegion", Vector2.Zero, ImGuiChildFlags.None, ImGuiWindowFlags.HorizontalScrollbar)){
+                ImGui.TextUnformatted(__FullLogBuffer);
 
-            if(__ScrollToBottom){ ImGui.SetKeyboardFocusHere(); }
-            
-            unsafe{
-                ImGui.InputTextMultiline("##FulLog", ref __FullLogBuffer, (uint)__FullLogBuffer.Length + 1, new Vector2(-1, -FooterHeightToReverse), ImGuiInputTextFlags.ReadOnly | ImGuiInputTextFlags.CallbackAlways, ConsoleCallback);
-
-                if(__ScrollToBottom && ImGui.IsItemActive()){
+                if(__ScrollToBottom){
+                    ImGui.SetScrollHereY(1);
                     __ScrollToBottom = false;
                 }
             }
+            ImGui.EndChild();
         } ImGui.End();
     }
 

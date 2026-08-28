@@ -102,7 +102,7 @@ public static class I_Menu{
     }
     
     private static void CloseScene(){
-        WEE.Interface.CurrentScene?.Clear();
+        WEE.Interface.CurrentScene?.Clear(true);
         WEE.Interface.CurrentEntity = null;
         WEE.Interface.CurrentScene = null;
 
@@ -150,12 +150,12 @@ public static class I_Menu{
         try{
             Scene.EditorInfo EditorInfo = WEE.Interface.CurrentScene.__EditorInfo ?? new Scene.EditorInfo();
 
-            EditorInfo.BackgroundColor = I_View.BackgroundColor;
-            EditorInfo.CameraPosition = WEE.Editor.ViewCamera.Position;
-            EditorInfo.CameraRotation = WEE.Editor.ViewCamera.Rotation;
+            EditorInfo.BackgroundColor   =  I_View.BackgroundColor;
+            EditorInfo.CameraPosition    =  WEE.Editor.ViewCamera.Position;
+            EditorInfo.CameraRotation    =  WEE.Editor.ViewCamera.Rotation;
             EditorInfo.CameraPerspective = !I_View.Is2DView;
-            EditorInfo.CameraSpeed = WEE.Editor.CameraSpeed;
-            EditorInfo.LastSaveTime = DateTime.Now.Ticks;
+            EditorInfo.CameraSpeed       =  WEE.Editor.CameraSpeed;
+            EditorInfo.LastSaveTime      =  DateTime.Now.Ticks;
                 
             if(EditorInfo.CreationTime == 0){ EditorInfo.CreationTime = DateTime.Now.Ticks; }
 

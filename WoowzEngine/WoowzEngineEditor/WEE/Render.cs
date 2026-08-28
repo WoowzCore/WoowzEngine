@@ -2,6 +2,7 @@
 using WEE_Interface;
 using WEEO;
 using WLO;
+using WLO.GPU;
 using WLO.Math;
 using WLO.Render;
 
@@ -25,7 +26,8 @@ public static class Render{
     
     // ----------------------------------------------------------------------
 
-    public static GLView SceneView = null!;
+    public static GLView SceneView   = null!;
+    public static GLView PickingView = null!;
 
     public static UniformBlock<UniformBlock_Default> UB_Default = null!;
     
@@ -35,9 +37,15 @@ public static class Render{
             GLView.LayerConfig.Color(),
             GLView.LayerConfig.Depth(true)
         ]);
+        
+        if(PickingView != null!){ PickingView.Destroy(); }
+        PickingView = GLView.Create(WE.Render.API, Size, [
+            GLView.LayerConfig.Color(),
+            GLView.LayerConfig.Depth()
+        ]);
     }
-    
-    public static void SceneRender(DeltaTimeInfo DTI){
+
+    public static void ViewRender(DeltaTimeInfo DTI){
         Vector2I TargetSize = I_View.SceneViewSize;
 
         if(TargetSize.X <= 0 || TargetSize.Y <= 0){ return; }
@@ -56,12 +64,33 @@ public static class Render{
         
         WE.Render.API.FrameStart();
             WE.Render.API.Clear(I_View.BackgroundColor);
-                
+                    
             WE.Render.API.Pool.SetDepthTest(true);
-        
-            WEE.Interface.CurrentScene?.Render(DTI, WEE.Editor.ViewCamera);
             
+            WEE.Interface.CurrentScene?.Render(DTI, WEE.Editor.ViewCamera);
+                
             WE.Render.Queue.Render();
+            
+        WE.Render.API.FrameStop();
+        
+        
+        WE.Render.API.Pool.SetView(PickingView);
+        
+        WE.Render.API.Pool.GetView().Viewport = TargetSize;
+        
+        WE.Render.API.FrameStart();
+            WE.Render.API.Clear(Color4B.Black);
+               
+            WE.Render.API.Pool.SetFrameSRGB(false);
+            WE.Render.API.Pool.SetDepthTest(true);
+            
+            WEE.Interface.CurrentScene?.Render(DTI, WEE.Editor.ViewCamera);
+                
+            WE.Render.Queue.RenderWithProgram(WE.Asset.Resolve<GLProgram>(WE.Asset.GetID("Shader/Picking"))!, (CMD, Program) => {
+                Color4B Color = I_View.IDToColor(CMD.ObjectID);
+                const float Epsilon = 0.5f / 255f;
+                Program.SetUniform(UniformValue.CreateV3F(1, new Vector3F(Color.R / 255f + Epsilon, Color.G / 255f + Epsilon, Color.B / 255f + Epsilon)));
+            });
             
         WE.Render.API.FrameStop();
     }
@@ -74,7 +103,7 @@ public static class Render{
             });
             WE.Render.API.Pool.SetUniformBlock(UB_Default, 0);
             
-            SceneRender(DTI);
+            ViewRender(DTI);
             
             WE.Render.API.Pool.SetView(null);
             

@@ -63,7 +63,13 @@ public class Scene : WLI.Packable{
         }
     }
 
-    public void Clear(){ foreach(Entity Entity in __Registry.ToList()){ Remove(Entity); } }
+    public void Clear(bool ClearAllEntities = false){
+        foreach(Entity Entity in __Registry.ToList()){
+            Remove(Entity);
+        }
+
+        if(ClearAllEntities){ Entity.DestroyAllEntities(); }
+    }
 
     public Dictionary<string, object?> __Pack() => new Dictionary<string, object?>{
         ["Name"      ] = Name,

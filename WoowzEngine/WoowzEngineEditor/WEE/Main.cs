@@ -8,6 +8,7 @@ public static class Main{
             WE.Engine.Start();
             
             WEE.Window.Start();
+            WEE.Control.Start();
             WEE.Render.Start();
             WEE.Interface.Start();
             

@@ -27,6 +27,8 @@ public class CMeshRenderer : RenderComponent{
         if(Mesh__ == null || Program__ == null){ return; }
         
         WE.Render.Queue.Submit(new GLRenderQueue.Command{
+            ObjectID = Owner.ID,
+            
             DistanceToCamera = (ActualPosition - CameraPosition).Length,
             IsTransparent =  IsTransparent,
             

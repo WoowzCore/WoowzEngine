@@ -103,7 +103,7 @@ public static class Asset{
     }
     
     public static T? Resolve<T>(int ID) where T : class{
-        if(__Providers.TryGetValue(ID, out Provider? Provider)){
+        if(ID >= 0 && __Providers.TryGetValue(ID, out Provider? Provider)){
             if(Provider.Get() is T Object){ return Object; }
         }
 

@@ -71,7 +71,7 @@ public static class I_Hierarchy{
             Flags |= ImGuiTreeNodeFlags.Leaf | ImGuiTreeNodeFlags.NoTreePushOnOpen;
         }
 
-        bool Opened = ImGui.TreeNodeEx($@"{Entity.Name}###{Entity.GetHashCode()}", Flags);
+        bool Opened = ImGui.TreeNodeEx($"[{Entity.ID}] {Entity.Name}###{Entity.GetHashCode()}", Flags);
 
         if(ImGui.IsItemClicked()){ WEE.Interface.CurrentEntity = Entity; }
 

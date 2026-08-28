@@ -44,6 +44,7 @@ public static class Cycle{
     
     public static void CycleRender(DeltaTimeInfo DTI){
         try{
+            WEE.Control.Update();
             WEE.Editor.UpdateSceneView();
             
             WEE.Window.MainWindow.PollEvents2();

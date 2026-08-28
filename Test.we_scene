@@ -44,6 +44,7 @@
         "Children": [],
         "PackType": "TWLO.HierarchyNode\u00601[[WEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
       },
+      "ID": "A1",
       "PackType": "TWEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
     },
     {
@@ -74,7 +75,7 @@
             "PackType": "TWEO.Asset\u00601[[WLI.GPU.Program, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
           },
           "Texture": {
-            "NotLinked": "Z1",
+            "Key": "T",
             "PackType": "TWEO.Asset\u00601[[WLI.GPU.Texture, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
           },
           "Color": {
@@ -89,6 +90,7 @@
         "Children": [],
         "PackType": "TWLO.HierarchyNode\u00601[[WEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
       },
+      "ID": "A2",
       "PackType": "TWEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
     },
     {
@@ -139,7 +141,7 @@
                   "PackType": "TWEO.Asset\u00601[[WLI.GPU.Program, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
                 },
                 "Texture": {
-                  "NotLinked": "Z1",
+                  "Key": "T",
                   "PackType": "TWEO.Asset\u00601[[WLI.GPU.Texture, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
                 },
                 "Color": {
@@ -154,6 +156,7 @@
               "Children": [],
               "PackType": "TWLO.HierarchyNode\u00601[[WEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
             },
+            "ID": "A4",
             "PackType": "TWEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
           },
           {
@@ -184,7 +187,7 @@
                   "PackType": "TWEO.Asset\u00601[[WLI.GPU.Program, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
                 },
                 "Texture": {
-                  "NotLinked": "Z1",
+                  "Key": "T",
                   "PackType": "TWEO.Asset\u00601[[WLI.GPU.Texture, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
                 },
                 "Color": {
@@ -199,6 +202,7 @@
               "Children": [],
               "PackType": "TWLO.HierarchyNode\u00601[[WEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
             },
+            "ID": "A5",
             "PackType": "TWEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
           },
           {
@@ -229,7 +233,7 @@
                   "PackType": "TWEO.Asset\u00601[[WLI.GPU.Program, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
                 },
                 "Texture": {
-                  "NotLinked": "Z1",
+                  "Key": "T",
                   "PackType": "TWEO.Asset\u00601[[WLI.GPU.Texture, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
                 },
                 "Color": {
@@ -244,6 +248,7 @@
               "Children": [],
               "PackType": "TWLO.HierarchyNode\u00601[[WEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
             },
+            "ID": "A6",
             "PackType": "TWEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
           },
           {
@@ -274,7 +279,7 @@
                   "PackType": "TWEO.Asset\u00601[[WLI.GPU.Program, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
                 },
                 "Texture": {
-                  "NotLinked": "Z1",
+                  "Key": "T",
                   "PackType": "TWEO.Asset\u00601[[WLI.GPU.Texture, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
                 },
                 "Color": {
@@ -289,6 +294,7 @@
               "Children": [],
               "PackType": "TWLO.HierarchyNode\u00601[[WEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
             },
+            "ID": "A7",
             "PackType": "TWEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
           },
           {
@@ -319,7 +325,7 @@
                   "PackType": "TWEO.Asset\u00601[[WLI.GPU.Program, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
                 },
                 "Texture": {
-                  "NotLinked": "Z1",
+                  "Key": "T",
                   "PackType": "TWEO.Asset\u00601[[WLI.GPU.Texture, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
                 },
                 "Color": {
@@ -334,6 +340,7 @@
               "Children": [],
               "PackType": "TWLO.HierarchyNode\u00601[[WEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
             },
+            "ID": "A8",
             "PackType": "TWEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
           },
           {
@@ -364,7 +371,7 @@
                   "PackType": "TWEO.Asset\u00601[[WLI.GPU.Program, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
                 },
                 "Texture": {
-                  "NotLinked": "Z1",
+                  "Key": "T",
                   "PackType": "TWEO.Asset\u00601[[WLI.GPU.Texture, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
                 },
                 "Color": {
@@ -379,6 +386,7 @@
               "Children": [],
               "PackType": "TWLO.HierarchyNode\u00601[[WEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
             },
+            "ID": "A9",
             "PackType": "TWEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
           },
           {
@@ -424,6 +432,7 @@
               "Children": [],
               "PackType": "TWLO.HierarchyNode\u00601[[WEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
             },
+            "ID": "A10",
             "PackType": "TWEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
           },
           {
@@ -454,7 +463,7 @@
                   "PackType": "TWEO.Asset\u00601[[WLI.GPU.Program, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
                 },
                 "Texture": {
-                  "NotLinked": "Z1",
+                  "Key": "T",
                   "PackType": "TWEO.Asset\u00601[[WLI.GPU.Texture, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
                 },
                 "Color": {
@@ -469,6 +478,7 @@
               "Children": [],
               "PackType": "TWLO.HierarchyNode\u00601[[WEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
             },
+            "ID": "A11",
             "PackType": "TWEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
           },
           {
@@ -514,6 +524,7 @@
               "Children": [],
               "PackType": "TWLO.HierarchyNode\u00601[[WEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
             },
+            "ID": "A12",
             "PackType": "TWEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
           },
           {
@@ -559,6 +570,7 @@
               "Children": [],
               "PackType": "TWLO.HierarchyNode\u00601[[WEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
             },
+            "ID": "A13",
             "PackType": "TWEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
           },
           {
@@ -604,6 +616,7 @@
               "Children": [],
               "PackType": "TWLO.HierarchyNode\u00601[[WEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
             },
+            "ID": "A14",
             "PackType": "TWEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
           },
           {
@@ -649,11 +662,13 @@
               "Children": [],
               "PackType": "TWLO.HierarchyNode\u00601[[WEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
             },
+            "ID": "A15",
             "PackType": "TWEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
           }
         ],
         "PackType": "TWLO.HierarchyNode\u00601[[WEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
       },
+      "ID": "A3",
       "PackType": "TWEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
     },
     {
@@ -668,7 +683,7 @@
           "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
         },
         "Scale": {
-          "XYZ": "T1,1036133|1,160264|1,3262546",
+          "XYZ": "T1,3458366|1,201906|0,904216",
           "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
         },
         "PackType": "TWEO.Transform, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
@@ -690,6 +705,7 @@
         "Children": [],
         "PackType": "TWLO.HierarchyNode\u00601[[WEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
       },
+      "ID": "A16",
       "PackType": "TWEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
     },
     {
@@ -755,6 +771,7 @@
               "Children": [],
               "PackType": "TWLO.HierarchyNode\u00601[[WEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
             },
+            "ID": "A18",
             "PackType": "TWEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
           },
           {
@@ -800,6 +817,7 @@
               "Children": [],
               "PackType": "TWLO.HierarchyNode\u00601[[WEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
             },
+            "ID": "A19",
             "PackType": "TWEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
           },
           {
@@ -845,11 +863,13 @@
               "Children": [],
               "PackType": "TWLO.HierarchyNode\u00601[[WEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
             },
+            "ID": "A20",
             "PackType": "TWEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
           }
         ],
         "PackType": "TWLO.HierarchyNode\u00601[[WEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
       },
+      "ID": "A17",
       "PackType": "TWEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
     },
     {
@@ -895,6 +915,7 @@
         "Children": [],
         "PackType": "TWLO.HierarchyNode\u00601[[WEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
       },
+      "ID": "A21",
       "PackType": "TWEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
     },
     {
@@ -940,6 +961,99 @@
         "Children": [],
         "PackType": "TWLO.HierarchyNode\u00601[[WEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
       },
+      "ID": "A22",
+      "PackType": "TWEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+    },
+    {
+      "Name": "TTriangle",
+      "Transform": {
+        "Position": {
+          "XYZ": "T-22,4|0|-12,5",
+          "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+        },
+        "Rotation": {
+          "XYZ": "T-1,5707964|0|1,5707964",
+          "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+        },
+        "Scale": {
+          "XYZ": "T10|10|1",
+          "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+        },
+        "PackType": "TWEO.Transform, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+      },
+      "Components": [
+        {
+          "Mesh": {
+            "Key": "TMesh/Triangle",
+            "PackType": "TWEO.Asset\u00601[[WLI.GPU.Mesh, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          },
+          "Program": {
+            "Key": "TShader/Default",
+            "PackType": "TWEO.Asset\u00601[[WLI.GPU.Program, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          },
+          "Texture": {
+            "Key": "TTexture/Sponge",
+            "PackType": "TWEO.Asset\u00601[[WLI.GPU.Texture, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          },
+          "Color": {
+            "RGBA": "T255|255|255|255",
+            "PackType": "TWLO.Math.Color4B, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          },
+          "Active": "Z1",
+          "PackType": "TWEO_Component.CMeshRenderer, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+        }
+      ],
+      "Hierarchy": {
+        "Children": [],
+        "PackType": "TWLO.HierarchyNode\u00601[[WEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+      },
+      "ID": "A23",
+      "PackType": "TWEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+    },
+    {
+      "Name": "TTriangle",
+      "Transform": {
+        "Position": {
+          "XYZ": "T-1|-0,001|-5",
+          "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+        },
+        "Rotation": {
+          "XYZ": "T-0,7853982|0|0",
+          "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+        },
+        "Scale": {
+          "XYZ": "T10|10|1",
+          "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+        },
+        "PackType": "TWEO.Transform, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+      },
+      "Components": [
+        {
+          "Mesh": {
+            "Key": "TMesh/Triangle",
+            "PackType": "TWEO.Asset\u00601[[WLI.GPU.Mesh, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          },
+          "Program": {
+            "Key": "TShader/Default",
+            "PackType": "TWEO.Asset\u00601[[WLI.GPU.Program, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          },
+          "Texture": {
+            "Key": "TTexture/Cat",
+            "PackType": "TWEO.Asset\u00601[[WLI.GPU.Texture, WoowzLib.Render, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          },
+          "Color": {
+            "RGBA": "T255|255|255|255",
+            "PackType": "TWLO.Math.Color4B, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          },
+          "Active": "Z1",
+          "PackType": "TWEO_Component.CMeshRenderer, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+        }
+      ],
+      "Hierarchy": {
+        "Children": [],
+        "PackType": "TWLO.HierarchyNode\u00601[[WEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+      },
+      "ID": "A24",
       "PackType": "TWEO.Entity, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
     }
   ],
@@ -949,17 +1063,17 @@
       "PackType": "TWLO.Math.Color4B, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
     },
     "CameraPosition": {
-      "XYZ": "T-0,27925703|6,0036297|19,788538",
+      "XYZ": "T-16,687138|2,145818|-3,7841291",
       "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
     },
     "CameraRotation": {
-      "XYZ": "T-0,011564504|6,112471|0",
+      "XYZ": "T0,34772748|-5,8417954|0",
       "PackType": "TWLO.Math.Vector3F, WoowzLib.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
     },
     "CameraPerspective": "Z1",
     "CameraSpeed": "F1",
     "CreationTime": "L639235303249196046",
-    "LastSaveTime": "L639235331474913638",
+    "LastSaveTime": "L639235627574145064",
     "PackType": "TWEO.Scene\u002BEditorInfo, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
   },
   "PackType": "TWEO.Scene, WoowzEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"

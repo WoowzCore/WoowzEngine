@@ -12,9 +12,26 @@ public class Entity : WLI.Packable, WLI.Hierarchical<Entity>{
     
     public Scene? Scene{ get; internal set; }
 
+    private static          uint                     __NextID = 1;
+    private static readonly Dictionary<uint, Entity> __IDMap  = [];
+    public uint ID{ get; internal set; }
+
+    public static Entity? GetFromID(uint ID) => __IDMap.TryGetValue(ID, out Entity? Entity) ? Entity : null;
+
+    public static void DestroyAllEntities(){
+        foreach(KeyValuePair<uint, Entity> KVP in __IDMap){
+            KVP.Value.Destroy();
+        }
+        __IDMap.Clear();
+        __NextID = 1;
+    }
+    
     private readonly List<Component> __Components = [];
 
     public Entity(){
+        ID = __NextID++;
+        __IDMap[ID] = this;
+        
         Node = new HierarchyNode<Entity>(this);
         Transform = new Transform();
 
@@ -78,6 +95,9 @@ public class Entity : WLI.Packable, WLI.Hierarchical<Entity>{
         __Components.Clear();
         
         Scene = null;
+
+        __IDMap.Remove(ID);
+        ID = 0;
     }
 
     // ----------------------------------------------------------------------
@@ -115,10 +135,28 @@ public class Entity : WLI.Packable, WLI.Hierarchical<Entity>{
         ["Name"      ] = Name,
         ["Transform" ] = Transform,
         ["Components"] = __Components,
-        ["Hierarchy" ] = Node
+        ["Hierarchy" ] = Node,
+        ["ID"        ] = ID
     };
     
     public void __Unpack(Dictionary<string, object?> Data){
+        uint SavedID = WL.Packer.Get(Data, "ID", 0U);
+
+        if(SavedID != 0){
+            __IDMap.Remove(ID);
+            
+            // todo, сменять везде ссылки тогда тоже
+            if(__IDMap.ContainsKey(SavedID)){
+                ID = __NextID++;
+            }else{
+                ID = SavedID;
+            }
+            
+            __IDMap[ID] = this;
+            
+            if(ID >= __NextID){ __NextID = ID + 1; }
+        }
+        
         Name = WL.Packer.Get(Data, "Name", Name)!;
         
         Dictionary<string, object?>? TransformData = WL.Packer.Get<Dictionary<string, object?>>(Data, "Transform", Raw: true);
