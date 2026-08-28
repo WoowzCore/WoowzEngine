@@ -18,27 +18,31 @@ public static class Cycle{
             
             if(WL.Thread.LimitByFPS(30, ref __Engine_DTI)){
                 Engine_DTI = __Engine_DTI!.Value;
-                CycleEngine();
+                CycleEngine(Engine_DTI);
             }
             
             if(WL.Thread.LimitByFPS(120, ref __Render_DTI)){
                 Render_DTI = __Render_DTI!.Value;
-                CycleRender();
+                CycleRender(Render_DTI);
             }
         }catch(Exception e){
             throw new ExceptionWEE("Произошла ошибка в главном цикле!", e);
         }
     }
 
-    public static void CycleEngine(){
+    public static void CycleEngine(DeltaTimeInfo DTI){
         try{
             WEE.Window.UpdateTitle();
+
+            if(WEE.Interface.CurrentScene != null){
+                WEE.Interface.CurrentScene.Update(DTI);
+            }
         }catch(Exception e){
             throw new ExceptionWEE("Произошла ошибка в ENGINE цикле!", e);
         }
     }
     
-    public static void CycleRender(){
+    public static void CycleRender(DeltaTimeInfo DTI){
         try{
             WEE.Editor.UpdateSceneView();
             
@@ -50,7 +54,7 @@ public static class Cycle{
             
             WEE.Interface.Update();
             
-            WEE.Render.MainRender();
+            WEE.Render.MainRender(DTI);
             
             WEE.Window.MainWindow.SwapBuffers();
         }catch(Exception e){

@@ -1,6 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 using WEE_Interface;
 using WEEO;
+using WLO;
 using WLO.Math;
 using WLO.Render;
 
@@ -36,7 +37,7 @@ public static class Render{
         ]);
     }
     
-    public static void SceneRender(){
+    public static void SceneRender(DeltaTimeInfo DTI){
         Vector2I TargetSize = I_View.SceneViewSize;
 
         if(TargetSize.X <= 0 || TargetSize.Y <= 0){ return; }
@@ -58,14 +59,14 @@ public static class Render{
                 
             WE.Render.API.Pool.SetDepthTest(true);
         
-            WEE.Interface.CurrentScene?.Render(WEE.Editor.ViewCamera);
+            WEE.Interface.CurrentScene?.Render(DTI, WEE.Editor.ViewCamera);
             
             WE.Render.Queue.Render();
             
         WE.Render.API.FrameStop();
     }
     
-    public static void MainRender(){
+    public static void MainRender(DeltaTimeInfo DTI){
         try{
             UB_Default.Update(new UniformBlock_Default{
                 ViewProjection = WEE.Editor.ViewCamera.GetProjectionMatrix() * WEE.Editor.ViewCamera.GetViewMatrix(),
@@ -73,7 +74,7 @@ public static class Render{
             });
             WE.Render.API.Pool.SetUniformBlock(UB_Default, 0);
             
-            SceneRender();
+            SceneRender(DTI);
             
             WE.Render.API.Pool.SetView(null);
             

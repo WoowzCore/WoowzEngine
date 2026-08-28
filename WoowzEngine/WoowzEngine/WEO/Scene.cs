@@ -7,6 +7,9 @@ namespace WEO;
 public class Scene : WLI.Packable{
     public string Name = "New Scene";
 
+    public bool DoUpdate       = true;
+    public bool DoEngineUpdate = false;
+    
     public EditorInfo? __EditorInfo;
     
     private readonly HashSet    <Entity> __Registry = [];
@@ -95,9 +98,17 @@ public class Scene : WLI.Packable{
     }
 
     // ----------------------------------------------------------------------
+
+    public void Update(DeltaTimeInfo DTI){
+        if(DoEngineUpdate){
+            PUpdate.UpdateEngine(this, DTI);
+        }
+        if(!DoUpdate){ return; }
+        PUpdate.Update(this, DTI);
+    }
     
-    public void Render(Camera Camera){
-        PRender.Render(this, Camera);
+    public void Render(DeltaTimeInfo DTI, Camera Camera){
+        PRender.Render(this, DTI, Camera);
     }
     
     // ----------------------------------------------------------------------
@@ -108,13 +119,17 @@ public class Scene : WLI.Packable{
         public Vector3F CameraRotation;
         public bool     CameraPerspective;
         public float    CameraSpeed;
+        public long     CreationTime;
+        public long     LastSaveTime;
 
         public Dictionary<string, object?> __Pack() => new Dictionary<string, object?>{
             ["BackgroundColor"  ] = BackgroundColor,
             ["CameraPosition"   ] = CameraPosition,
             ["CameraRotation"   ] = CameraRotation,
             ["CameraPerspective"] = CameraPerspective,
-            ["CameraSpeed"      ] = CameraSpeed
+            ["CameraSpeed"      ] = CameraSpeed,
+            ["CreationTime"     ] = CreationTime,
+            ["LastSaveTime"     ] = LastSaveTime
         };
         
         public void __Unpack(Dictionary<string, object?> Data){
@@ -123,6 +138,8 @@ public class Scene : WLI.Packable{
             CameraRotation    = WL.Packer.Get<Vector3F>(Data, "CameraRotation", CameraRotation);
             CameraPerspective = WL.Packer.Get<bool    >(Data, "CameraPerspective", CameraPerspective);
             CameraSpeed       = WL.Packer.Get<float   >(Data, "CameraSpeed", CameraSpeed);
+            CreationTime      = WL.Packer.Get<long    >(Data, "CreationTime", CreationTime);
+            LastSaveTime      = WL.Packer.Get<long    >(Data, "LastSaveTime", LastSaveTime);
         }
     }
 }

@@ -9,20 +9,13 @@ using WLO.Render;
 
 namespace WEO_Component;
 
-public class CMeshRenderer : RenderComponent{
+public class CTest : RenderComponent{
     [WEESave] public Asset<Mesh   > Mesh   ;
     [WEESave] public Asset<Program> Program;
-    [WEESave] public Asset<Texture> Texture;
-
-    [WEESave] public Color4B Color = new Color4B(255, 255, 255);
-    [WEESave] public bool Active = true;
     
     public override void OnRender(DeltaTimeInfo DTI, Vector3F CameraPosition){
-        if(!Active){ return; }
-
         GLMesh?      Mesh__    = Mesh   .Resolve() as GLMesh;
         GLProgram?   Program__ = Program.Resolve() as GLProgram;
-        GLTexture2D? Texture__ = Texture.Resolve() as GLTexture2D;
         
         if(Mesh__ == null || Program__ == null){ return; }
         
@@ -32,12 +25,21 @@ public class CMeshRenderer : RenderComponent{
             
             Mesh      = Mesh__,
             Program   = Program__,
-            Texture2D = Texture__,
             
             Uniforms = [
                 UniformValue.CreateM4F(0, Owner.Transform.GetWorldMatrix()),
-                UniformValue.CreateV3F(1, new Vector3F(Color.R / 255f, Color.G / 255f, Color.B / 255f))
+                UniformValue.CreateV3F(1, new Vector3F(Random.Shared.Next(0, 255) / 255f, Random.Shared.Next(0, 255) / 255f, Random.Shared.Next(0, 255) / 255f))
             ]
         });
+    }
+
+    public override void OnEngineUpdate(DeltaTimeInfo DTI){
+        Owner.Transform.Scale = new Vector3F(Random.Shared.NextSingle() + 0.5f, Random.Shared.NextSingle() + 0.5f, Random.Shared.NextSingle() + 0.5f);
+        Owner.Transform.IsDirty = true;
+    }
+    
+    public override void OnUpdate(DeltaTimeInfo DTI){
+        Owner.Transform.Rotation = new Vector3F(Random.Shared.NextSingle() * MathF.PI, Random.Shared.NextSingle() * MathF.PI, Random.Shared.NextSingle() * MathF.PI);
+        Owner.Transform.IsDirty = true;
     }
 }

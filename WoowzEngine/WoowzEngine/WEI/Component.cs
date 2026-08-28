@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using WEI.Editor;
 using WEO;
+using WLO;
 
 namespace WEI;
 
@@ -28,4 +29,22 @@ public abstract class Component : WLI.Packable{
             }
         }
     }
+
+    private bool __IsStarted = false;
+    public void __Update(DeltaTimeInfo DTI){
+        if(!__IsStarted){ OnStart(); __IsStarted = true; }
+        OnUpdate(DTI);
+    }
+    
+    // ----------------------------------------------------------------------
+
+    public virtual void OnAdd(){}
+
+    public virtual void OnDestroy(){}
+
+    public virtual void OnStart(){}
+
+    public virtual void OnUpdate(DeltaTimeInfo DTI){}
+    
+    public virtual void OnEngineUpdate(DeltaTimeInfo DTI){}
 }
