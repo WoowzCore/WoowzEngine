@@ -101,15 +101,17 @@ public static class I_Assets{
             Time = (float)ImGui.GetTime()
         });
         
-        WE.Render.API.Pool.SetUniformBlock(WEE.Render.UB_Default, 0, true);
+        WEE.Render.API.Pool.SetUniformBlock(WEE.Render.UB_Default, 0, true);
 
+        const float PreviewScale = 4;
+        
         Matrix4F CalculateModel(GLMesh Mesh){
             Bounds3D Bounds = Mesh.Bounds;
             
             Matrix4F Translation = Matrix4F.CreateTranslation(-Bounds.Center);
 
             float MaxDimension = System.Math.Max(Bounds.Size.X, System.Math.Max(Bounds.Size.Y, Bounds.Size.Z));
-            float ScaleFactor = (MaxDimension > 0.0001f) ? (3 / MaxDimension) : 1;
+            float ScaleFactor = (MaxDimension > 0.0001f) ? (PreviewScale / MaxDimension) : 1;
             Matrix4F Scale = Matrix4F.CreateScale(new Vector3F(ScaleFactor, ScaleFactor, ScaleFactor));
 
             Matrix4F Rotation = Matrix4F.CreateRotationY(__PreviewRotation);
@@ -118,21 +120,21 @@ public static class I_Assets{
         }
         
         GLTexture2D? TestTexture = WE.Asset.Resolve<GLTexture2D>(WE.Asset.GetID("Texture/Test"));
-        WE.Render.API.Pool.SetTexture2D(TestTexture);
+        WEE.Render.API.Pool.SetTexture2D(TestTexture);
         
         if(Asset is GLMesh Mesh){
             GLProgram? TestProgram = WE.Asset.Resolve<GLProgram>(WE.Asset.GetID("Shader/Default"));
             if(TestProgram != null){
                 TestProgram.SetUniform(UniformValue.CreateM4F(0, CalculateModel(Mesh)));
                 TestProgram.SetUniform(UniformValue.CreateV3F(1, new Vector3F(1, 1, 1)));
-                WE.Render.API.Draw(Mesh, TestProgram);
+                WEE.Render.API.Draw(Mesh, TestProgram);
             }
         }else if(Asset is GLProgram Program){
             GLMesh? TestMesh = WE.Asset.Resolve<GLMesh>(WE.Asset.GetID("Mesh/Sphere"));
             if(TestMesh != null){
                 Program.SetUniform(UniformValue.CreateM4F(0, CalculateModel(TestMesh)));
                 Program.SetUniform(UniformValue.CreateV3F(1, new Vector3F(1, 1, 1)));
-                WE.Render.API.Draw(TestMesh, Program);
+                WEE.Render.API.Draw(TestMesh, Program);
             }
         }
     }
@@ -141,43 +143,43 @@ public static class I_Assets{
         const int Size = 128;
 
         if(!__PreviewTextures.TryGetValue(ID, out GLTexture2D? Texture)){
-            Texture = WE.Render.API.CreateTexture2D(new Vector2I(Size, Size));
+            Texture = WEE.Render.API.CreateTexture2D(new Vector2I(Size, Size));
             __PreviewTextures[ID] = Texture;
         }
 
         if(__SharedPreviewView == null){
-            __SharedPreviewView = GLView.Create(WE.Render.API, new Vector2I(Size, Size),
+            __SharedPreviewView = GLView.Create(WEE.Render.API, new Vector2I(Size, Size),
                 GLView.LayerConfig.Color(),
                 GLView.LayerConfig.Depth()
             );
         }
 
-        GLView OldView = WE.Render.API.Pool.GetView();
-        WE.Render.API.Pool.SetView(__SharedPreviewView);
+        GLView OldView = WEE.Render.API.Pool.GetView();
+        WEE.Render.API.Pool.SetView(__SharedPreviewView);
 
         __SharedPreviewView.SetTexture(Texture);
         
-        WE.Render.API.FrameStart();
+        WEE.Render.API.FrameStart();
         
-            WE.Render.API.Clear(Color4B.Transparent);
+            WEE.Render.API.Clear(Color4B.Transparent);
 
-            bool OldDepthTest = WE.Render.API.Pool.GetDepthTest();
-            bool OldScissor   = WE.Render.API.Pool.GetScissorTest();
-            bool OldCullFace  = WE.Render.API.Pool.GetCullFace();
+            bool OldDepthTest = WEE.Render.API.Pool.GetDepthTest();
+            bool OldScissor   = WEE.Render.API.Pool.GetScissorTest();
+            bool OldCullFace  = WEE.Render.API.Pool.GetCullFace();
             
-            WE.Render.API.Pool.SetDepthTest(true);
-            WE.Render.API.Pool.SetScissorTest(false);
-            WE.Render.API.Pool.SetCullFace(false);
+            WEE.Render.API.Pool.SetDepthTest(true);
+            WEE.Render.API.Pool.SetScissorTest(false);
+            WEE.Render.API.Pool.SetCullFace(false);
             
             RenderAsset(Asset);
             
-            WE.Render.API.Pool.SetDepthTest(OldDepthTest);
-            WE.Render.API.Pool.SetScissorTest(OldScissor);
-            WE.Render.API.Pool.SetCullFace(OldCullFace);
+            WEE.Render.API.Pool.SetDepthTest(OldDepthTest);
+            WEE.Render.API.Pool.SetScissorTest(OldScissor);
+            WEE.Render.API.Pool.SetCullFace(OldCullFace);
             
-        WE.Render.API.FrameStop();
+        WEE.Render.API.FrameStop();
         
-        WE.Render.API.Pool.SetView(OldView);
+        WEE.Render.API.Pool.SetView(OldView);
     }
     
     private static void RenderPreview(string Key, Vector2 CursorPosition, float IconSize, bool IsVisible, int ID){

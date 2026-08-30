@@ -34,7 +34,7 @@ public static class Interface{
     // ----------------------------------------------------------------------
     
     public static void Start(){
-        ImGUI = new GLImGUI(WE.Render.API, true);
+        ImGUI = new GLImGUI(WEE.Render.API, true);
 
         ImGUI.IO.ConfigFlags |= ImGuiConfigFlags.DockingEnable;
         ImGUI.IO.ConfigFlags |= ImGuiConfigFlags.NavEnableKeyboard;

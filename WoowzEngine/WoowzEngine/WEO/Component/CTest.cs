@@ -19,7 +19,7 @@ public class CTest : RenderComponent{
         
         if(Mesh__ == null || Program__ == null){ return; }
         
-        WE.Render.Queue.Submit(new GLRenderQueue.Command{
+        /*WE.Render.Queue.Submit(new GLRenderQueue.Command{
             ObjectID = Owner.ID,
             
             DistanceToCamera = (ActualPosition - CameraPosition).Length,
@@ -32,7 +32,7 @@ public class CTest : RenderComponent{
                 UniformValue.CreateM4F(0, Owner.Transform.GetWorldMatrix()),
                 UniformValue.CreateV3F(1, new Vector3F(Random.Shared.Next(0, 255) / 255f, Random.Shared.Next(0, 255) / 255f, Random.Shared.Next(0, 255) / 255f))
             ]
-        });
+        });*/
     }
 
     public override void OnEngineUpdate(DeltaTimeInfo DTI){

@@ -5,8 +5,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WoowzEngine", "WoowzEngine\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WoowzEngineEditor", "WoowzEngineEditor\WoowzEngineEditor.csproj", "{ED5481C5-1311-433B-B0B2-4E3A5C98695E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WoowzEngineRender", "WoowzEngineRender\WoowzEngineRender.csproj", "{6B2F9C04-3CC7-4F63-AEA5-1663D8341014}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,9 +19,5 @@ Global
 		{ED5481C5-1311-433B-B0B2-4E3A5C98695E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{ED5481C5-1311-433B-B0B2-4E3A5C98695E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{ED5481C5-1311-433B-B0B2-4E3A5C98695E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6B2F9C04-3CC7-4F63-AEA5-1663D8341014}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6B2F9C04-3CC7-4F63-AEA5-1663D8341014}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6B2F9C04-3CC7-4F63-AEA5-1663D8341014}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6B2F9C04-3CC7-4F63-AEA5-1663D8341014}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

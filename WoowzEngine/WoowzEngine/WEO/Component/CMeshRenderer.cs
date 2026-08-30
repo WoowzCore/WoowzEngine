@@ -26,7 +26,7 @@ public class CMeshRenderer : RenderComponent{
         
         if(Mesh__ == null || Program__ == null){ return; }
         
-        WE.Render.Queue.Submit(new GLRenderQueue.Command{
+        /*WE.Render.Queue.Submit(new GLRenderQueue.Command{
             ObjectID = Owner.ID,
             
             DistanceToCamera = (ActualPosition - CameraPosition).Length,
@@ -40,6 +40,6 @@ public class CMeshRenderer : RenderComponent{
                 UniformValue.CreateM4F(0, Owner.Transform.GetWorldMatrix()),
                 UniformValue.CreateV3F(1, new Vector3F(Color.R / 255f, Color.G / 255f, Color.B / 255f))
             ]
-        });
+        });*/
     }
 }
