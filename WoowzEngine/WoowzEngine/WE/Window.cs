@@ -2,7 +2,7 @@
 
 namespace WE;
 
-public static class Window{
+public struct Window{
     public static void __Start(){
         WL.GLFW.Start();
     }

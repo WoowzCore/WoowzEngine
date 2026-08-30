@@ -2,7 +2,7 @@
 
 namespace WE;
 
-public static class Asset{
+public struct Asset{
     private static readonly Dictionary<string, int>   __KeyToID   = [];
     private static readonly List<string>              __IDToKey   = [];
     private static readonly Dictionary<int, Provider> __Providers = [];

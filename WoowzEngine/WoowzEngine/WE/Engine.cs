@@ -2,7 +2,7 @@
 
 namespace WE;
 
-public static class Engine{
+public struct Engine{
     public static void Start(){
         try{
             WE.Asset.__Start();
