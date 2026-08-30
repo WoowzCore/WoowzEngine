@@ -183,11 +183,11 @@
 									"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Mesh)"
 								},
 								"Program": {
-									"Key": "TShader/Test",
+									"Key": "TShader/Default",
 									"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Program)"
 								},
 								"Texture": {
-									"Key": "T",
+									"Key": "TTexture/Baldi",
 									"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Texture)"
 								},
 								"Color": {
@@ -229,11 +229,11 @@
 									"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Mesh)"
 								},
 								"Program": {
-									"Key": "TShader/Test",
+									"Key": "TShader/Default",
 									"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Program)"
 								},
 								"Texture": {
-									"Key": "T",
+									"Key": "TTexture/Test",
 									"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Texture)"
 								},
 								"Color": {
@@ -417,7 +417,7 @@
 									"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Program)"
 								},
 								"Texture": {
-									"Key": "TTexture/Pavel",
+									"Key": "TTexture/Picsis",
 									"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Texture)"
 								},
 								"Color": {
@@ -683,7 +683,7 @@
 					"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
 				},
 				"Scale": {
-					"XYZ": "T0,61902815|0,5629634|1,225726",
+					"XYZ": "T0,63182527|0,5880354|0,7879843",
 					"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
 				},
 				"PackType": "TWoowzEngine|WEO.Transform"
@@ -1059,21 +1059,21 @@
 	],
 	"EditorInfo": {
 		"BackgroundColor": {
-			"RGBA": "T0|0|0|255",
+			"RGBA": "T255|255|255|255",
 			"PackType": "TWoowzLib.Core|WLO.Math.Color4B"
 		},
 		"CameraPosition": {
-			"XYZ": "T-6,5871286|0,9514692|4,0353584",
+			"XYZ": "T20,515528|7,456383|37,420258",
 			"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
 		},
 		"CameraRotation": {
-			"XYZ": "T0,02663026|-5,5133443|0",
+			"XYZ": "T0,09252151|0,28095767|0",
 			"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
 		},
 		"CameraPerspective": "Z1",
 		"CameraSpeed": "F1",
 		"CreationTime": "L639235303249196046",
-		"LastSaveTime": "L639236985435150192",
+		"LastSaveTime": "L639237219133504316",
 		"PackType": "TWoowzEngine|WEO.Scene.EditorInfo"
 	},
 	"PackType": "TWoowzEngine|WEO.Scene"

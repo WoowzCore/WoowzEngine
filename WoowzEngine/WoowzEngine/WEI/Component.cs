@@ -38,8 +38,12 @@ public abstract class Component : WLI.Packable{
     
     // ----------------------------------------------------------------------
 
+    // TODO, додел это, оно не вызывается
+    [Obsolete]
     public virtual void OnAdd(){}
 
+    // TODO, додел это, оно не вызывается
+    [Obsolete]
     public virtual void OnDestroy(){}
 
     public virtual void OnStart(){}
