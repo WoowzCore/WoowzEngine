@@ -104,7 +104,7 @@ public static class I_Assets{
         WE.Render.API.Pool.SetUniformBlock(WEE.Render.UB_Default, 0, true);
 
         Matrix4F CalculateModel(GLMesh Mesh){
-            Bounds Bounds = Mesh.Bounds;
+            Bounds3D Bounds = Mesh.Bounds;
             
             Matrix4F Translation = Matrix4F.CreateTranslation(-Bounds.Center);
 
