@@ -1,6 +1,6 @@
 ﻿using WEI.Editor;
 
-namespace WEI;
+namespace WEO;
 
 public class UnknownComponent : WEI.Component{
     [WEESave] public string OriginalType = "";

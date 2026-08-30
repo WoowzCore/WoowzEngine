@@ -70,13 +70,40 @@ public static class Registry{
         if(__CachedMethods.TryGetValue(typeof(T), out List<MethodInfo>? Methods)){
             foreach(MethodInfo Method in Methods){
                 try{
-                    Result.Add((TD)Delegate.CreateDelegate(typeof(TD), Method));   
+                    Result.Add((TD)Delegate.CreateDelegate(typeof(TD), Method));
                 }catch{
                     WL.Logger.Error($"Не удалось создать делегат для {Method.Name}!");
                 }
             }
         }
         return Result;
+    }
+
+    public static TD? GetFirstDelegate<T, TD>() where TD : Delegate{
+        if(__CachedMethods.TryGetValue(typeof(T), out List<MethodInfo>? Methods) && Methods.Count > 0){
+            try{
+                return (TD)Delegate.CreateDelegate(typeof(TD), Methods[0]);
+            }catch{
+                WL.Logger.Error($"Не удалось создать делегат для {Methods[0].Name}!");
+            }
+        }
+        return null;
+    }
+
+    public static object? RunFirstDelegate<T, TD>(bool Notify, params object[] Args) where TD : Delegate{
+        TD? Delegate = GetFirstDelegate<T, TD>();
+        if(Delegate != null){
+            try{
+                return Delegate.DynamicInvoke(Args);
+            }catch(Exception e){
+                e = e is TargetInvocationException ? (e.InnerException ?? e) : e;
+                WL.Logger.Error($"Ошибка при выполнении делегата [{typeof(T).Name}]:\n{e.Message}\n{e.StackTrace}");
+            }
+        }else{
+            WL.Logger.Warn($"Не найден делегат [{typeof(T).Name}] для вызова!");
+        }
+
+        return null;
     }
     
     public static void ResetAndReload(Assembly? GameAssembly = null){

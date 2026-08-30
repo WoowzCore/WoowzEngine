@@ -144,30 +144,6 @@ public static class I_View{
             }
         } ImGui.End();
     }
-
-    private const uint __IDColor_Mask24     = 0xFFFFFFu;
-    private const uint __IDColor_Multiplier = 0x5BF037u;
-    private const uint __IDColor_Inverse    = 0xA6C587u;
-
-    public static Color4B IDToColor(uint ID){
-        if(ID == 0){ return Color4B.Black; }
-
-        uint X = (ID * __IDColor_Multiplier) & __IDColor_Mask24;
-
-        byte R = (byte)((X >> 0 ) & 0xFF);
-        byte G = (byte)((X >> 8 ) & 0xFF);
-        byte B = (byte)((X >> 16) & 0xFF);
-
-        return new Color4B(R, G, B, 255);
-    }
-
-    public static uint ColorToID(Color4B Color){
-        if(Color.R == 0 && Color.G == 0 && Color.B == 0){ return 0; }
-
-        uint X = ((uint)Color.R << 0) | ((uint)Color.G << 8) | ((uint)Color.B << 16);
-
-        return (X * __IDColor_Inverse) & __IDColor_Mask24;
-    }
     
     public static void ClickToView(){
         if(ViewMousePosition.X < 0 || ViewMousePosition.Y < 0 || ViewMousePosition.X > SceneViewSize.X || ViewMousePosition.Y > SceneViewSize.Y){ return; }
@@ -176,7 +152,7 @@ public static class I_View{
         Vector2I PickPosition = new Vector2I(ViewMousePosition.X, SceneViewSize.Y - ViewMousePosition.Y);
         
         Color4B Color = WEE.Render.PickingView.GetRect(new Rect2I(PickPosition, new Vector2I(1, 1)))[0];
-        uint ID = ColorToID(Color);
+        uint ID = Color.ToUInt();
         
         WEE.Interface.CurrentEntity = ID != 0 ? Entity.GetFromID(ID) : null;
     }

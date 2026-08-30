@@ -1,6 +1,8 @@
 ﻿using System.Runtime.InteropServices;
 using WEE_Interface;
 using WEEO;
+using WEI.Editor;
+using WEO;
 using WLO;
 using WLO.GPU;
 using WLO.Math;
@@ -66,14 +68,17 @@ public static class Render{
         API.Pool.GetView().Viewport = TargetSize;
         
         API.FrameStart();
-            API.Clear(I_View.BackgroundColor);
-                    
-            API.Pool.SetDepthTest(true);
-            
-            WEE.Interface.CurrentScene?.Render(DTI, WEE.Editor.ViewCamera);
-                
-            //WE.Render.Queue.Render();
-            
+            if(WEE.Interface.CurrentScene != null){
+                WEE.Registry.RunFirstDelegate<WEEMainRender, Action<OpenGL, Scene, Camera, Vector2I, Color4B, DeltaTimeInfo, bool>>(true,
+                    WEE.Render.API,
+                    WEE.Interface.CurrentScene,
+                    WEE.Editor.ViewCamera,
+                    TargetSize,
+                    I_View.BackgroundColor,
+                    DTI,
+                    false
+                );
+            }
         API.FrameStop();
         
         
@@ -82,19 +87,17 @@ public static class Render{
         API.Pool.GetView().Viewport = TargetSize;
         
         API.FrameStart();
-            API.Clear(Color4B.Black);
-               
-            API.Pool.SetFrameSRGB(false);
-            API.Pool.SetDepthTest(true);
-            
-            WEE.Interface.CurrentScene?.Render(DTI, WEE.Editor.ViewCamera);
-                
-            /*WE.Render.Queue.RenderWithProgram(WE.Asset.Resolve<GLProgram>(WE.Asset.GetID("Shader/Picking"))!, (CMD, Program) => {
-                Color4B Color = I_View.IDToColor(CMD.ObjectID);
-                const float Epsilon = 0.5f / 255f;
-                Program.SetUniform(UniformValue.CreateV3F(1, new Vector3F(Color.R / 255f + Epsilon, Color.G / 255f + Epsilon, Color.B / 255f + Epsilon)));
-            });*/
-            
+            if(WEE.Interface.CurrentScene != null){
+                WEE.Registry.RunFirstDelegate<WEEMainRender, Action<OpenGL, Scene, Camera, Vector2I, Color4B, DeltaTimeInfo, bool>>(true,
+                    WEE.Render.API,
+                    WEE.Interface.CurrentScene,
+                    WEE.Editor.ViewCamera,
+                    TargetSize,
+                    Color4B.Black,
+                    DTI,
+                    true
+                );
+            }
         API.FrameStop();
     }
     

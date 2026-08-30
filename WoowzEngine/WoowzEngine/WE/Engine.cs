@@ -5,6 +5,8 @@ namespace WE;
 public struct Engine{
     public static void Start(){
         try{
+            WL.Packer.SetFallback(typeof(WEI.Component), typeof(WEO.UnknownComponent));
+            
             WE.Asset.__Start();
             WE.Window.__Start();
         }catch(Exception e){
