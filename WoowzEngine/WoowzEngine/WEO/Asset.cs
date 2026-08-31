@@ -1,9 +1,9 @@
-﻿using WEI.Editor;
+﻿using WEI_Attribute;
 
 namespace WEO;
 
 public struct Asset<T> : WLI.Packable where T : class{
-    [WEESave] public string Key;
+    [WE_Save] public string Key;
     
     public int __ID = -1;
 

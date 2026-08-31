@@ -1,5 +1,5 @@
 ﻿using System.Reflection;
-using WEI.Editor;
+using WEI_Attribute;
 using WEO;
 using WLO;
 
@@ -12,7 +12,7 @@ public abstract class Component : WLI.Packable{
         Dictionary<string, object?> Data = new Dictionary<string, object?>();
 
         foreach(FieldInfo Field in GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)){
-            if(Field.GetCustomAttribute<WEESave>() == null){ continue; }
+            if(Field.GetCustomAttribute<WE_Save>() == null){ continue; }
 
             Data[Field.Name] = Field.GetValue(this);
         }
@@ -22,7 +22,7 @@ public abstract class Component : WLI.Packable{
 
     public virtual void __Unpack(Dictionary<string, object?> Data){
         foreach(FieldInfo Field in GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)){
-            if(Field.GetCustomAttribute<WEESave>() == null){ continue; }
+            if(Field.GetCustomAttribute<WE_Save>() == null){ continue; }
 
             if(Data.TryGetValue(Field.Name, out object? Value)){
                 Field.SetValue(this, WL.Packer.Unpack(Value, Field.FieldType));

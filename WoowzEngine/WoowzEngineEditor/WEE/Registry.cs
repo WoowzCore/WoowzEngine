@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
-using WEI.Editor;
-using WEO;
+using WEI_Attribute;
 
 namespace WEE;
 
@@ -119,6 +118,6 @@ public static class Registry{
 
         if(GameAssembly != null){ ScanAssembly(GameAssembly); }
         
-        RunMethods<WEERunOnInit>(true, WEE.Render.API);
+        RunMethods<WEE_OnStart>(true, WEE.Render.API);
     }
 }

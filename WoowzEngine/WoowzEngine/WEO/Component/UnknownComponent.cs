@@ -1,11 +1,11 @@
-﻿using WEI.Editor;
+﻿using WEI_Attribute;
 
 namespace WEO;
 
 public class UnknownComponent : WEI.Component{
-    [WEESave] public string OriginalType = "";
-    [WEEMultilineString(500)]
-    [WEESave] public string RawJSONData = "";
+    [WE_Save] public string OriginalType = "";
+    [WEEI_MultilineString(500)]
+    [WE_Save] public string RawJSONData = "";
 
     public override Dictionary<string, object?> __Pack(){
         try{

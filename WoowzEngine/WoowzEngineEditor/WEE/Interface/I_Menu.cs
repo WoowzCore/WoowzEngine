@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using ImGuiNET;
 using NativeFileDialogSharp;
-using WEI.Editor;
+using WEI_Attribute;
 using WEO;
 using WLO.Math;
 
@@ -199,7 +199,7 @@ public static class I_Menu{
             WEE.Prefs.AddRecentScene(Path);
             WL.Logger.Info($"Сцена загружена: {Path}");
             
-            WEE.Registry.RunMethods<WEERunOnSceneLoad>(true, WEE.Interface.CurrentScene);
+            WEE.Registry.RunMethods<WEE_OnSceneLoad>(true, WEE.Interface.CurrentScene);
         }catch(Exception e){
             WL.Logger.Error($"Ошибка загрузки: {e.Message + "\n" + e.StackTrace}");
         }

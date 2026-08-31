@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using ImGuiNET;
 using WEI;
-using WEI.Editor;
+using WEI_Attribute;
 using WEO;
 using WLO.Math;
 
@@ -109,7 +109,7 @@ public static class I_Inspector{
         FieldInfo[] Fields = Component.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 
         foreach(FieldInfo Field in Fields){
-            if(Field.GetCustomAttribute<WEESave>() == null){ continue; }
+            if(Field.GetCustomAttribute<WE_Save>() == null){ continue; }
 
             ImGui.PushID(Field.Name);
             
@@ -204,7 +204,7 @@ public static class I_Inspector{
             }else if(FieldType == typeof(string)){
                 string V = (string)Value ?? "";
 
-                WEEMultilineString? MultilineAttribute = Field.GetCustomAttribute<WEEMultilineString>();
+                WEEI_MultilineString? MultilineAttribute = Field.GetCustomAttribute<WEEI_MultilineString>();
 
                 if(MultilineAttribute != null){
                     ImGui.Text(Label);

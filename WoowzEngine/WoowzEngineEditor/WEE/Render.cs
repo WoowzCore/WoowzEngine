@@ -1,10 +1,9 @@
 ﻿using System.Runtime.InteropServices;
 using WEE_Interface;
 using WEEO;
-using WEI.Editor;
+using WEI_Attribute;
 using WEO;
 using WLO;
-using WLO.GPU;
 using WLO.Math;
 using WLO.Render;
 using WLO.Render.Hardware;
@@ -69,7 +68,7 @@ public static class Render{
         
         API.FrameStart();
             if(WEE.Interface.CurrentScene != null){
-                WEE.Registry.RunFirstDelegate<WEEMainRender, Action<OpenGL, Scene, Camera, Vector2I, Color4B, DeltaTimeInfo, bool>>(true,
+                WEE.Registry.RunFirstDelegate<WEE_OnViewRender, Action<OpenGL, Scene, Camera, Vector2I, Color4B, DeltaTimeInfo, bool>>(true,
                     WEE.Render.API,
                     WEE.Interface.CurrentScene,
                     WEE.Editor.ViewCamera,
@@ -88,7 +87,7 @@ public static class Render{
         
         API.FrameStart();
             if(WEE.Interface.CurrentScene != null){
-                WEE.Registry.RunFirstDelegate<WEEMainRender, Action<OpenGL, Scene, Camera, Vector2I, Color4B, DeltaTimeInfo, bool>>(true,
+                WEE.Registry.RunFirstDelegate<WEE_OnViewRender, Action<OpenGL, Scene, Camera, Vector2I, Color4B, DeltaTimeInfo, bool>>(true,
                     WEE.Render.API,
                     WEE.Interface.CurrentScene,
                     WEE.Editor.ViewCamera,
