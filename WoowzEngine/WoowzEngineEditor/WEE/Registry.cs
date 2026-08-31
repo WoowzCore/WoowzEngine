@@ -59,7 +59,7 @@ public static class Registry{
                 }
             }catch(Exception e){
                 e = e.InnerException ?? e;
-                WL.Logger.Error($"Ошибка в {Method.Name} [{TargetAttribute.Name}]:\n{e.Message}\n{e.StackTrace}");
+                WL.Logger.Error($"Ошибка в {Method.Name} [{TargetAttribute.Name}]:", e);
             }
         }
     }
@@ -96,7 +96,7 @@ public static class Registry{
                 return Delegate.DynamicInvoke(Args);
             }catch(Exception e){
                 e = e is TargetInvocationException ? (e.InnerException ?? e) : e;
-                WL.Logger.Error($"Ошибка при выполнении делегата [{typeof(T).Name}]:\n{e.Message}\n{e.StackTrace}");
+                WL.Logger.Error($"Ошибка при выполнении делегата [{typeof(T).Name}]", e);
             }
         }else{
             WL.Logger.Warn($"Не найден делегат [{typeof(T).Name}] для вызова!");

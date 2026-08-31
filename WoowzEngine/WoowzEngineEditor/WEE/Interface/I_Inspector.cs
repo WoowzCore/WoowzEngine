@@ -107,7 +107,7 @@ public static class I_Inspector{
                     }
                 }
             }catch(Exception e){
-                WL.Logger.Warn("TODO INSPECTOR " + e.Message);
+                WL.Logger.Warn("TODO INSPECTOR", e);
             }
         } ImGui.End();
     }

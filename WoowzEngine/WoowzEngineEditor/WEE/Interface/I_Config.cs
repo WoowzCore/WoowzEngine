@@ -54,7 +54,7 @@ public static class I_Config{
                         Assembly GameAssembly = Assembly.LoadFrom(WEE.Interface.Config.GameDLLPath);
                         WEE.Registry.ResetAndReload(GameAssembly);
                     }catch(Exception e){
-                        WL.Logger.Error($"ошибка при загрузке dll, todo {e.Message}\n{e.StackTrace}");
+                        WL.Logger.Error($"ошибка при загрузке dll, todo", e);
                     }
                 }
             }

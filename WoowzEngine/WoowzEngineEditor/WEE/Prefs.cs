@@ -29,7 +29,7 @@ public static class Prefs{
         try{
             File.WriteAllText(PrefsPath, WL.String.ToJSON(__Pack()));
         }catch(Exception e){
-            WL.Logger.Warn("ERROR TODO... " + e.Message);
+            WL.Logger.Warn("ERROR TODO...", e);
         }
     }
 
@@ -38,7 +38,7 @@ public static class Prefs{
         try{
             __Unpack((Dictionary<string, object?>)WL.String.FromJSON(File.ReadAllText(PrefsPath))!);
         }catch(Exception e){
-            WL.Logger.Warn("ERROR TODO 2... " + e.Message);
+            WL.Logger.Warn("ERROR TODO 2...", e);
         }
     }
 }

@@ -166,7 +166,7 @@ public static class I_Menu{
             __SceneFilePath = Path;
             WL.Logger.Info($"Сцена сохранена: {Path}");
         }catch (Exception e){
-            WL.Logger.Error($"Ошибка сохранения: {e.Message}");
+            WL.Logger.Error($"Ошибка сохранения:", e);
         }
     }
 
@@ -201,7 +201,7 @@ public static class I_Menu{
             
             WEE.Registry.RunMethods<WEE_OnSceneLoad>(true, WEE.Interface.CurrentScene);
         }catch(Exception e){
-            WL.Logger.Error($"Ошибка загрузки: {e.Message + "\n" + e.StackTrace}");
+            WL.Logger.Error($"Ошибка загрузки:", e);
         }
     }
 }

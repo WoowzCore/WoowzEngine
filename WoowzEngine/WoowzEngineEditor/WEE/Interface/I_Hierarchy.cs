@@ -56,7 +56,7 @@ public static class I_Hierarchy{
                     }
                 }
             }catch(Exception e){
-                WL.Logger.Warn("TODO HIERARCHY " + e.Message + "\n" + e.StackTrace);
+                WL.Logger.Warn("TODO HIERARCHY", e);
             }
         } ImGui.End();
     }

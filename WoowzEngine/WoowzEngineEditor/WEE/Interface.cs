@@ -156,7 +156,7 @@ public static class Interface{
                     try{
                         if(Config != null && !string.IsNullOrEmpty(Config.GameDLLPath)){ GameAssembly = Assembly.LoadFrom(Config.GameDLLPath); }
                     }catch(Exception e){
-                        WL.Logger.Error($"ошибка при загрузке dll, todo 2 {e.Message}\n{e.StackTrace}");
+                        WL.Logger.Error($"ошибка при загрузке dll, todo 2", e);
                     }
                     WEE.Registry.ResetAndReload(GameAssembly);
 
