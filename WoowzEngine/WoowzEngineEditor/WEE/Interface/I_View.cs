@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using ImGuiNET;
+using WEI_Attribute;
 using WEO;
 using WLO.Math;
 
@@ -129,18 +130,40 @@ public static class I_View{
             SceneViewSize = new Vector2I((int)__SceneViewport.X, (int)__SceneViewport.Y);
 
             if(WEE.Interface.CurrentScene != null){
-                uint TextureID = ShowWhat switch{
-                    ShowWhatType.Scene => WEE.Render.SceneView.TextureColor0!.ID,
-                    ShowWhatType.Depth => WEE.Render.SceneView.TextureDepth!.ID,
-                    ShowWhatType.Picking => WEE.Render.PickingView.TextureColor0!.ID
-                };
+                if(WEE.Registry.HasMethods<WEE_OnViewRender>()){
+                    uint TextureID = ShowWhat switch{
+                        ShowWhatType.Scene => WEE.Render.SceneView.TextureColor0!.ID,
+                        ShowWhatType.Depth => WEE.Render.SceneView.TextureDepth!.ID,
+                        ShowWhatType.Picking => WEE.Render.PickingView.TextureColor0!.ID
+                    };
                 
-                ImGui.Image((IntPtr)TextureID, __SceneViewport, new Vector2(0, 1), new Vector2(1, 0));
-                Vector2 ImagePositionMin = ImGui.GetItemRectMin();
-                ViewMousePosition = new Vector2I(
-                    (int)(WEE.Control.MousePosition.X - ImagePositionMin.X),
-                    (int)(WEE.Control.MousePosition.Y - ImagePositionMin.Y)
-                );
+                    ImGui.Image((IntPtr)TextureID, __SceneViewport, new Vector2(0, 1), new Vector2(1, 0));
+                    Vector2 ImagePositionMin = ImGui.GetItemRectMin();
+                    ViewMousePosition = new Vector2I(
+                        (int)(WEE.Control.MousePosition.X - ImagePositionMin.X),
+                        (int)(WEE.Control.MousePosition.Y - ImagePositionMin.Y)
+                    );
+                }else{
+                    string WarningText = "Укажите метод рендера сцены через атрибут [WEE_OnViewRender]!";
+                    Vector2 TextSize = ImGui.CalcTextSize(WarningText);
+                    
+                    ImGui.SetCursorPos(new Vector2(
+                        ImGui.GetCursorPosX() + (__SceneViewport.X - TextSize.X) * 0.5f,
+                        ImGui.GetCursorPosY() + (__SceneViewport.Y - TextSize.Y) * 0.5f
+                    ));
+                    ImGui.TextColored(new Vector4(1, 0.4f, 0, 1), WarningText);
+                }
+            }else{
+                // todo, Я НАХУЙ МЕГАТРОН, ДЕЛАЯ ПОВТОРЫ КОДА НАХУЙ Я МЕГАТРОН ДЕЛАЯ ПОВТОРЫ КОДА ПОВТОРЫ КОДА ПОВТОРЫ КОДА ПОВТОРИТЕ ПОЖАЛУЙСТА НЕ РАССЛЫШАЛ, ВЫ СКАЗАЛИ ПОВТОРЫ КОДА?
+                
+                string WarningText = "Откройте сцену для рендера сцены";
+                Vector2 TextSize = ImGui.CalcTextSize(WarningText);
+                    
+                ImGui.SetCursorPos(new Vector2(
+                    ImGui.GetCursorPosX() + (__SceneViewport.X - TextSize.X) * 0.5f,
+                    ImGui.GetCursorPosY() + (__SceneViewport.Y - TextSize.Y) * 0.5f
+                ));
+                ImGui.TextColored(new Vector4(1, 0.4f, 0, 1), WarningText);
             }
         } ImGui.End();
     }

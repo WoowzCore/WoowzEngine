@@ -1,10 +1,12 @@
 ﻿using System.Numerics;
 using System.Runtime.InteropServices;
 using ImGuiNET;
+using WEI_Attribute;
 using WLO;
 using WLO.GPU;
 using WLO.Math;
 using WLO.Render;
+using WLO.Render.Hardware;
 
 namespace WEE_Interface;
 
@@ -35,6 +37,8 @@ public static class I_Assets{
 
                         float WindowVisibleRightEdge = ImGui.GetCursorScreenPos().X + ImGui.GetContentRegionAvail().X;
 
+                        WEE.Registry.RunMethods<WEE_OnPreAllPreviewRender>(false, WEE.Render.API, WEE.Cycle.Render_DTI, WEE.Cycle.Render_Time);
+                        
                         for(int i = 0; i < Keys.Count; i++){
                             string Key = Keys[i];
                             int ID = WE.Asset.GetID(Key);
@@ -84,62 +88,12 @@ public static class I_Assets{
                 }
             }
         } ImGui.End();
-
-        __PreviewRotation += WEE.Cycle.Render_DT / 2;
     }
 
     private static readonly Dictionary<int, GLTexture2D> __PreviewTextures = [];
     private static          GLView?                      __SharedPreviewView;
-    private static          float                        __PreviewRotation = 0;
-
-    private static void RenderAsset(object Asset){
-        Matrix4F View = Matrix4F.CreateLookAt(new Vector3F(0, 0, 5), new Vector3F(0, 0, 0), new Vector3F(0, 1, 0));
-        Matrix4F Projection = Matrix4F.CreatePerspective(45, 1, 0.1f, 100);
-        
-        WEE.Render.UB_Default.Update(new WEE.Render.UniformBlock_Default {
-            ViewProjection = Projection * View,
-            Time = (float)ImGui.GetTime()
-        });
-        
-        WEE.Render.API.Pool.SetUniformBlock(WEE.Render.UB_Default, 0, true);
-
-        const float PreviewScale = 4;
-        
-        Matrix4F CalculateModel(GLMesh Mesh){
-            Bounds3D Bounds = Mesh.Bounds;
-            
-            Matrix4F Translation = Matrix4F.CreateTranslation(-Bounds.Center);
-
-            float MaxDimension = System.Math.Max(Bounds.Size.X, System.Math.Max(Bounds.Size.Y, Bounds.Size.Z));
-            float ScaleFactor = (MaxDimension > 0.0001f) ? (PreviewScale / MaxDimension) : 1;
-            Matrix4F Scale = Matrix4F.CreateScale(new Vector3F(ScaleFactor, ScaleFactor, ScaleFactor));
-
-            Matrix4F Rotation = Matrix4F.CreateRotationY(__PreviewRotation);
-
-            return Rotation * Scale * Translation;
-        }
-        
-        GLTexture2D? TestTexture = WE.Asset.Resolve<GLTexture2D>(WE.Asset.GetID("Texture/Test"));
-        WEE.Render.API.Pool.SetTexture2D(TestTexture);
-        
-        if(Asset is GLMesh Mesh){
-            GLProgram? TestProgram = WE.Asset.Resolve<GLProgram>(WE.Asset.GetID("Shader/Default"));
-            if(TestProgram != null){
-                TestProgram.SetUniform(UniformValue.CreateM4F(0, CalculateModel(Mesh)));
-                TestProgram.SetUniform(UniformValue.CreateV3F(1, new Vector3F(1, 1, 1)));
-                WEE.Render.API.Draw(Mesh, TestProgram);
-            }
-        }else if(Asset is GLProgram Program){
-            GLMesh? TestMesh = WE.Asset.Resolve<GLMesh>(WE.Asset.GetID("Mesh/Sphere"));
-            if(TestMesh != null){
-                Program.SetUniform(UniformValue.CreateM4F(0, CalculateModel(TestMesh)));
-                Program.SetUniform(UniformValue.CreateV3F(1, new Vector3F(1, 1, 1)));
-                WEE.Render.API.Draw(TestMesh, Program);
-            }
-        }
-    }
     
-    private static void UpdateAssetPreview(object Asset, int ID){
+    private static void UpdateAssetPreview(object Asset, int ID, string Key){
         const int Size = 128;
 
         if(!__PreviewTextures.TryGetValue(ID, out GLTexture2D? Texture)){
@@ -158,24 +112,30 @@ public static class I_Assets{
         WEE.Render.API.Pool.SetView(__SharedPreviewView);
 
         __SharedPreviewView.SetTexture(Texture);
+
+        GLMesh?    TargetMesh    = null;
+        GLProgram? TargetProgram = null;
+
+        switch(Asset){
+            case GLMesh AssetMesh__:
+                TargetMesh = AssetMesh__;
+                break;
+            case GLProgram AssetProgram__:
+                TargetProgram = AssetProgram__;
+                break;
+        }
         
         WEE.Render.API.FrameStart();
-        
-            WEE.Render.API.Clear(Color4B.Transparent);
 
-            bool OldDepthTest = WEE.Render.API.Pool.GetDepthTest();
-            bool OldScissor   = WEE.Render.API.Pool.GetScissorTest();
-            bool OldCullFace  = WEE.Render.API.Pool.GetCullFace();
-            
-            WEE.Render.API.Pool.SetDepthTest(true);
-            WEE.Render.API.Pool.SetScissorTest(false);
-            WEE.Render.API.Pool.SetCullFace(false);
-            
-            RenderAsset(Asset);
-            
-            WEE.Render.API.Pool.SetDepthTest(OldDepthTest);
-            WEE.Render.API.Pool.SetScissorTest(OldScissor);
-            WEE.Render.API.Pool.SetCullFace(OldCullFace);
+            WEE.Registry.RunFirstDelegate<WEE_OnPreviewRender, Action<OpenGL, GLMesh?, GLProgram?, DeltaTimeInfo, object, int, string>>(true,
+                WEE.Render.API,
+                TargetMesh,
+                TargetProgram,
+                WEE.Cycle.Render_DTI,
+                Asset,
+                ID,
+                Key
+            );
             
         WEE.Render.API.FrameStop();
         
@@ -202,16 +162,22 @@ public static class I_Assets{
                 new Vector2(1, 0)
             );
         }else if(Asset is GLMesh || Asset is GLProgram){
-            UpdateAssetPreview(Asset, ID);
+            if(WEE.Registry.HasMethods<WEE_OnPreviewRender>()){
+                UpdateAssetPreview(Asset, ID, Key);
 
-            if(__PreviewTextures.TryGetValue(ID, out GLTexture2D? PreviewTexture)){
-                DrawList.AddImage(
-                    (IntPtr)PreviewTexture.ID,
-                    PMix,
-                    PMax,
-                    new Vector2(0, 1),
-                    new Vector2(1, 0)
-                );
+                if(__PreviewTextures.TryGetValue(ID, out GLTexture2D? PreviewTexture)){
+                    DrawList.AddImage(
+                        (IntPtr)PreviewTexture.ID,
+                        PMix,
+                        PMax,
+                        new Vector2(0, 1),
+                        new Vector2(1, 0)
+                    );
+                }
+            }else{
+                string WarningText = "Нет метода\nрендера!";
+                Vector2 TextSize = ImGui.CalcTextSize(WarningText);
+                DrawList.AddText(CursorPosition + (new Vector2(IconSize) - TextSize) * 0.5f, ImGui.GetColorU32(new Vector4(1, 0.4f, 0.4f, 1)), WarningText);
             }
         }else{
             string Label = Asset?.GetType().Name ?? "Null";

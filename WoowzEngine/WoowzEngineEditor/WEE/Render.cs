@@ -18,8 +18,6 @@ public static class Render{
         }, true);
         
         RecreateSceneFrameBuffer(new Vector2I(800, 600));
-
-        UB_Default = new UniformBlock<UniformBlock_Default>(API);
     }
     
     public static void Stop(){
@@ -32,8 +30,6 @@ public static class Render{
     
     public static GLView SceneView   = null!;
     public static GLView PickingView = null!;
-
-    public static UniformBlock<UniformBlock_Default> UB_Default = null!;
     
     private static void RecreateSceneFrameBuffer(Vector2I Size){
         if(SceneView != null!){ SceneView.Destroy(); }
@@ -68,13 +64,14 @@ public static class Render{
         
         API.FrameStart();
             if(WEE.Interface.CurrentScene != null){
-                WEE.Registry.RunFirstDelegate<WEE_OnViewRender, Action<OpenGL, Scene, Camera, Vector2I, Color4B, DeltaTimeInfo, bool>>(true,
+                WEE.Registry.RunFirstDelegate<WEE_OnViewRender, Action<OpenGL, Scene, Camera, Vector2I, Color4B, DeltaTimeInfo, float, bool>>(true,
                     WEE.Render.API,
                     WEE.Interface.CurrentScene,
                     WEE.Editor.ViewCamera,
                     TargetSize,
                     I_View.BackgroundColor,
                     DTI,
+                    WEE.Cycle.Render_Time,
                     false
                 );
             }
@@ -87,13 +84,14 @@ public static class Render{
         
         API.FrameStart();
             if(WEE.Interface.CurrentScene != null){
-                WEE.Registry.RunFirstDelegate<WEE_OnViewRender, Action<OpenGL, Scene, Camera, Vector2I, Color4B, DeltaTimeInfo, bool>>(true,
+                WEE.Registry.RunFirstDelegate<WEE_OnViewRender, Action<OpenGL, Scene, Camera, Vector2I, Color4B, DeltaTimeInfo, float, bool>>(true,
                     WEE.Render.API,
                     WEE.Interface.CurrentScene,
                     WEE.Editor.ViewCamera,
                     TargetSize,
                     Color4B.Black,
                     DTI,
+                    WEE.Cycle.Render_Time,
                     true
                 );
             }
@@ -102,13 +100,7 @@ public static class Render{
     
     public static void MainRender(DeltaTimeInfo DTI){
         try{
-            UB_Default.Update(new UniformBlock_Default{
-                ViewProjection = WEE.Editor.ViewCamera.GetProjectionMatrix() * WEE.Editor.ViewCamera.GetViewMatrix(),
-                Time = WEE.Cycle.Render_Time
-            });
-            API.Pool.SetUniformBlock(UB_Default, 0);
-            
-            ViewRender(DTI);
+            if(WEE.Registry.HasMethods<WEE_OnViewRender>()){ ViewRender(DTI); }
             
             API.Pool.SetView(null);
             
@@ -123,17 +115,5 @@ public static class Render{
         }catch(Exception e){
             throw new ExceptionWEE("Произошла ошибка в главном рендере!", e);
         }
-    }
-    
-    // ----------------------------------------------------------------------
-    
-    [StructLayout(LayoutKind.Sequential, Pack = 4)]
-    public struct UniformBlock_Default{
-        public Matrix4F ViewProjection;
-        public float    Time;
-        
-        private float __0; 
-        private float __1;
-        private float __2;
     }
 }

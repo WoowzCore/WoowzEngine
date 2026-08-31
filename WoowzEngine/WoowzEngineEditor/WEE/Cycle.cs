@@ -68,7 +68,7 @@ public static class Cycle{
     public static DeltaTimeInfo Render_DTI;
     public static DeltaTimeInfo Engine_DTI;
     
-    public static float         Render_DT;
+    public static float Render_DT;
     
-    public static float         Render_Time;
+    public static float Render_Time;
 }

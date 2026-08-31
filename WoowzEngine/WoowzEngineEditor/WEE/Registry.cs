@@ -42,7 +42,7 @@ public static class Registry{
         }
     }
 
-    public static void RunMethods<T>(bool Notify, params object[] Args) where T : Attribute{
+    public static void RunMethods<T>(bool Notify, params object?[] Args) where T : Attribute{
         if(Notify){ WL.Logger.Debug($"Поиск и выполнение методов с атрибутом [{typeof(T).Name}]..."); }
 
         Type TargetAttribute = typeof(T);
@@ -89,7 +89,7 @@ public static class Registry{
         return null;
     }
 
-    public static object? RunFirstDelegate<T, TD>(bool Notify, params object[] Args) where TD : Delegate{
+    public static object? RunFirstDelegate<T, TD>(bool Notify, params object?[] Args) where TD : Delegate{
         TD? Delegate = GetFirstDelegate<T, TD>();
         if(Delegate != null){
             try{
@@ -104,6 +104,8 @@ public static class Registry{
 
         return null;
     }
+
+    public static bool HasMethods<T>() where T : Attribute => __CachedMethods.TryGetValue(typeof(T), out List<MethodInfo>? Methods) && Methods.Count > 0;
     
     public static void ResetAndReload(Assembly? GameAssembly = null){
         WL.Logger.Info("Обновление компонентов...");
