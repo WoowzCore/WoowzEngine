@@ -130,7 +130,7 @@ public static class I_View{
             SceneViewSize = new Vector2I((int)__SceneViewport.X, (int)__SceneViewport.Y);
 
             if(WEE.Interface.CurrentScene != null){
-                if(WEE.Registry.HasMethods<WEE_OnViewRender>()){
+                if(WEE.Registry.HasMethods<WEE_OnRenderView>()){
                     uint TextureID = ShowWhat switch{
                         ShowWhatType.Scene => WEE.Render.SceneView.TextureColor0!.ID,
                         ShowWhatType.Depth => WEE.Render.SceneView.TextureDepth!.ID,

@@ -1,4 +1,4 @@
 ﻿namespace WEI_Attribute;
 
 [AttributeUsage(AttributeTargets.Method)]
-public class WEE_OnPreAllPreviewRender : Attribute{}
+public class WEE_OnPreAllRenderPreview : Attribute{}

@@ -64,7 +64,7 @@ public static class Render{
         
         API.FrameStart();
             if(WEE.Interface.CurrentScene != null){
-                WEE.Registry.RunFirstDelegate<WEE_OnViewRender, Action<OpenGL, Scene, Camera, Vector2I, Color4B, DeltaTimeInfo, float, bool>>(true,
+                WEE.Registry.RunFirstDelegate<WEE_OnRenderView, Action<OpenGL, Scene, Camera, Vector2I, Color4B, DeltaTimeInfo, float, bool>>(true,
                     WEE.Render.API,
                     WEE.Interface.CurrentScene,
                     WEE.Editor.ViewCamera,
@@ -84,7 +84,7 @@ public static class Render{
         
         API.FrameStart();
             if(WEE.Interface.CurrentScene != null){
-                WEE.Registry.RunFirstDelegate<WEE_OnViewRender, Action<OpenGL, Scene, Camera, Vector2I, Color4B, DeltaTimeInfo, float, bool>>(true,
+                WEE.Registry.RunFirstDelegate<WEE_OnRenderView, Action<OpenGL, Scene, Camera, Vector2I, Color4B, DeltaTimeInfo, float, bool>>(true,
                     WEE.Render.API,
                     WEE.Interface.CurrentScene,
                     WEE.Editor.ViewCamera,
@@ -100,7 +100,7 @@ public static class Render{
     
     public static void MainRender(DeltaTimeInfo DTI){
         try{
-            if(WEE.Registry.HasMethods<WEE_OnViewRender>()){ ViewRender(DTI); }
+            if(WEE.Registry.HasMethods<WEE_OnRenderView>()){ ViewRender(DTI); }
             
             API.Pool.SetView(null);
             

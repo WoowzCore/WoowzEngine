@@ -37,7 +37,7 @@ public static class I_Assets{
 
                         float WindowVisibleRightEdge = ImGui.GetCursorScreenPos().X + ImGui.GetContentRegionAvail().X;
 
-                        WEE.Registry.RunMethods<WEE_OnPreAllPreviewRender>(false, WEE.Render.API, WEE.Cycle.Render_DTI, WEE.Cycle.Render_Time);
+                        WEE.Registry.RunMethods<WEE_OnPreAllRenderPreview>(false, WEE.Render.API, WEE.Cycle.Render_DTI, WEE.Cycle.Render_Time);
                         
                         for(int i = 0; i < Keys.Count; i++){
                             string Key = Keys[i];
@@ -127,7 +127,7 @@ public static class I_Assets{
         
         WEE.Render.API.FrameStart();
 
-            WEE.Registry.RunFirstDelegate<WEE_OnPreviewRender, Action<OpenGL, GLMesh?, GLProgram?, DeltaTimeInfo, object, int, string>>(true,
+            WEE.Registry.RunFirstDelegate<WEE_OnRenderPreview, Action<OpenGL, GLMesh?, GLProgram?, DeltaTimeInfo, object, int, string>>(true,
                 WEE.Render.API,
                 TargetMesh,
                 TargetProgram,
@@ -162,7 +162,7 @@ public static class I_Assets{
                 new Vector2(1, 0)
             );
         }else if(Asset is GLMesh || Asset is GLProgram){
-            if(WEE.Registry.HasMethods<WEE_OnPreviewRender>()){
+            if(WEE.Registry.HasMethods<WEE_OnRenderPreview>()){
                 UpdateAssetPreview(Asset, ID, Key);
 
                 if(__PreviewTextures.TryGetValue(ID, out GLTexture2D? PreviewTexture)){

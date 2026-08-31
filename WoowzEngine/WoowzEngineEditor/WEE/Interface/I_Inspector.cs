@@ -18,7 +18,14 @@ public static class I_Inspector{
                 if(WEE.Interface.CurrentEntity == null){
                     ImGui.TextDisabled("Выберите объект в иерархии...");
                 }else{
+                    string Prefix = $"[{WEE.Interface.CurrentEntity.ID}]";
+                    ImGui.AlignTextToFramePadding();
+                    ImGui.TextDisabled(Prefix);
+                    
+                    ImGui.SameLine();
+                    
                     string Name = WEE.Interface.CurrentEntity.Name;
+                    ImGui.SetNextItemWidth(-(ImGui.CalcTextSize("Название").X + ImGui.GetStyle().ItemSpacing.X));
                     if(ImGui.InputText("Название", ref Name, 100)){
                         WEE.Interface.CurrentEntity.Name = Name;
                     }
