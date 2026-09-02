@@ -125,6 +125,7 @@ public class Scene : WLI.Packable{
         public Vector3F CameraRotation;
         public bool     CameraPerspective;
         public float    CameraSpeed;
+        public float    CameraFar;
         public long     CreationTime;
         public long     LastSaveTime;
 
@@ -134,6 +135,7 @@ public class Scene : WLI.Packable{
             ["CameraRotation"   ] = CameraRotation,
             ["CameraPerspective"] = CameraPerspective,
             ["CameraSpeed"      ] = CameraSpeed,
+            ["CameraFar"        ] = CameraFar,
             ["CreationTime"     ] = CreationTime,
             ["LastSaveTime"     ] = LastSaveTime
         };
@@ -144,6 +146,7 @@ public class Scene : WLI.Packable{
             CameraRotation    = WL.Packer.Get<Vector3F>(Data, "CameraRotation", CameraRotation);
             CameraPerspective = WL.Packer.Get<bool    >(Data, "CameraPerspective", CameraPerspective);
             CameraSpeed       = WL.Packer.Get<float   >(Data, "CameraSpeed", CameraSpeed);
+            CameraFar         = WL.Packer.Get<float   >(Data, "CameraFar", CameraFar);
             CreationTime      = WL.Packer.Get<long    >(Data, "CreationTime", CreationTime);
             LastSaveTime      = WL.Packer.Get<long    >(Data, "LastSaveTime", LastSaveTime);
         }

@@ -59,7 +59,7 @@ public static class Render{
         if(SceneView == null! || PickingView == null!){ return; }
         
         if(WEE.Interface.CurrentScene != null){
-            WEE.Registry.RunFirstDelegate<WEE_OnRenderView, Action<OpenGL, GLView, Scene, Camera, Vector2I, Color4B, DeltaTimeInfo, float, bool>>(true,
+            WEE.Registry.RunFirstDelegate<WEE_OnRenderView, Action<OpenGL, GLView, Scene, Camera, Vector2I, Color4B, DeltaTimeInfo, float, string?, bool>>(true,
                 WEE.Render.API,
                 SceneView,
                 WEE.Interface.CurrentScene,
@@ -68,12 +68,13 @@ public static class Render{
                 I_View.BackgroundColor,
                 DTI,
                 WEE.Cycle.Render_Time,
+                I_View.SelectedEffect,
                 false
             );
         }
         
         if(WEE.Interface.CurrentScene != null){
-            WEE.Registry.RunFirstDelegate<WEE_OnRenderView, Action<OpenGL, GLView, Scene, Camera, Vector2I, Color4B, DeltaTimeInfo, float, bool>>(true,
+            WEE.Registry.RunFirstDelegate<WEE_OnRenderView, Action<OpenGL, GLView, Scene, Camera, Vector2I, Color4B, DeltaTimeInfo, float, string?, bool>>(true,
                 WEE.Render.API,
                 PickingView,
                 WEE.Interface.CurrentScene,
@@ -82,6 +83,7 @@ public static class Render{
                 Color4B.Black,
                 DTI,
                 WEE.Cycle.Render_Time,
+                I_View.SelectedEffect,
                 true
             );
         }

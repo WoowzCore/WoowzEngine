@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using WEE_Interface;
 using WEI_Attribute;
 
 namespace WEE;
@@ -121,5 +122,7 @@ public static class Registry{
         if(GameAssembly != null){ ScanAssembly(GameAssembly); }
         
         RunMethods<WEE_OnStart>(true, WEE.Render.API);
+        
+        I_View.RefreshEffects();
     }
 }

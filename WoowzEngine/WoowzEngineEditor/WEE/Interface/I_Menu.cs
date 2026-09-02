@@ -113,6 +113,7 @@ public static class I_Menu{
         WEE.Editor.ViewCamera.Rotation = new Vector3F();
         I_View.Is2DView                = false;
         WEE.Editor.CameraSpeed         = 1;
+        WEE.Editor.ViewCamera.Far      = 1000;
     }
 
     private static void SaveSceneAs(){
@@ -155,6 +156,7 @@ public static class I_Menu{
             EditorInfo.CameraRotation    =  WEE.Editor.ViewCamera.Rotation;
             EditorInfo.CameraPerspective = !I_View.Is2DView;
             EditorInfo.CameraSpeed       =  WEE.Editor.CameraSpeed;
+            EditorInfo.CameraFar         =  WEE.Editor.ViewCamera.Far;
             EditorInfo.LastSaveTime      =  DateTime.Now.Ticks;
                 
             if(EditorInfo.CreationTime == 0){ EditorInfo.CreationTime = DateTime.Now.Ticks; }
@@ -190,6 +192,7 @@ public static class I_Menu{
                 WEE.Editor.ViewCamera.Rotation =  WEE.Interface.CurrentScene.__EditorInfo.Value.CameraRotation;
                 I_View.Is2DView                = !WEE.Interface.CurrentScene.__EditorInfo.Value.CameraPerspective;
                 WEE.Editor.CameraSpeed         =  WEE.Interface.CurrentScene.__EditorInfo.Value.CameraSpeed;
+                WEE.Editor.ViewCamera.Far      =  WEE.Interface.CurrentScene.__EditorInfo.Value.CameraFar;
                 
                 if(WEE.Interface.CurrentScene.__EditorInfo.Value.CreationTime == 0){
                     WEE.Interface.CurrentScene.__EditorInfo = WEE.Interface.CurrentScene.__EditorInfo.Value with{ CreationTime = DateTime.Now.Ticks };

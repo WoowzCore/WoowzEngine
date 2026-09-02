@@ -24,11 +24,29 @@ public static class I_View{
         }
     }
     
+    public static Color4B BackgroundColor = new Color4B(200, 200, 200);
+    
+    // ----------------------------------------------------------------------
+    
     private static readonly PixelAttribute PA_Default = new PixelAttribute("Default", 4, FramebufferAttachment.ColorAttachment0, InternalFormat.Rgba8);
     private static readonly PixelAttribute PA_Picking = new PixelAttribute("Picking", 4, FramebufferAttachment.ColorAttachment0, InternalFormat.Rgba8);
-    public static           PixelAttribute ShowWhat = PA_Default;
+
+    private static PixelAttribute? SelectedAttachment = PA_Default;
+
+    public static string? SelectedEffect;
+
+    private static Dictionary<string, string> AvailableEffects = [];
     
-    public static Color4B BackgroundColor = new Color4B(200, 200, 200);
+    public static void RefreshEffects(){
+        AvailableEffects.Clear();
+
+        if(WEE.Registry.HasMethods<WEE_OnDebugEffects>()){
+            Dictionary<string, string>? Result = WEE.Registry.RunFirstDelegate<WEE_OnDebugEffects, Func<Dictionary<string, string>>>(false) as Dictionary<string, string>;
+            AvailableEffects = Result!;
+        }
+    }
+    
+    // ----------------------------------------------------------------------
     
     public static void Update(){
         if(!WEE.Interface.WindowViewActive){ return; }
@@ -97,6 +115,15 @@ public static class I_View{
                 ImGui.SameLine();
                 ImGui.SetNextItemWidth(50);
                 ImGui.DragFloat("##CameraSpeed", ref WEE.Editor.CameraSpeed, 0.1f, 0.001f, 1000, "%g");
+                
+                ImGui.SameLine();
+                ImGui.TextDisabled("|");
+                ImGui.SameLine();
+                
+                ImGui.TextDisabled("Far.:");
+                ImGui.SameLine();
+                ImGui.SetNextItemWidth(50);
+                ImGui.DragFloat("##CameraFar", ref WEE.Editor.ViewCamera.Far, 0.1f, 0.001f, 100000, "%g");
 
                 ImGui.SameLine();
                 ImGui.TextDisabled("|");
@@ -121,19 +148,33 @@ public static class I_View{
                 ImGui.SameLine();
                 ImGui.TextDisabled("|");
                 ImGui.SameLine();
-
-                ImGui.SetNextItemWidth(150);
-                if(ImGui.BeginCombo("##ShowWhat", ShowWhat.Name)){
-                    if(ImGui.Selectable(PA_Default.Name, ShowWhat == PA_Default)){ ShowWhat = PA_Default; }
-                    if(SupportedPA.Count > 0){
-                        foreach(PixelAttribute Attribute in SupportedPA){
-                            if(ImGui.Selectable(Attribute.Name, ShowWhat == Attribute)){ ShowWhat = Attribute; }
-                        }
-                    }
-                    if(ImGui.Selectable(PA_Picking.Name, ShowWhat == PA_Picking)){ ShowWhat = PA_Picking; }
-                    
-                    ImGui.EndCombo();
+                
+                if(ImGui.Button("Слой")){
+                    ImGui.OpenPopup("GBufferMenu");
                 }
+                
+                if(ImGui.BeginPopup("GBufferMenu")){
+                    if(ImGui.BeginMenu("Канал")){
+                        void MenuItem(PixelAttribute PA){ if(ImGui.MenuItem(PA.Name, "", SelectedAttachment == PA)){ SelectedAttachment = PA; SelectedEffect = null; } }
+                    
+                        MenuItem(PA_Default);
+                        foreach(PixelAttribute PA in SupportedPA){ MenuItem(PA); }
+                        MenuItem(PA_Picking);
+                        
+                        ImGui.EndMenu();
+                    }
+                    
+                    if(ImGui.BeginMenu("Эффекты")){
+                        foreach(KeyValuePair<string, string> Effect in AvailableEffects){
+                            if(ImGui.MenuItem(Effect.Key, "", SelectedEffect == Effect.Value)){ SelectedEffect = Effect.Value; SelectedAttachment = null; }
+                        }
+                        
+                        ImGui.EndMenu();
+                    }
+                    
+                    ImGui.EndPopup();
+                }
+                
             } ImGui.EndChild();
             ImGui.PopStyleVar();
 
@@ -145,16 +186,18 @@ public static class I_View{
             if(WEE.Interface.CurrentScene != null){
                 if(WEE.Registry.HasMethods<WEE_OnRenderView>()){
                     if(WEE.Render.SceneView != null!){
-                        uint TextureID = 0;
+                        PixelAttribute PA = SelectedAttachment ?? PA_Default;
+                        
+                        uint TextureID;
 
-                        if(ShowWhat == PA_Default){
+                        if(PA == PA_Default){
                             TextureID = WEE.Render.SceneView.TextureColor0!.ID;
-                        }else if(ShowWhat == PA_Picking){
+                        }else if(PA == PA_Picking){
                             TextureID = WEE.Render.PickingView.TextureColor0!.ID;
                         }else{
-                            TextureID = CameraLayout!.GetTexture(ShowWhat.Attachment)!.ID;
+                            TextureID = CameraLayout!.GetTexture(PA.Attachment)!.ID;
                         }
-                
+            
                         ImGui.Image((IntPtr)TextureID, __SceneViewport, new Vector2(0, 1), new Vector2(1, 0));
                         Vector2 ImagePositionMin = ImGui.GetItemRectMin();
                         ViewMousePosition = new Vector2I(

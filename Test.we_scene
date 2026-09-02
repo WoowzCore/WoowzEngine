@@ -71,7 +71,7 @@
 						"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Mesh)"
 					},
 					"Program": {
-						"Key": "TShader/Test",
+						"Key": "TShader/Default",
 						"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Program)"
 					},
 					"Texture": {
@@ -137,7 +137,7 @@
 									"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Mesh)"
 								},
 								"Program": {
-									"Key": "TShader/Test",
+									"Key": "TShader/Default",
 									"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Program)"
 								},
 								"Texture": {
@@ -275,7 +275,7 @@
 									"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Mesh)"
 								},
 								"Program": {
-									"Key": "TShader/Test",
+									"Key": "TShader/Default",
 									"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Program)"
 								},
 								"Texture": {
@@ -321,7 +321,7 @@
 									"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Mesh)"
 								},
 								"Program": {
-									"Key": "TShader/Test",
+									"Key": "TShader/Default",
 									"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Program)"
 								},
 								"Texture": {
@@ -367,7 +367,7 @@
 									"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Mesh)"
 								},
 								"Program": {
-									"Key": "TShader/Test",
+									"Key": "TShader/Default",
 									"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Program)"
 								},
 								"Texture": {
@@ -459,7 +459,7 @@
 									"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Mesh)"
 								},
 								"Program": {
-									"Key": "TShader/Test",
+									"Key": "TShader/Default",
 									"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Program)"
 								},
 								"Texture": {
@@ -597,7 +597,7 @@
 									"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Mesh)"
 								},
 								"Program": {
-									"Key": "TShader/Test",
+									"Key": "TShader/Default",
 									"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Program)"
 								},
 								"Texture": {
@@ -643,7 +643,7 @@
 									"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Mesh)"
 								},
 								"Program": {
-									"Key": "TShader/Test",
+									"Key": "TShader/Default",
 									"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Program)"
 								},
 								"Texture": {
@@ -683,7 +683,7 @@
 					"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
 				},
 				"Scale": {
-					"XYZ": "T1,0881158|0,65451676|0,8779261",
+					"XYZ": "T0,6722971|0,82776564|1,0485806",
 					"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
 				},
 				"PackType": "TWoowzEngine|WEO.Transform"
@@ -1100,7 +1100,7 @@
 									"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Mesh)"
 								},
 								"Program": {
-									"Key": "TShader/Test",
+									"Key": "TShader/Default",
 									"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Program)"
 								},
 								"Texture": {
@@ -1238,7 +1238,7 @@
 									"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Mesh)"
 								},
 								"Program": {
-									"Key": "TShader/Test",
+									"Key": "TShader/Default",
 									"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Program)"
 								},
 								"Texture": {
@@ -1284,7 +1284,7 @@
 									"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Mesh)"
 								},
 								"Program": {
-									"Key": "TShader/Test",
+									"Key": "TShader/Default",
 									"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Program)"
 								},
 								"Texture": {
@@ -1330,7 +1330,7 @@
 									"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Mesh)"
 								},
 								"Program": {
-									"Key": "TShader/Test",
+									"Key": "TShader/Default",
 									"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Program)"
 								},
 								"Texture": {
@@ -1422,7 +1422,7 @@
 									"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Mesh)"
 								},
 								"Program": {
-									"Key": "TShader/Test",
+									"Key": "TShader/Default",
 									"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Program)"
 								},
 								"Texture": {
@@ -1560,7 +1560,7 @@
 									"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Mesh)"
 								},
 								"Program": {
-									"Key": "TShader/Test",
+									"Key": "TShader/Default",
 									"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Program)"
 								},
 								"Texture": {
@@ -1606,7 +1606,7 @@
 									"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Mesh)"
 								},
 								"Program": {
-									"Key": "TShader/Test",
+									"Key": "TShader/Default",
 									"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Program)"
 								},
 								"Texture": {
@@ -1652,7 +1652,7 @@
 									"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Mesh)"
 								},
 								"Program": {
-									"Key": "TShader/Solid",
+									"Key": "TShader/Default",
 									"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Program)"
 								},
 								"Texture": {
@@ -1687,17 +1687,18 @@
 			"PackType": "TWoowzLib.Core|WLO.Math.Color4B"
 		},
 		"CameraPosition": {
-			"XYZ": "T-14,802352|10,771019|12,740433",
+			"XYZ": "T-28,681057|-38,220318|53,015327",
 			"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
 		},
 		"CameraRotation": {
-			"XYZ": "T0,6371328|0,61724275|0",
+			"XYZ": "T-0,30441177|0,5912786|0",
 			"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
 		},
 		"CameraPerspective": "Z1",
 		"CameraSpeed": "F1",
+		"CameraFar": "F1000",
 		"CreationTime": "L639235303249196046",
-		"LastSaveTime": "L639239551446672593",
+		"LastSaveTime": "L639239869803039591",
 		"PackType": "TWoowzEngine|WEO.Scene.EditorInfo"
 	},
 	"PackType": "TWoowzEngine|WEO.Scene"
