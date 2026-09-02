@@ -1,8 +1,10 @@
 ﻿using System.Numerics;
 using ImGuiNET;
+using Silk.NET.OpenGL;
 using WEI_Attribute;
 using WEO;
 using WLO.Math;
+using WLO.Render;
 
 namespace WEE_Interface;
 
@@ -21,21 +23,32 @@ public static class I_View{
             WEE.Editor.ViewCamera.IsOrthographic = __Is2DView;
         }
     }
-
-    public enum ShowWhatType{
-        Scene, Depth, Picking
-    }
-    public static ShowWhatType ShowWhat = ShowWhatType.Scene;
-
+    
+    private static readonly PixelAttribute PA_Default = new PixelAttribute("Default", 4, FramebufferAttachment.ColorAttachment0, InternalFormat.Rgba8);
+    private static readonly PixelAttribute PA_Picking = new PixelAttribute("Picking", 4, FramebufferAttachment.ColorAttachment0, InternalFormat.Rgba8);
+    public static           PixelAttribute ShowWhat = PA_Default;
+    
     public static Color4B BackgroundColor = new Color4B(200, 200, 200);
     
     public static void Update(){
         if(!WEE.Interface.WindowViewActive){ return; }
 
+        GLView? CameraLayout = null;
+        List<PixelAttribute> SupportedPA = [];
+        if(WEE.Registry.HasMethods<WEE_OnCameraPixelLayout>()){
+            CameraLayout = WEE.Registry.RunFirstDelegate<WEE_OnCameraPixelLayout, Func<GLView>>(false) as GLView;
+
+            if(CameraLayout != null){
+                foreach(PixelAttribute PA in CameraLayout.Layout.Attributes){
+                    if(PA.IsTexture){ SupportedPA.Add(PA); }
+                }
+            }
+        }
+        
         if(ImGui.Begin("Просмотр###View", ref WEE.Interface.WindowViewActive)){
 
             FocusSceneView = ImGui.IsWindowFocused(ImGuiFocusedFlags.RootAndChildWindows);
-
+            
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8, 0)); 
             if(ImGui.BeginChild("SceneToolbar", new Vector2(0, 35), ImGuiChildFlags.Borders, ImGuiWindowFlags.NoScrollbar)){
                 ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 5); 
@@ -109,15 +122,15 @@ public static class I_View{
                 ImGui.TextDisabled("|");
                 ImGui.SameLine();
 
-                ImGui.SetNextItemWidth(100);
-                if(ImGui.BeginCombo("##ShowWhat", ShowWhat switch{
-                    ShowWhatType.Scene => "Сцена",
-                    ShowWhatType.Depth => "Глубина",
-                    ShowWhatType.Picking => "ID"
-                })){
-                    if(ImGui.Selectable("Сцена", ShowWhat == ShowWhatType.Scene)){ ShowWhat = ShowWhatType.Scene; }
-                    if(ImGui.Selectable("Глубина", ShowWhat == ShowWhatType.Depth)){ ShowWhat = ShowWhatType.Depth; }
-                    if(ImGui.Selectable("ID", ShowWhat == ShowWhatType.Picking)){ ShowWhat = ShowWhatType.Picking; }
+                ImGui.SetNextItemWidth(150);
+                if(ImGui.BeginCombo("##ShowWhat", ShowWhat.Name)){
+                    if(ImGui.Selectable(PA_Default.Name, ShowWhat == PA_Default)){ ShowWhat = PA_Default; }
+                    if(SupportedPA.Count > 0){
+                        foreach(PixelAttribute Attribute in SupportedPA){
+                            if(ImGui.Selectable(Attribute.Name, ShowWhat == Attribute)){ ShowWhat = Attribute; }
+                        }
+                    }
+                    if(ImGui.Selectable(PA_Picking.Name, ShowWhat == PA_Picking)){ ShowWhat = PA_Picking; }
                     
                     ImGui.EndCombo();
                 }
@@ -131,18 +144,34 @@ public static class I_View{
 
             if(WEE.Interface.CurrentScene != null){
                 if(WEE.Registry.HasMethods<WEE_OnRenderView>()){
-                    uint TextureID = ShowWhat switch{
-                        ShowWhatType.Scene => WEE.Render.SceneView.TextureColor0!.ID,
-                        ShowWhatType.Depth => WEE.Render.SceneView.TextureDepth!.ID,
-                        ShowWhatType.Picking => WEE.Render.PickingView.TextureColor0!.ID
-                    };
+                    if(WEE.Render.SceneView != null!){
+                        uint TextureID = 0;
+
+                        if(ShowWhat == PA_Default){
+                            TextureID = WEE.Render.SceneView.TextureColor0!.ID;
+                        }else if(ShowWhat == PA_Picking){
+                            TextureID = WEE.Render.PickingView.TextureColor0!.ID;
+                        }else{
+                            TextureID = CameraLayout!.GetTexture(ShowWhat.Attachment)!.ID;
+                        }
                 
-                    ImGui.Image((IntPtr)TextureID, __SceneViewport, new Vector2(0, 1), new Vector2(1, 0));
-                    Vector2 ImagePositionMin = ImGui.GetItemRectMin();
-                    ViewMousePosition = new Vector2I(
-                        (int)(WEE.Control.MousePosition.X - ImagePositionMin.X),
-                        (int)(WEE.Control.MousePosition.Y - ImagePositionMin.Y)
-                    );
+                        ImGui.Image((IntPtr)TextureID, __SceneViewport, new Vector2(0, 1), new Vector2(1, 0));
+                        Vector2 ImagePositionMin = ImGui.GetItemRectMin();
+                        ViewMousePosition = new Vector2I(
+                            (int)(WEE.Control.MousePosition.X - ImagePositionMin.X),
+                            (int)(WEE.Control.MousePosition.Y - ImagePositionMin.Y)
+                        );
+                    }else{
+                        // todo, Я ВСЁ ЕЩЁ МЕГАТРОН ДЕЛАЯ ПОВТОРЫ
+                        string WarningText = "WEE.Render.SceneView равен null!";
+                        Vector2 TextSize = ImGui.CalcTextSize(WarningText);
+                    
+                        ImGui.SetCursorPos(new Vector2(
+                            ImGui.GetCursorPosX() + (__SceneViewport.X - TextSize.X) * 0.5f,
+                            ImGui.GetCursorPosY() + (__SceneViewport.Y - TextSize.Y) * 0.5f
+                        ));
+                        ImGui.TextColored(new Vector4(1, 0.4f, 0, 1), WarningText);
+                    }
                 }else{
                     string WarningText = "Укажите метод рендера сцены через атрибут [WEE_OnViewRender]!";
                     Vector2 TextSize = ImGui.CalcTextSize(WarningText);

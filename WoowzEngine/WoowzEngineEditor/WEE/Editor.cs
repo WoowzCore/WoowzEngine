@@ -54,7 +54,7 @@ public static class Editor{
 
         float CameraSpeed__ = CameraSpeed;
 
-        if(Keyboard.IsKeyDown(Keyboard.Key.ShiftL)){ CameraSpeed__ = 5; }
+        if(Keyboard.IsKeyDown(Keyboard.Key.ShiftL)){ CameraSpeed__ *= 5; }
 
         if(MoveDirection.Length > 0){
             ViewCamera.Position += MoveDirection.Normalized * CameraSpeed__ * 5 * DT;

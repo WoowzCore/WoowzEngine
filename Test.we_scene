@@ -683,7 +683,7 @@
 					"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
 				},
 				"Scale": {
-					"XYZ": "T1,2424295|1,4640079|0,62445575",
+					"XYZ": "T1,0881158|0,65451676|0,8779261",
 					"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
 				},
 				"PackType": "TWoowzEngine|WEO.Transform"
@@ -904,7 +904,7 @@
 						"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Texture)"
 					},
 					"Color": {
-						"RGBA": "T255|255|255|255",
+						"RGBA": "T255|0|0|255",
 						"PackType": "TWoowzLib.Core|WLO.Math.Color4B"
 					},
 					"Active": "Z1",
@@ -1687,17 +1687,17 @@
 			"PackType": "TWoowzLib.Core|WLO.Math.Color4B"
 		},
 		"CameraPosition": {
-			"XYZ": "T-0,063683674|4,479205|34,56242",
+			"XYZ": "T-14,802352|10,771019|12,740433",
 			"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
 		},
 		"CameraRotation": {
-			"XYZ": "T0,056342144|0,77637815|0",
+			"XYZ": "T0,6371328|0,61724275|0",
 			"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
 		},
 		"CameraPerspective": "Z1",
 		"CameraSpeed": "F1",
 		"CreationTime": "L639235303249196046",
-		"LastSaveTime": "L639237884034522990",
+		"LastSaveTime": "L639239551446672593",
 		"PackType": "TWoowzEngine|WEO.Scene.EditorInfo"
 	},
 	"PackType": "TWoowzEngine|WEO.Scene"

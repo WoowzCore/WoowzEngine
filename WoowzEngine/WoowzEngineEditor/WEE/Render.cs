@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using Silk.NET.OpenGL;
 using WEE_Interface;
 using WEEO;
 using WEI_Attribute;
@@ -16,8 +17,6 @@ public static class Render{
             DebugLogger = true,
             UseThisLogger = WL.Logger.CurrentLogger
         }, true);
-        
-        RecreateSceneFrameBuffer(new Vector2I(800, 600));
     }
     
     public static void Stop(){
@@ -32,17 +31,16 @@ public static class Render{
     public static GLView PickingView = null!;
     
     private static void RecreateSceneFrameBuffer(Vector2I Size){
-        if(SceneView != null!){ SceneView.Destroy(); }
-        SceneView = GLView.Create(API, Size, [
-            GLView.LayerConfig.Color(),
-            GLView.LayerConfig.Depth(true)
-        ]);
-        
+        if(SceneView   != null!){ SceneView  .Destroy(); }
         if(PickingView != null!){ PickingView.Destroy(); }
-        PickingView = GLView.Create(API, Size, [
-            GLView.LayerConfig.Color(),
-            GLView.LayerConfig.Depth()
-        ]);
+
+        SceneView = GLView.Create(API, Size, new PixelLayout(
+            PixelAttribute.Color("Color", 4)
+        ));
+        PickingView = GLView.Create(API, Size, new PixelLayout(
+            PixelAttribute.Color("Color", 4),
+            PixelAttribute.Depth()
+        ));
     }
 
     public static void ViewRender(DeltaTimeInfo DTI){
@@ -50,52 +48,43 @@ public static class Render{
 
         if(TargetSize.X <= 0 || TargetSize.Y <= 0){ return; }
 
-        if(TargetSize.X > 0 && TargetSize.Y > 0 && 
+        if(SceneView == null! || PickingView == null! || (TargetSize.X > 0 && TargetSize.Y > 0 && 
            (TargetSize.X != SceneView.TextureColor0!.Size.X || 
-            TargetSize.Y != SceneView.TextureColor0!.Size.Y)){
+            TargetSize.Y != SceneView.TextureColor0!.Size.Y))){
             RecreateSceneFrameBuffer(TargetSize);
             
             WEE.Editor.ViewCamera.Aspect = TargetSize.Aspect;
         }
         
-        API.Pool.SetView(SceneView);
+        if(SceneView == null! || PickingView == null!){ return; }
         
-        API.Pool.GetView().Viewport = TargetSize;
+        if(WEE.Interface.CurrentScene != null){
+            WEE.Registry.RunFirstDelegate<WEE_OnRenderView, Action<OpenGL, GLView, Scene, Camera, Vector2I, Color4B, DeltaTimeInfo, float, bool>>(true,
+                WEE.Render.API,
+                SceneView,
+                WEE.Interface.CurrentScene,
+                WEE.Editor.ViewCamera,
+                TargetSize,
+                I_View.BackgroundColor,
+                DTI,
+                WEE.Cycle.Render_Time,
+                false
+            );
+        }
         
-        API.FrameStart();
-            if(WEE.Interface.CurrentScene != null){
-                WEE.Registry.RunFirstDelegate<WEE_OnRenderView, Action<OpenGL, Scene, Camera, Vector2I, Color4B, DeltaTimeInfo, float, bool>>(true,
-                    WEE.Render.API,
-                    WEE.Interface.CurrentScene,
-                    WEE.Editor.ViewCamera,
-                    TargetSize,
-                    I_View.BackgroundColor,
-                    DTI,
-                    WEE.Cycle.Render_Time,
-                    false
-                );
-            }
-        API.FrameStop();
-        
-        
-        API.Pool.SetView(PickingView);
-        
-        API.Pool.GetView().Viewport = TargetSize;
-        
-        API.FrameStart();
-            if(WEE.Interface.CurrentScene != null){
-                WEE.Registry.RunFirstDelegate<WEE_OnRenderView, Action<OpenGL, Scene, Camera, Vector2I, Color4B, DeltaTimeInfo, float, bool>>(true,
-                    WEE.Render.API,
-                    WEE.Interface.CurrentScene,
-                    WEE.Editor.ViewCamera,
-                    TargetSize,
-                    Color4B.Black,
-                    DTI,
-                    WEE.Cycle.Render_Time,
-                    true
-                );
-            }
-        API.FrameStop();
+        if(WEE.Interface.CurrentScene != null){
+            WEE.Registry.RunFirstDelegate<WEE_OnRenderView, Action<OpenGL, GLView, Scene, Camera, Vector2I, Color4B, DeltaTimeInfo, float, bool>>(true,
+                WEE.Render.API,
+                PickingView,
+                WEE.Interface.CurrentScene,
+                WEE.Editor.ViewCamera,
+                TargetSize,
+                Color4B.Black,
+                DTI,
+                WEE.Cycle.Render_Time,
+                true
+            );
+        }
     }
     
     public static void MainRender(DeltaTimeInfo DTI){

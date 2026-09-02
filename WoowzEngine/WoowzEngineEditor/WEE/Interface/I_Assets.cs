@@ -102,16 +102,15 @@ public static class I_Assets{
         }
 
         if(__SharedPreviewView == null){
-            __SharedPreviewView = GLView.Create(WEE.Render.API, new Vector2I(Size, Size),
-                GLView.LayerConfig.Color(),
-                GLView.LayerConfig.Depth()
-            );
+            __SharedPreviewView = GLView.Create(WEE.Render.API, new Vector2I(Size, Size), new PixelLayout(
+                PixelAttribute.Color("Color", 4)
+            ));
         }
 
         GLView OldView = WEE.Render.API.Pool.GetView();
         WEE.Render.API.Pool.SetView(__SharedPreviewView);
 
-        __SharedPreviewView.SetTexture(Texture);
+        __SharedPreviewView!.SetTexture(Texture);
 
         GLMesh?    TargetMesh    = null;
         GLProgram? TargetProgram = null;
