@@ -42,7 +42,7 @@ public class Entity : WLI.Packable, WLI.Hierarchical<Entity>{
 
         Node.OnParentChanged += (Self, OldParent, NewParent) => {
             Transform.Parent = NewParent?.Owner.Transform;
-            Transform.IsDirty = true;
+            Transform.__IsDirty = true;
         };
     }
     
@@ -76,9 +76,9 @@ public class Entity : WLI.Packable, WLI.Hierarchical<Entity>{
     public IEnumerable<Component> GetAllComponents() => __Components;
     
     public void SetTransformDirty(){
-        if(Transform.IsDirty){ return; }
+        if(Transform.__IsDirty){ return; }
 
-        Transform.IsDirty = true;
+        Transform.__IsDirty = true;
 
         foreach(HierarchyNode<Entity> Child in Node.Children.ToList()){
             Child.Owner.SetTransformDirty();

@@ -683,7 +683,7 @@
 					"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
 				},
 				"Scale": {
-					"XYZ": "T1,08516|0,53893644|0,905102",
+					"XYZ": "T1,144414|1,4494338|0,85692805",
 					"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
 				},
 				"PackType": "TWoowzEngine|WEO.Transform"
@@ -1334,7 +1334,7 @@
 									"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Program)"
 								},
 								"Texture": {
-									"Key": "T",
+									"Key": "TTexture/White",
 									"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Texture)"
 								},
 								"Color": {
@@ -1679,6 +1679,226 @@
 			},
 			"ID": "A29",
 			"PackType": "TWoowzEngine|WEO.Entity"
+		},
+		{
+			"Name": "TLIGHT",
+			"Transform": {
+				"Position": {
+					"XYZ": "T6,1|-37,1|2,8",
+					"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
+				},
+				"Rotation": {
+					"XYZ": "T0|0|0",
+					"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
+				},
+				"Scale": {
+					"XYZ": "T0,1|0,1|0,1",
+					"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
+				},
+				"PackType": "TWoowzEngine|WEO.Transform"
+			},
+			"Components": [
+				{
+					"Mesh": {
+						"Key": "TMesh/Sphere",
+						"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Mesh)"
+					},
+					"Program": {
+						"Key": "TShader/Picking",
+						"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Program)"
+					},
+					"Texture": {
+						"Key": "TTexture/Pavel",
+						"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Texture)"
+					},
+					"Color": {
+						"RGBA": "T255|0|0|255",
+						"PackType": "TWoowzLib.Core|WLO.Math.Color4B"
+					},
+					"Active": "Z1",
+					"PackType": "TWoowzCore|WC.Component.CMeshRenderer"
+				},
+				{
+					"Color": {
+						"RGBA": "T255|0|0|255",
+						"PackType": "TWoowzLib.Core|WLO.Math.Color4B"
+					},
+					"Intensity": "F5",
+					"Range": "F10",
+					"PackType": "TWoowzCore|WC.Component.CLight"
+				}
+			],
+			"Hierarchy": {
+				"Children": [],
+				"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
+			},
+			"ID": "A43",
+			"PackType": "TWoowzEngine|WEO.Entity"
+		},
+		{
+			"Name": "TLIGHT",
+			"Transform": {
+				"Position": {
+					"XYZ": "T6,1|-0,5|2,8",
+					"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
+				},
+				"Rotation": {
+					"XYZ": "T0|0|0",
+					"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
+				},
+				"Scale": {
+					"XYZ": "T0,1|0,1|0,1",
+					"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
+				},
+				"PackType": "TWoowzEngine|WEO.Transform"
+			},
+			"Components": [
+				{
+					"Mesh": {
+						"Key": "TMesh/Sphere",
+						"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Mesh)"
+					},
+					"Program": {
+						"Key": "TShader/Picking",
+						"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Program)"
+					},
+					"Texture": {
+						"Key": "TTexture/Pavel",
+						"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Texture)"
+					},
+					"Color": {
+						"RGBA": "T255|255|255|255",
+						"PackType": "TWoowzLib.Core|WLO.Math.Color4B"
+					},
+					"Active": "Z1",
+					"PackType": "TWoowzCore|WC.Component.CMeshRenderer"
+				},
+				{
+					"Color": {
+						"RGBA": "T255|255|255|255",
+						"PackType": "TWoowzLib.Core|WLO.Math.Color4B"
+					},
+					"Intensity": "F6.3",
+					"Range": "F11.6",
+					"PackType": "TWoowzCore|WC.Component.CLight"
+				}
+			],
+			"Hierarchy": {
+				"Children": [],
+				"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
+			},
+			"ID": "A44",
+			"PackType": "TWoowzEngine|WEO.Entity"
+		},
+		{
+			"Name": "TLIGHT",
+			"Transform": {
+				"Position": {
+					"XYZ": "T15,4|-34,2|2,8",
+					"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
+				},
+				"Rotation": {
+					"XYZ": "T0|0|0",
+					"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
+				},
+				"Scale": {
+					"XYZ": "T0,1|0,1|0,1",
+					"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
+				},
+				"PackType": "TWoowzEngine|WEO.Transform"
+			},
+			"Components": [
+				{
+					"Mesh": {
+						"Key": "TMesh/Sphere",
+						"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Mesh)"
+					},
+					"Program": {
+						"Key": "TShader/Picking",
+						"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Program)"
+					},
+					"Texture": {
+						"Key": "TTexture/Pavel",
+						"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Texture)"
+					},
+					"Color": {
+						"RGBA": "T0|255|0|255",
+						"PackType": "TWoowzLib.Core|WLO.Math.Color4B"
+					},
+					"Active": "Z1",
+					"PackType": "TWoowzCore|WC.Component.CMeshRenderer"
+				},
+				{
+					"Color": {
+						"RGBA": "T0|255|0|255",
+						"PackType": "TWoowzLib.Core|WLO.Math.Color4B"
+					},
+					"Intensity": "F5",
+					"Range": "F10",
+					"PackType": "TWoowzCore|WC.Component.CLight"
+				}
+			],
+			"Hierarchy": {
+				"Children": [],
+				"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
+			},
+			"ID": "A45",
+			"PackType": "TWoowzEngine|WEO.Entity"
+		},
+		{
+			"Name": "TLIGHT",
+			"Transform": {
+				"Position": {
+					"XYZ": "T15,4|-36,4|-4,4",
+					"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
+				},
+				"Rotation": {
+					"XYZ": "T0|0|0",
+					"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
+				},
+				"Scale": {
+					"XYZ": "T0,1|0,1|0,1",
+					"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
+				},
+				"PackType": "TWoowzEngine|WEO.Transform"
+			},
+			"Components": [
+				{
+					"Mesh": {
+						"Key": "TMesh/Sphere",
+						"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Mesh)"
+					},
+					"Program": {
+						"Key": "TShader/Picking",
+						"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Program)"
+					},
+					"Texture": {
+						"Key": "TTexture/Pavel",
+						"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Texture)"
+					},
+					"Color": {
+						"RGBA": "T0|0|255|255",
+						"PackType": "TWoowzLib.Core|WLO.Math.Color4B"
+					},
+					"Active": "Z1",
+					"PackType": "TWoowzCore|WC.Component.CMeshRenderer"
+				},
+				{
+					"Color": {
+						"RGBA": "T0|0|255|255",
+						"PackType": "TWoowzLib.Core|WLO.Math.Color4B"
+					},
+					"Intensity": "F5",
+					"Range": "F10",
+					"PackType": "TWoowzCore|WC.Component.CLight"
+				}
+			],
+			"Hierarchy": {
+				"Children": [],
+				"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
+			},
+			"ID": "A46",
+			"PackType": "TWoowzEngine|WEO.Entity"
 		}
 	],
 	"EditorInfo": {
@@ -1687,18 +1907,18 @@
 			"PackType": "TWoowzLib.Core|WLO.Math.Color4B"
 		},
 		"CameraPosition": {
-			"XYZ": "T-13,817454|9,091506|11,539787",
+			"XYZ": "T13,144215|-29,631086|10,835159",
 			"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
 		},
 		"CameraRotation": {
-			"XYZ": "T0,4487596|0,7496232|0",
+			"XYZ": "T0,6803854|6,0657463|0",
 			"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
 		},
 		"CameraPerspective": "Z1",
 		"CameraSpeed": "F1",
 		"CameraFar": "F1000",
 		"CreationTime": "L639235303249196046",
-		"LastSaveTime": "L639239880370906590",
+		"LastSaveTime": "L639240428286938469",
 		"PackType": "TWoowzEngine|WEO.Scene.EditorInfo"
 	},
 	"PackType": "TWoowzEngine|WEO.Scene"

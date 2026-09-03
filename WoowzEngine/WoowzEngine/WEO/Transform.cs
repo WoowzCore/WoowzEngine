@@ -3,13 +3,41 @@
 namespace WEO;
 
 public class Transform : WLI.Packable{
-    public Vector3F Position = new Vector3F(0, 0, 0);
-    public Vector3F Rotation = new Vector3F(0, 0, 0);
-    public Vector3F Scale    = new Vector3F(1, 1, 1);
+    private Vector3F __Position = new Vector3F(0, 0, 0);
+    private Vector3F __Rotation = new Vector3F(0, 0, 0);
+    private Vector3F __Scale    = new Vector3F(1, 1, 1);
+
+    public Vector3F Position{
+        get => __Position;
+        set{
+            if(__Position == value){ return; }
+            __Position = value;
+            __IsDirty = true;
+        }
+    }
+    public Vector3F Rotation{
+        get => __Rotation;
+        set{
+            if(__Rotation == value){ return; }
+            __Rotation = value;
+            __IsDirty = true;
+        }
+    }
+    public Vector3F Scale{
+        get => __Scale;
+        set{
+            if(__Scale == value){ return; }
+            __Scale = value;
+            __IsDirty = true;
+        }
+    }
+
+    //todo
+    public Vector3F WorldPosition => GetWorldMatrix().Translation;
     
     public Transform? Parent;
     
-    public bool IsDirty = true;
+    public bool __IsDirty = true;
     
     public Matrix4F GetLocalMatrix() => Matrix4F.CreateTranslation(Position) *
                                         Matrix4F.CreateRotationX(Rotation.X) *
@@ -19,14 +47,14 @@ public class Transform : WLI.Packable{
 
     private Matrix4F __WorldMatrix = Matrix4F.Identity;
     public Matrix4F GetWorldMatrix(){
-        if(IsDirty){
+        if(__IsDirty){
             if(Parent == null){
                 __WorldMatrix = GetLocalMatrix();
             }else{
                 __WorldMatrix = Parent.GetWorldMatrix() * GetLocalMatrix();
             }
 
-            IsDirty = false;
+            __IsDirty = false;
         }
 
         return __WorldMatrix;
@@ -53,6 +81,6 @@ public class Transform : WLI.Packable{
         Rotation = WL.Packer.Get(Data, "Rotation", new Vector3F());
         Scale    = WL.Packer.Get(Data, "Scale"   , new Vector3F());
 
-        IsDirty = true;
+        __IsDirty = true;
     }
 }
