@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <Version>0.0.119</Version>
+        <Version>0.0.121</Version>
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
@@ -16,6 +16,7 @@
         <ProjectReference Include="..\..\..\WoowzLib\WoowzLib\WoowzLib.Loader.Geometry\WoowzLib.Loader.Geometry.csproj" />
         <ProjectReference Include="..\..\..\WoowzLib\WoowzLib\WoowzLib.Render.OpenGL\WoowzLib.Render.OpenGL.csproj" />
         <ProjectReference Include="..\..\..\WoowzLib\WoowzLib\WoowzLib.Interface.ImGUI.OpenGL\WoowzLib.Interface.ImGUI.OpenGL.csproj" />
+        <ProjectReference Include="..\..\..\WoowzLib\WoowzLib\WoowzLib.Physic3D.Bepu\WoowzLib.Physic3D.Bepu.csproj" />
     </ItemGroup>
 
     <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
