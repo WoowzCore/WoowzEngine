@@ -241,6 +241,24 @@ public static class I_Inspector{
                 if(ImGui.ColorEdit4(Label, ref SysV)){
                     Field.SetValue(Component, new Color4B((byte)(SysV.X * 255), (byte)(SysV.Y * 255), (byte)(SysV.Z * 255), (byte)(SysV.W * 255)));
                 }
+            }else if(FieldType.IsEnum){
+                string[] Names = Enum.GetNames(FieldType);
+                string CurrentName = Value.ToString()!;
+
+                if(ImGui.BeginCombo(Label, CurrentName)){
+                    foreach(string Name in Names){
+                        bool IsSelected = CurrentName == Name;
+                        if(ImGui.Selectable(Name, IsSelected)){
+                            Field.SetValue(Component, Enum.Parse(FieldType, Name));
+                        }
+
+                        if(IsSelected){
+                            ImGui.SetItemDefaultFocus();
+                        }
+                    }
+                    
+                    ImGui.EndCombo();
+                }
             }
             
             ImGui.PopID();

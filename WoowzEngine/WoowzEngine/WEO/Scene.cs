@@ -90,6 +90,14 @@ public class Scene : WLI.Packable{
         return [];
     }
 
+    public T? GetFirstComponent<T>() where T : class{
+        if(__Components.TryGetValue(typeof(T), out HashSet<Component>? Pool)){
+            foreach(Component Component in Pool){ return Component as T; }
+        }
+        
+        return null;
+    }
+
     internal void RegisterComponent(Component Component){
         Type? Type = Component.GetType();
         while(Type != null && Type != typeof(object)){
