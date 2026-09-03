@@ -139,7 +139,7 @@ public static class Interface{
     private static bool __FirstFrame = true;
     
     public static void Update(){
-        ImGUI.FrameStart(WEE.Cycle.Render_DT, WEE.Window.MainWindow.Size);
+        ImGUI.FrameStart((float)WEE.Cycle.Render_DTI.DT, WEE.Window.MainWindow.Size);
 
             if(!__IsProjectLoaded){
                 I_Launcher.Update(); 

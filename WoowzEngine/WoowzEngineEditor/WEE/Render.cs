@@ -37,14 +37,26 @@ public static class Render{
         SceneView = GLView.Create(API, Size, new PixelLayout(
             PixelAttribute.Color("Color", 4)
         ));
+        
         PickingView = GLView.Create(API, Size, new PixelLayout(
             PixelAttribute.Color("Color", 4),
             PixelAttribute.Depth()
         ));
     }
 
-    public static void ViewRender(DeltaTimeInfo DTI){
-        Vector2I TargetSize = I_View.SceneViewSize;
+    public static void ViewRender(
+        DeltaTimeInfo DTI,
+        Scene? Scene,
+        Vector2I ViewSize,
+        GLView? SceneView,
+        GLView? PickingView,
+        OpenGL Render,
+        Camera Camera,
+        Color4B BackgroundColor,
+        double Time,
+        string Effect
+    ){
+        Vector2I TargetSize = ViewSize;
 
         if(TargetSize.X <= 0 || TargetSize.Y <= 0){ return; }
 
@@ -53,37 +65,37 @@ public static class Render{
             TargetSize.Y != SceneView.TextureColor0!.Size.Y))){
             RecreateSceneFrameBuffer(TargetSize);
             
-            WEE.Editor.ViewCamera.Aspect = TargetSize.Aspect;
+            Camera.Aspect = TargetSize.Aspect;
         }
         
         if(SceneView == null! || PickingView == null!){ return; }
         
-        if(WEE.Interface.CurrentScene != null){
-            WEE.Registry.RunFirstDelegate<WEE_OnRenderView, Action<OpenGL, GLView, Scene, Camera, Vector2I, Color4B, DeltaTimeInfo, float, string?, bool>>(true,
-                WEE.Render.API,
+        if(Scene != null){
+            WEE.Registry.RunFirstDelegate<WEE_OnRenderView, Action<OpenGL, GLView, Scene, Camera, Vector2I, Color4B, DeltaTimeInfo, double, string?, bool>>(true,
+                Render,
                 SceneView,
-                WEE.Interface.CurrentScene,
-                WEE.Editor.ViewCamera,
+                Scene,
+                Camera,
                 TargetSize,
-                I_View.BackgroundColor,
+                BackgroundColor,
                 DTI,
-                WEE.Cycle.Render_Time,
-                I_View.SelectedEffect,
+                Time,
+                Effect,
                 false
             );
         }
         
-        if(WEE.Interface.CurrentScene != null){
-            WEE.Registry.RunFirstDelegate<WEE_OnRenderView, Action<OpenGL, GLView, Scene, Camera, Vector2I, Color4B, DeltaTimeInfo, float, string?, bool>>(true,
-                WEE.Render.API,
+        if(Scene != null){
+            WEE.Registry.RunFirstDelegate<WEE_OnRenderView, Action<OpenGL, GLView, Scene, Camera, Vector2I, Color4B, DeltaTimeInfo, double, string?, bool>>(true,
+                Render,
                 PickingView,
-                WEE.Interface.CurrentScene,
-                WEE.Editor.ViewCamera,
+                Scene,
+                Camera,
                 TargetSize,
                 Color4B.Black,
                 DTI,
-                WEE.Cycle.Render_Time,
-                I_View.SelectedEffect,
+                Time,
+                Effect,
                 true
             );
         }
@@ -91,7 +103,18 @@ public static class Render{
     
     public static void MainRender(DeltaTimeInfo DTI){
         try{
-            if(WEE.Registry.HasMethods<WEE_OnRenderView>()){ ViewRender(DTI); }
+            WEE.Main.Pipeline.Run("SceneRender",
+                DTI,
+                WEE.Interface.CurrentScene,
+                I_View.SceneViewSize,
+                SceneView,
+                PickingView,
+                WEE.Render.API,
+                WEE.Editor.ViewCamera,
+                I_View.BackgroundColor,
+                WEE.Cycle.Render_Time,
+                I_View.SelectedEffect?.Asset
+            );
             
             API.Pool.SetView(null);
             

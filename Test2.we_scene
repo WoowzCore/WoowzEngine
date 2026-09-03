@@ -7,17 +7,18 @@
 			"PackType": "TWoowzLib.Core|WLO.Math.Color4B"
 		},
 		"CameraPosition": {
-			"XYZ": "T-0,031843454|-1,4424512|0,42327452",
+			"XYZ": "T-2,8359332|2,4021294|4,7513266",
 			"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
 		},
 		"CameraRotation": {
-			"XYZ": "T0,058452398|0,07508975|0",
+			"XYZ": "T0,2468242|0,86781955|0",
 			"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
 		},
 		"CameraPerspective": "Z1",
 		"CameraSpeed": "F1",
+		"CameraFar": "F1000",
 		"CreationTime": "L639236986383677089",
-		"LastSaveTime": "L639236986383677083",
+		"LastSaveTime": "L639240011251276942",
 		"PackType": "TWoowzEngine|WEO.Scene.EditorInfo"
 	},
 	"PackType": "TWoowzEngine|WEO.Scene"

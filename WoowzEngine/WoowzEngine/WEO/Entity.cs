@@ -53,6 +53,9 @@ public class Entity : WLI.Packable, WLI.Hierarchical<Entity>{
     public T AddComponent<T>() where T : Component, new(){
         T Component = new T{ Owner = this };
         __Components.Add(Component);
+        
+        Scene?.RegisterComponent(Component);
+        
         return Component;
     }
     
@@ -62,6 +65,8 @@ public class Entity : WLI.Packable, WLI.Hierarchical<Entity>{
 
     public bool RemoveComponent(Component Component){
         if(__Components.Remove(Component)){
+            Scene?.UnregisterComponent(Component);
+            
             Component.Owner = null!;
             return true;
         }
@@ -161,18 +166,25 @@ public class Entity : WLI.Packable, WLI.Hierarchical<Entity>{
         Dictionary<string, object?>? TransformData = WL.Packer.Get<Dictionary<string, object?>>(Data, "Transform", Raw: true);
         if(TransformData != null){ WL.Packer.Unpack(Transform, TransformData); }
         
-        List<Component>? ComponentsList =  WL.Packer.Get<List<Component>>(Data, "Components");
+        List<Component>? ComponentsList = WL.Packer.Get<List<Component>>(Data, "Components");
         if(ComponentsList != null){
+            if(Scene != null){
+                foreach(Component C in __Components){
+                    Scene.UnregisterComponent(C);
+                }
+            }
+            
             __Components.Clear();
             foreach(var Component in ComponentsList){
                 if(Component != null!){
                     Component.Owner = this;
                     __Components.Add(Component);
+                    Scene?.RegisterComponent(Component);
                 }
             }
         }
 
-        Dictionary<string, object?>? HierarchyData =  WL.Packer.Get<Dictionary<string, object?>>(Data, "Hierarchy", Raw: true);
+        Dictionary<string, object?>? HierarchyData = WL.Packer.Get<Dictionary<string, object?>>(Data, "Hierarchy", Raw: true);
         if(HierarchyData != null){ WL.Packer.Unpack(Node, HierarchyData); }
     }
 }

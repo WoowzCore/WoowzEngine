@@ -24,7 +24,7 @@ public static class Editor{
     }
     
     public static void UpdateCameraControls(){
-        float DT = (float)WEE.Cycle.Render_DT;
+        float DT = (float)WEE.Cycle.Render_DTI.DT;
         WLI_Input.Keyboard Keyboard = WEE.Window.MainWindow.Keyboard;
         WLI_Input.Mouse    Mouse    = WEE.Window.MainWindow.Mouse;
 

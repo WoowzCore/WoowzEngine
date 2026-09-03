@@ -33,7 +33,7 @@ public static class I_View{
 
     private static PixelAttribute? SelectedAttachment = PA_Default;
 
-    public static string? SelectedEffect;
+    public static (string Name, string Asset)? SelectedEffect;
 
     private static Dictionary<string, string> AvailableEffects = [];
     
@@ -149,7 +149,7 @@ public static class I_View{
                 ImGui.TextDisabled("|");
                 ImGui.SameLine();
                 
-                if(ImGui.Button("Слой")){
+                if(ImGui.Button(SelectedAttachment != null ? SelectedAttachment.Value.Name : SelectedEffect!.Value.Name)){
                     ImGui.OpenPopup("GBufferMenu");
                 }
                 
@@ -166,7 +166,7 @@ public static class I_View{
                     
                     if(ImGui.BeginMenu("Эффекты")){
                         foreach(KeyValuePair<string, string> Effect in AvailableEffects){
-                            if(ImGui.MenuItem(Effect.Key, "", SelectedEffect == Effect.Value)){ SelectedEffect = Effect.Value; SelectedAttachment = null; }
+                            if(ImGui.MenuItem(Effect.Key, "", SelectedEffect?.Asset == Effect.Value)){ SelectedEffect = (Effect.Key, Effect.Value); SelectedAttachment = null; }
                         }
                         
                         ImGui.EndMenu();

@@ -1,4 +1,4 @@
-﻿using WEO.Processor;
+﻿using WEI;
 using WLO;
 using WLO.Math;
 
@@ -9,18 +9,23 @@ public class Scene : WLI.Packable{
 
     public bool DoUpdate       = true;
     public bool DoEngineUpdate = false;
+    public bool DoRender       = true;
     
     public EditorInfo? __EditorInfo;
+    
+    // ----------------------------------------------------------------------
     
     private readonly HashSet    <Entity> __Registry = [];
     public           IEnumerable<Entity> AllEntity => __Registry;
 
     public IEnumerable<Entity> Roots => __Registry.Where(E => E.Node.Parent == null);
-
+    
     public bool Add(Entity Entity){
         if(!__Registry.Add(Entity)){ return false; }
 
         Entity.Scene = this;
+
+        foreach(Component Component in Entity.GetAllComponents()){ RegisterComponent(Component); }
         
         Entity.Node.OnChildAdded    += OnChildAddedToEntity;
         Entity.Node.OnParentChanged += OnEntityParentChanged;
@@ -35,6 +40,8 @@ public class Scene : WLI.Packable{
     public bool Remove(Entity Entity){
         if(!__Registry.Contains(Entity)){ return false; }
 
+        foreach(Component Component in Entity.GetAllComponents()){ UnregisterComponent(Component); }
+        
         Entity.Scene = null;
         
         __Registry.Remove(Entity);
@@ -70,6 +77,44 @@ public class Scene : WLI.Packable{
 
         if(ClearAllEntities){ Entity.DestroyAllEntities(); }
     }
+    
+    // ----------------------------------------------------------------------
+    
+    private readonly Dictionary<Type, HashSet<Component>> __Components = [];
+
+    public IEnumerable<T> GetComponents<T>() where T : class{
+        if(__Components.TryGetValue(typeof(T), out HashSet<Component>? Pool)){
+            return Pool.Cast<T>().ToList();
+        }
+
+        return [];
+    }
+
+    internal void RegisterComponent(Component Component){
+        Type? Type = Component.GetType();
+        while(Type != null && Type != typeof(object)){
+            if(!__Components.TryGetValue(Type, out HashSet<Component>? Pool)){
+                Pool = new HashSet<Component>();
+                __Components[Type] = Pool;
+            }
+
+            Pool!.Add(Component);
+            Type = Type.BaseType;
+        }
+    }
+
+    internal void UnregisterComponent(Component Component){
+        Type? Type = Component.GetType();
+        while(Type != null && Type != typeof(object)){
+            if(__Components.TryGetValue(Type, out HashSet<Component>? Pool)){
+                Pool.Remove(Component);
+                if(Pool.Count == 0){ __Components.Remove(Type); }
+            }
+            Type = Type.BaseType;
+        }
+    }
+    
+    // ----------------------------------------------------------------------
 
     public Dictionary<string, object?> __Pack() => new Dictionary<string, object?>{
         ["Name"      ] = Name,
@@ -102,19 +147,31 @@ public class Scene : WLI.Packable{
         
         return Result;
     }
-
+    
     // ----------------------------------------------------------------------
 
     public void Update(DeltaTimeInfo DTI){
-        if(DoEngineUpdate){
-            PUpdate.UpdateEngine(this, DTI);
-        }
         if(!DoUpdate){ return; }
-        PUpdate.Update(this, DTI);
+        
+        foreach(Component C in GetComponents<Component>()){
+            C.OnUpdate(DTI);
+        }
     }
     
-    public void Render(DeltaTimeInfo DTI, Camera Camera){
-        PRender.Render(this, DTI, Camera);
+    public void UpdateEngine(DeltaTimeInfo DTI){
+        if(!DoEngineUpdate){ return; }
+
+        foreach(Component C in GetComponents<Component>()){
+            C.OnEngineUpdate(DTI);
+        }
+    }
+    
+    public void Render(DeltaTimeInfo DTI, Vector3F CameraPosition){
+        if(!DoRender){ return; }
+        
+        foreach(RenderComponent C in GetComponents<RenderComponent>()){
+            C.OnRender(DTI, CameraPosition);
+        }
     }
     
     // ----------------------------------------------------------------------

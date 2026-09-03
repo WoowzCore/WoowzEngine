@@ -124,5 +124,7 @@ public static class Registry{
         RunMethods<WEE_OnStart>(true, WEE.Render.API);
         
         I_View.RefreshEffects();
+        
+        WEE.Main.RefreshPipeline();
     }
 }
