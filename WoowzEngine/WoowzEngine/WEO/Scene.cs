@@ -169,8 +169,8 @@ public class Scene : WLI.Packable{
     public void UpdateEngine(DeltaTimeInfo DTI){
         if(!DoEngineUpdate){ return; }
 
-        foreach(Component C in GetComponents<Component>()){
-            C.OnEngineUpdate(DTI);
+        foreach(EngineComponent C in GetComponents<EngineComponent>()){
+            C.OnEngineUpdate(DTI, false /* todo */);
         }
     }
     
@@ -179,6 +179,10 @@ public class Scene : WLI.Packable{
         
         foreach(RenderComponent C in GetComponents<RenderComponent>()){
             C.OnRender(DTI, CameraPosition);
+        }
+        
+        foreach(EngineComponent C in GetComponents<EngineComponent>()){
+            C.OnEngineRender(DTI, CameraPosition, false /* todo */);
         }
     }
     

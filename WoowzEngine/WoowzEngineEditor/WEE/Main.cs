@@ -12,6 +12,7 @@ public static class Main{
     public static void Start(string[] Args){
         try{
             WE.Engine.Start();
+            WE.Engine.IsEditor = true;
 
             Pipeline = new Pipeline();
             

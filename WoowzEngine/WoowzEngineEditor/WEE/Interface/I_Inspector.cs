@@ -113,23 +113,45 @@ public static class I_Inspector{
     }
     
     private static void DrawComponentFields(WEI.Component Component){
-        FieldInfo[] Fields = Component.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-
-        foreach(FieldInfo Field in Fields){
+        Type Type = Component.GetType();
+        
+        foreach(FieldInfo Field in Type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)){
             if(Field.GetCustomAttribute<WE_Save>() == null){ continue; }
+            HandleMember(
+                Component,
+                Field.Name,
+                Field.FieldType,
+                () => Field.GetValue(Component),
+                Value => Field.SetValue(Component, Value),
+                Field
+            );
+        }
 
-            ImGui.PushID(Field.Name);
+        foreach(PropertyInfo Property in Type.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)){
+            if(Property.GetCustomAttribute<WE_Save>() == null || !Property.CanWrite || !Property.CanRead){ continue; }
+            HandleMember(
+                Component,
+                Property.Name,
+                Property.PropertyType,
+                () => Property.GetValue(Component),
+                Value => Property.SetValue(Component, Value),
+                Property
+            );
+        }
+    }
+    
+    private static void HandleMember(object Component, string Label, Type MemberType, Func<object?> Getter, Action<object?> Setter, MemberInfo Info){
+        ImGui.PushID(Label);
             
-            string Label = Field.Name;
-            object Value = Field.GetValue(Component)!;
+            object? Value = Getter();
 
-            Type FieldType = Field.FieldType;
+            if(Value == null && MemberType == typeof(string)){ Value = ""; }
 
-            if(FieldType.IsGenericType && FieldType.GetGenericTypeDefinition() == typeof(WEO.Asset<>)){
-                Type AssetTargetType = FieldType.GetGenericArguments()[0];
+            if(MemberType.IsGenericType && MemberType.GetGenericTypeDefinition() == typeof(WEO.Asset<>)){
+                Type AssetTargetType = MemberType.GetGenericArguments()[0];
 
-                string CurrentKey = (string)(FieldType.GetField("Key")!.GetValue(Value) ?? "");
-                bool   UseCache   = (bool)FieldType.GetField("UseCache")!.GetValue(Value)!;
+                string CurrentKey = (string)(MemberType.GetField("Key")!.GetValue(Value) ?? "");
+                bool   UseCache   = (bool)MemberType.GetField("UseCache")!.GetValue(Value)!;
                 
                 ImGui.BeginGroup();
 
@@ -141,8 +163,8 @@ public static class I_Inspector{
 
                     string TempKey = CurrentKey;
                     if(ImGui.InputText($"##in_{Label}", ref TempKey, 256)){
-                        ConstructorInfo? Constructor = FieldType.GetConstructor([typeof(string)]);
-                        Field.SetValue(Component, Constructor!.Invoke([TempKey]));
+                        ConstructorInfo? Constructor = MemberType.GetConstructor([typeof(string)]);
+                        Setter(Constructor!.Invoke([TempKey]));
                     }
 
                     if(!string.IsNullOrEmpty(CurrentKey) && ImGui.BeginDragDropSource()){
@@ -164,8 +186,8 @@ public static class I_Inspector{
 
                                 if(IsValidType){
                                     if(ImGui.IsMouseReleased(ImGuiMouseButton.Left)){
-                                        ConstructorInfo? Constructor = FieldType.GetConstructor([typeof(string)]);
-                                        Field.SetValue(Component, Constructor!.Invoke([DroppedKey]));
+                                        ConstructorInfo? Constructor = MemberType.GetConstructor([typeof(string)]);
+                                        Setter(Constructor!.Invoke([DroppedKey]));
                                     }
                                     
                                     ImGui.GetWindowDrawList().AddRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), ImGui.GetColorU32(new Vector4(0.2f, 1, 0.2f, 1)), 4.0f);
@@ -193,63 +215,63 @@ public static class I_Inspector{
                 if(ImGui.BeginPopup("AssetPicker")){
                     foreach(string Key in WE.Asset.GetKeysForType(AssetTargetType).OrderBy(K => K)){
                         if(ImGui.Selectable(Key, Key == CurrentKey)){
-                            ConstructorInfo? Constructor = FieldType.GetConstructor([typeof(string)]);
-                            Field.SetValue(Component, Constructor!.Invoke([Key]));
+                            ConstructorInfo? Constructor = MemberType.GetConstructor([typeof(string)]);
+                            Setter(Constructor!.Invoke([Key]));
                         }
                     }
                     ImGui.EndPopup();
                 }
-            }else if(FieldType == typeof(float)){
-                float V = (float)Value;
-                if(ImGui.DragFloat(Label, ref V, 0.1f)){ Field.SetValue(Component, V); }
-            }else if(FieldType == typeof(int)){
-                int V = (int)Value;
-                if(ImGui.DragInt(Label, ref V)){ Field.SetValue(Component, V); }
-            }else if(FieldType == typeof(bool)){
-                bool V = (bool)Value;
-                if(ImGui.Checkbox(Label, ref V)){ Field.SetValue(Component, V); }
-            }else if(FieldType == typeof(string)){
-                string V = (string)Value ?? "";
+            }else if(MemberType == typeof(float)){
+                float V = (float)Value!;
+                if(ImGui.DragFloat(Label, ref V, 0.1f)){ Setter(V); }
+            }else if(MemberType == typeof(int)){
+                int V = (int)Value!;
+                if(ImGui.DragInt(Label, ref V)){ Setter(V); }
+            }else if(MemberType == typeof(bool)){
+                bool V = (bool)Value!;
+                if(ImGui.Checkbox(Label, ref V)){ Setter(V); }
+            }else if(MemberType == typeof(string)){
+                string V = (string)Value!;
 
-                WEEI_MultilineString? MultilineAttribute = Field.GetCustomAttribute<WEEI_MultilineString>();
+                WEEI_MultilineString? MultilineAttribute = Info.GetCustomAttribute<WEEI_MultilineString>();
 
                 if(MultilineAttribute != null){
                     ImGui.Text(Label);
                     if(ImGui.InputTextMultiline($"##{Label}", ref V, 5000, new Vector2(-1, MultilineAttribute.Height))){
-                        Field.SetValue(Component, V);
+                        Setter(V);
                     }
                 }else{
                     if(ImGui.InputText(Label, ref V, 200)){
-                        Field.SetValue(Component, V);
+                        Setter(V);
                     }
                 }
-            }else if(FieldType == typeof(Vector3F)){
-                Vector3F V = (Vector3F)Value;
+            }else if(MemberType == typeof(Vector3F)){
+                Vector3F V = (Vector3F)Value!;
                 Vector3 SysV = new Vector3(V.X, V.Y, V.Z);
                 if(ImGui.DragFloat3(Label, ref SysV, 0.1f, 0, 0, "%g")){
-                    Field.SetValue(Component, new Vector3F(SysV.X, SysV.Y, SysV.Z));
+                    Setter(new Vector3F(SysV.X, SysV.Y, SysV.Z));
                 }
-            }else if(FieldType == typeof(Vector2F)){
-                Vector2F V = (Vector2F)Value;
+            }else if(MemberType == typeof(Vector2F)){
+                Vector2F V = (Vector2F)Value!;
                 Vector2 SysV = new Vector2(V.X, V.Y);
                 if(ImGui.DragFloat2(Label, ref SysV, 0.1f, 0, 0, "%g")){
-                    Field.SetValue(Component, new Vector2F(SysV.X, SysV.Y));
+                    Setter(new Vector2F(SysV.X, SysV.Y));
                 }
-            }else if(FieldType == typeof(Color4B)){
-                Color4B V = (Color4B)Value;
+            }else if(MemberType == typeof(Color4B)){
+                Color4B V = (Color4B)Value!;
                 Vector4 SysV = new Vector4(V.R / 255f, V.G / 255f, V.B / 255f, V.A / 255f);
                 if(ImGui.ColorEdit4(Label, ref SysV)){
-                    Field.SetValue(Component, new Color4B((byte)(SysV.X * 255), (byte)(SysV.Y * 255), (byte)(SysV.Z * 255), (byte)(SysV.W * 255)));
+                    Setter(new Color4B((byte)(SysV.X * 255), (byte)(SysV.Y * 255), (byte)(SysV.Z * 255), (byte)(SysV.W * 255)));
                 }
-            }else if(FieldType.IsEnum){
-                string[] Names = Enum.GetNames(FieldType);
-                string CurrentName = Value.ToString()!;
+            }else if(MemberType.IsEnum){
+                string[] Names = Enum.GetNames(MemberType);
+                string CurrentName = Value!.ToString()!;
 
                 if(ImGui.BeginCombo(Label, CurrentName)){
                     foreach(string Name in Names){
                         bool IsSelected = CurrentName == Name;
                         if(ImGui.Selectable(Name, IsSelected)){
-                            Field.SetValue(Component, Enum.Parse(FieldType, Name));
+                            Setter(Enum.Parse(MemberType, Name));
                         }
 
                         if(IsSelected){
@@ -261,7 +283,6 @@ public static class I_Inspector{
                 }
             }
             
-            ImGui.PopID();
-        }
+        ImGui.PopID();
     }
 }

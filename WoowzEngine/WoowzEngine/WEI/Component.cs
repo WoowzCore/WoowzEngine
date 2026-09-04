@@ -10,22 +10,41 @@ public abstract class Component : WLI.Packable{
 
     public virtual Dictionary<string, object?> __Pack(){
         Dictionary<string, object?> Data = new Dictionary<string, object?>();
-
-        foreach(FieldInfo Field in GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)){
+        Type Type = GetType();
+        
+        foreach(FieldInfo Field in Type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)){
             if(Field.GetCustomAttribute<WE_Save>() == null){ continue; }
 
             Data[Field.Name] = Field.GetValue(this);
+        }
+        
+        foreach(PropertyInfo Property in Type.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)){
+            if(Property.GetCustomAttribute<WE_Save>() == null || !Property.CanRead){ continue; }
+
+            Data[Property.Name] = Property.GetValue(this);
         }
         
         return Data;
     }
 
     public virtual void __Unpack(Dictionary<string, object?> Data){
-        foreach(FieldInfo Field in GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)){
-            if(Field.GetCustomAttribute<WE_Save>() == null){ continue; }
-
-            if(Data.TryGetValue(Field.Name, out object? Value)){
-                Field.SetValue(this, WL.Packer.Unpack(Value, Field.FieldType));
+        Type Type = GetType();
+        const BindingFlags Flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+        
+        foreach(KeyValuePair<string, object?> KVP in Data){
+            FieldInfo? Field = Type.GetField(KVP.Key, Flags);
+            if(Field != null){
+                if(Field.GetCustomAttribute<WE_Save>() != null){
+                    Field.SetValue(this, WL.Packer.Unpack(KVP.Value, Field.FieldType));
+                }
+                continue;
+            }
+        
+            PropertyInfo? Property = Type.GetProperty(KVP.Key, Flags);
+            if(Property != null){
+                if(Property.GetCustomAttribute<WE_Save>() != null){
+                    Property.SetValue(this, WL.Packer.Unpack(KVP.Value, Property.PropertyType));
+                }
             }
         }
     }
@@ -38,17 +57,11 @@ public abstract class Component : WLI.Packable{
     
     // ----------------------------------------------------------------------
 
-    // TODO, додел это, оно не вызывается
-    [Obsolete]
     public virtual void OnAdd(){}
 
-    // TODO, додел это, оно не вызывается
-    [Obsolete]
-    public virtual void OnDestroy(){}
+    public virtual void OnRemove(){}
 
     public virtual void OnStart(){}
 
     public virtual void OnUpdate(DeltaTimeInfo DTI){}
-    
-    public virtual void OnEngineUpdate(DeltaTimeInfo DTI){}
 }

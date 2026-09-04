@@ -56,6 +56,8 @@ public class Entity : WLI.Packable, WLI.Hierarchical<Entity>{
         
         Scene?.RegisterComponent(Component);
         
+        Component.OnAdd();
+        
         return Component;
     }
     
@@ -65,6 +67,8 @@ public class Entity : WLI.Packable, WLI.Hierarchical<Entity>{
 
     public bool RemoveComponent(Component Component){
         if(__Components.Remove(Component)){
+            Component.OnRemove();
+            
             Scene?.UnregisterComponent(Component);
             
             Component.Owner = null!;
@@ -74,6 +78,8 @@ public class Entity : WLI.Packable, WLI.Hierarchical<Entity>{
     }
 
     public IEnumerable<Component> GetAllComponents() => __Components;
+
+    public IEnumerable<T> GetComponents<T>() where T : Component => __Components.OfType<T>();
     
     public void SetTransformDirty(){
         if(Transform.__IsDirty){ return; }
@@ -109,7 +115,9 @@ public class Entity : WLI.Packable, WLI.Hierarchical<Entity>{
     public void SetFrom(Entity Other){
         Transform.SetFrom(Other.Transform);
         
-        __Components.Clear();
+        List<Component> OldComponents = __Components.ToList();
+        foreach(Component Component in OldComponents){ RemoveComponent(Component); }
+        
         foreach(Component OtherComponent in Other.__Components){
             Component NewComponent = (Component)Activator.CreateInstance(OtherComponent.GetType())!;
             NewComponent.Owner = this;
@@ -117,6 +125,9 @@ public class Entity : WLI.Packable, WLI.Hierarchical<Entity>{
             WL.Packer.Unpack(NewComponent, WL.Packer.Pack(OtherComponent) as Dictionary<string, object>);
             
             __Components.Add(NewComponent);
+            Scene?.RegisterComponent(NewComponent);
+            
+            NewComponent.OnAdd();
         }
 
         foreach(HierarchyNode<Entity> Children in Other.Node.Children){
@@ -168,18 +179,14 @@ public class Entity : WLI.Packable, WLI.Hierarchical<Entity>{
         
         List<Component>? ComponentsList = WL.Packer.Get<List<Component>>(Data, "Components");
         if(ComponentsList != null){
-            if(Scene != null){
-                foreach(Component C in __Components){
-                    Scene.UnregisterComponent(C);
-                }
-            }
+            foreach(Component Component in __Components.ToList()){ RemoveComponent(Component); }
             
-            __Components.Clear();
-            foreach(var Component in ComponentsList){
+            foreach(Component? Component in ComponentsList){
                 if(Component != null!){
                     Component.Owner = this;
                     __Components.Add(Component);
                     Scene?.RegisterComponent(Component);
+                    Component.OnAdd();
                 }
             }
         }

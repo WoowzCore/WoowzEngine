@@ -2018,15 +2018,15 @@
 						"Name": "TPLATFORM",
 						"Transform": {
 							"Position": {
-								"XYZ": "T-57,702785|-89,95126|36,803486",
+								"XYZ": "T-2,0750978E-05|-79,9|2,0195826E-05",
 								"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
 							},
 							"Rotation": {
-								"XYZ": "T-1,5093909E-06|0,00072562706|6,72727E-05",
+								"XYZ": "T0|0|0",
 								"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
 							},
 							"Scale": {
-								"XYZ": "T100|1|100",
+								"XYZ": "T1|1|1",
 								"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
 							},
 							"PackType": "TWoowzEngine|WEO.Transform"
@@ -2054,14 +2054,16 @@
 							},
 							{
 								"Size": {
-									"XYZ": "T100|1|100",
+									"XYZ": "T1|1|1",
 									"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
 								},
 								"PackType": "TWoowzCore|WC.Component.CBoxCollider"
 							},
 							{
 								"Mass": "F1",
-								"IsStatic": "Z1",
+								"Type": "XWoowzLib.Physic3D.Bepu|WLO.Physic3D.Bepu.PhysicObject.PhysicType:Dynamic",
+								"Active": "Z1",
+								"ActiveEngine": "Z0",
 								"PackType": "TWoowzCore|WC.Component.CRigidBody"
 							}
 						],
@@ -2076,15 +2078,15 @@
 						"Name": "TPLATFORM",
 						"Transform": {
 							"Position": {
-								"XYZ": "T-57,7|-26,5|36,8",
+								"XYZ": "T0|-91,1712|0",
 								"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
 							},
 							"Rotation": {
-								"XYZ": "T0|0|0",
+								"XYZ": "T0,00083638297|7,508786E-09|-1,7399006E-07",
 								"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
 							},
 							"Scale": {
-								"XYZ": "T100|1|100",
+								"XYZ": "T1|1|1",
 								"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
 							},
 							"PackType": "TWoowzEngine|WEO.Transform"
@@ -2109,134 +2111,20 @@
 								},
 								"Active": "Z1",
 								"PackType": "TWoowzCore|WC.Component.CMeshRenderer"
-							},
-							{
-								"Size": {
-									"XYZ": "T100|1|100",
-									"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
-								},
-								"PackType": "TWoowzCore|WC.Component.CBoxCollider"
-							},
-							{
-								"Mass": "F0",
-								"IsStatic": "Z1",
-								"PackType": "TWoowzCore|WC.Component.CRigidBody"
-							}
-						],
-						"Hierarchy": {
-							"Children": [],
-							"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
-						},
-						"ID": "A51",
-						"PackType": "TWoowzEngine|WEO.Entity"
-					},
-					{
-						"Name": "TPLATFORM",
-						"Transform": {
-							"Position": {
-								"XYZ": "T-57,7|-88,92827|36,800003",
-								"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
-							},
-							"Rotation": {
-								"XYZ": "T-1,7294838E-07|0,0007744864|-4,052342E-12",
-								"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
-							},
-							"Scale": {
-								"XYZ": "T100|1|100",
-								"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
-							},
-							"PackType": "TWoowzEngine|WEO.Transform"
-						},
-						"Components": [
-							{
-								"Mesh": {
-									"Key": "TMesh/Cube",
-									"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Mesh)"
-								},
-								"Program": {
-									"Key": "TShader/Default",
-									"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Program)"
-								},
-								"Texture": {
-									"Key": "TTexture/Test",
-									"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Texture)"
-								},
-								"Color": {
-									"RGBA": "T255|255|255|255",
-									"PackType": "TWoowzLib.Core|WLO.Math.Color4B"
-								},
-								"Active": "Z1",
-								"PackType": "TWoowzCore|WC.Component.CMeshRenderer"
-							},
-							{
-								"Size": {
-									"XYZ": "T100|1|100",
-									"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
-								},
-								"PackType": "TWoowzCore|WC.Component.CBoxCollider"
 							},
 							{
 								"Mass": "F1",
-								"IsStatic": "Z1",
-								"PackType": "TWoowzCore|WC.Component.CRigidBody"
-							}
-						],
-						"Hierarchy": {
-							"Children": [],
-							"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
-						},
-						"ID": "A52",
-						"PackType": "TWoowzEngine|WEO.Entity"
-					},
-					{
-						"Name": "TPLATFORM",
-						"Transform": {
-							"Position": {
-								"XYZ": "T-57,7|-93,73688|36,800003",
-								"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
-							},
-							"Rotation": {
-								"XYZ": "T-1,7399634E-07|0,0008363789|7,5088105E-09",
-								"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
-							},
-							"Scale": {
-								"XYZ": "T100|1|100",
-								"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
-							},
-							"PackType": "TWoowzEngine|WEO.Transform"
-						},
-						"Components": [
-							{
-								"Mesh": {
-									"Key": "TMesh/Cube",
-									"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Mesh)"
-								},
-								"Program": {
-									"Key": "TShader/Default",
-									"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Program)"
-								},
-								"Texture": {
-									"Key": "TTexture/Test",
-									"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Texture)"
-								},
-								"Color": {
-									"RGBA": "T255|255|255|255",
-									"PackType": "TWoowzLib.Core|WLO.Math.Color4B"
-								},
+								"Type": "XWoowzLib.Physic3D.Bepu|WLO.Physic3D.Bepu.PhysicObject.PhysicType:Static",
 								"Active": "Z1",
-								"PackType": "TWoowzCore|WC.Component.CMeshRenderer"
+								"ActiveEngine": "Z1",
+								"PackType": "TWoowzCore|WC.Component.CRigidBody"
 							},
 							{
 								"Size": {
-									"XYZ": "T100|1|100",
+									"XYZ": "T1|1|1",
 									"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
 								},
 								"PackType": "TWoowzCore|WC.Component.CBoxCollider"
-							},
-							{
-								"Mass": "F1",
-								"IsStatic": "Z1",
-								"PackType": "TWoowzCore|WC.Component.CRigidBody"
 							}
 						],
 						"Hierarchy": {
@@ -2259,18 +2147,18 @@
 			"PackType": "TWoowzLib.Core|WLO.Math.Color4B"
 		},
 		"CameraPosition": {
-			"XYZ": "T1,9326673|-86,57711|93,56671",
+			"XYZ": "T4,575626|-77,89703|12,257863",
 			"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
 		},
 		"CameraRotation": {
-			"XYZ": "T0,14934397|24,403456|0",
+			"XYZ": "T0,41923338|24,77131|0",
 			"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
 		},
 		"CameraPerspective": "Z1",
 		"CameraSpeed": "F1",
 		"CameraFar": "F1000",
 		"CreationTime": "L639235303249196046",
-		"LastSaveTime": "L639240548834581839",
+		"LastSaveTime": "L639241587655694240",
 		"PackType": "TWoowzEngine|WEO.Scene.EditorInfo"
 	},
 	"PackType": "TWoowzEngine|WEO.Scene"

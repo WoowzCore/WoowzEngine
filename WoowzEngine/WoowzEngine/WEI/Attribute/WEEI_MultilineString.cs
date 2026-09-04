@@ -1,6 +1,6 @@
 ﻿namespace WEI_Attribute;
 
-[AttributeUsage(AttributeTargets.Field)]
+[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 public class WEEI_MultilineString : Attribute{
     public int Height;
     public WEEI_MultilineString(int Height = 100){ this.Height = Height; }

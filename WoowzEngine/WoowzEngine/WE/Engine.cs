@@ -30,4 +30,7 @@ public struct Engine{
             throw new ExceptionWE("Произошла ошибка при остановке WoowzEngine!", e);
         }
     }
+
+    // todo, remove setter?
+    public static bool IsEditor = false;
 }
