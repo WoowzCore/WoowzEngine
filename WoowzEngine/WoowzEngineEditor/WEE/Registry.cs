@@ -1,6 +1,10 @@
 ﻿using System.Reflection;
+using Assimp;
 using WEE_Interface;
 using WEI_Attribute;
+using WEI;
+using WEO;
+using Scene = WEO.Scene;
 
 namespace WEE;
 
@@ -121,10 +125,63 @@ public static class Registry{
 
         if(GameAssembly != null){ ScanAssembly(GameAssembly); }
         
+        ReloadAssets(true);
+        
         RunMethods<WEE_OnStart>(true, WEE.Render.API);
         
         I_View.RefreshEffects();
         
         WEE.Main.RefreshPipeline();
+    }
+
+    public static void ReloadAssets(bool First){
+        WE.Asset.Clear();
+        
+        RunMethods<WEE_OnAssetsLoad>(true, WEE.Render.API, First);
+
+        if(!First && WEE.Interface.CurrentScene != null){
+            __RefreshAssetsScene(WEE.Interface.CurrentScene);    
+        }
+    }
+
+    private static void __RefreshAssetsScene(Scene Scene){
+        WL.Logger.Debug("Переподключение ресурсов на текущей сцене...");
+        foreach(Entity Entity in Scene.AllEntity.ToList()){
+            __RefreshAssetsObject(Entity);
+            foreach(Component Component in Entity.GetAllComponents()){
+                __RefreshAssetsObject(Component);
+            }
+        }
+        
+        foreach(Entity Entity in Scene.AllEntity.ToList()){
+            if(Entity.SourcePrefab.HasValue){
+                Entity.SyncFromPrefab();
+            }
+        }
+    }
+
+    private static void __RefreshAssetsObject(object Object){
+        if(Object == null!){ return; }
+        Type Type = Object.GetType();
+
+        MemberInfo[] Members = Type.GetMembers(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+        foreach(MemberInfo Member in Members){
+            Type? MemberType = null;
+            if(Member is FieldInfo F){ MemberType = F.FieldType; }else if(Member is PropertyInfo P){ MemberType = P.PropertyType; }
+
+            if(MemberType != null && MemberType.IsGenericType && MemberType.GetGenericTypeDefinition() == typeof(WEO.Asset<>)){
+                object? AssetValue = (Member is FieldInfo Field) ? Field.GetValue(Object) : ((PropertyInfo)Member).GetValue(Object);
+                if(AssetValue != null){
+                    MethodInfo? InvalidateMethod = MemberType.GetMethod("Invalidate");
+                    InvalidateMethod?.Invoke(AssetValue, null);
+
+                    if(Member is FieldInfo F__){
+                        F__.SetValue(Object, AssetValue);
+                    }else if(Member is PropertyInfo P__){
+                        P__.SetValue(Object, AssetValue);
+                    }
+                }
+            }
+        }
     }
 }

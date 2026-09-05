@@ -1,0 +1,79 @@
+{
+	"EntityData": {
+		"Name": "TSphereFlat",
+		"Components": [
+			{
+				"Mesh": {
+					"Key": "TMesh/Sphere",
+					"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Mesh)"
+				},
+				"Program": {
+					"Key": "TShader/Default",
+					"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Program)"
+				},
+				"Texture": {
+					"Key": "TTexture/Error",
+					"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Texture)"
+				},
+				"Color": {
+					"RGBA": "T255|255|255|255",
+					"PackType": "TWoowzLib.Core|WLO.Math.Color4B"
+				},
+				"Active": "Z1",
+				"PackType": "TWoowzCore|WC.Component.CMeshRenderer"
+			}
+		],
+		"Hierarchy": {
+			"Children": [
+				{
+					"Name": "TSphereFlat",
+					"Transform": {
+						"Position": {
+							"XYZ": "T0|0,01|0",
+							"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
+						},
+						"Rotation": {
+							"XYZ": "T0,28972465|0|0",
+							"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
+						},
+						"Scale": {
+							"XYZ": "T1|1|1",
+							"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
+						},
+						"PackType": "TWoowzEngine|WEO.Transform"
+					},
+					"Components": [
+						{
+							"Mesh": {
+								"Key": "TMesh/Sphere",
+								"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Mesh)"
+							},
+							"Program": {
+								"Key": "TShader/Error",
+								"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Program)"
+							},
+							"Texture": {
+								"Key": "TTexture/Bom",
+								"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Texture)"
+							},
+							"Color": {
+								"RGBA": "T255|255|255|255",
+								"PackType": "TWoowzLib.Core|WLO.Math.Color4B"
+							},
+							"Active": "Z1",
+							"PackType": "TWoowzCore|WC.Component.CMeshRenderer"
+						}
+					],
+					"Hierarchy": {
+						"Children": [],
+						"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
+					},
+					"PackType": "TWoowzEngine|WEO.Entity"
+				}
+			],
+			"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
+		},
+		"PackType": "TWoowzEngine|WEO.Entity"
+	},
+	"PackType": "TWoowzEngine|WEO.Prefab"
+}

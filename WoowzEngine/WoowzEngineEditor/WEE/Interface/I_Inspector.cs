@@ -20,87 +20,117 @@ public static class I_Inspector{
             if(WEE.Interface.CurrentEntity == null){
                 ImGui.TextDisabled("Выберите объект в иерархии...");
             }else{
-                string Prefix = $"[{WEE.Interface.CurrentEntity.ID}]";
+                Entity Entity = WEE.Interface.CurrentEntity;
+                
+                string Prefix = $"[{Entity.ID}]";
                 ImGui.AlignTextToFramePadding();
                 ImGui.TextDisabled(Prefix);
                 
                 ImGui.SameLine();
                 
-                string Name = WEE.Interface.CurrentEntity.Name;
+                string Name = Entity.Name;
                 ImGui.SetNextItemWidth(-(ImGui.CalcTextSize("Название").X + ImGui.GetStyle().ItemSpacing.X));
                 if(ImGui.InputText("Название", ref Name, 100)){
-                    WEE.Interface.CurrentEntity.Name = Name;
+                    Entity.Name = Name;
                 }
-
+                
                 ImGui.Separator();
 
+                if(Entity.IsPartOfPrefab){
+                    Entity Root = Entity.PrefabRoot!;
+                    
+                    ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(0.4f, 0.6f, 1, 1));
+                    ImGui.Text("Prefab:");
+                    ImGui.PopStyleColor();
+                    ImGui.SameLine();
+                    ImGui.Text(Root.SourcePrefab!.Value.Key);
+
+                    if (ImGui.Button("Разобрать")) {
+                        Root.SourcePrefab = null;
+                    }
+                }else{
+                    if(ImGui.Button("Превратить в Prefab")){
+                        I_Menu.SaveEntityAsPrefab(Entity);
+                    }
+                }
+                
+                ImGui.Separator();
+                
                 if(ImGui.CollapsingHeader("Transform", ImGuiTreeNodeFlags.DefaultOpen)){
-                    Vector3 Position = new Vector3(WEE.Interface.CurrentEntity.Transform.Position.X, WEE.Interface.CurrentEntity.Transform.Position.Y, WEE.Interface.CurrentEntity.Transform.Position.Z);
+                    Vector3 Position = new Vector3(Entity.Transform.Position.X, Entity.Transform.Position.Y, Entity.Transform.Position.Z);
 
                     if(ImGui.DragFloat3("Позиция", ref Position, 0.1f, 0, 0, "%g")){
-                        WEE.Interface.CurrentEntity.Transform.Position = new Vector3F(Position.X, Position.Y, Position.Z);
-                        WEE.Interface.CurrentEntity.SetTransformDirty();
+                        Entity.Transform.Position = new Vector3F(Position.X, Position.Y, Position.Z);
+                        Entity.SetTransformDirty();
                     }
 
                     const float RadToDeg = 180f / System.MathF.PI;
                     const float DegToRad = System.MathF.PI / 180;
                     
                     Vector3 Rotation = new Vector3(
-                        WEE.Interface.CurrentEntity.Transform.Rotation.X * RadToDeg,
-                        WEE.Interface.CurrentEntity.Transform.Rotation.Y * RadToDeg,
-                        WEE.Interface.CurrentEntity.Transform.Rotation.Z * RadToDeg
+                        Entity.Transform.Rotation.X * RadToDeg,
+                        Entity.Transform.Rotation.Y * RadToDeg,
+                        Entity.Transform.Rotation.Z * RadToDeg
                     );
                     
                     if(ImGui.DragFloat3("Поворот", ref Rotation, 0.1f, 0, 0, "%g")){
-                        WEE.Interface.CurrentEntity.Transform.Rotation = new Vector3F(
+                        Entity.Transform.Rotation = new Vector3F(
                             Rotation.X * DegToRad,
                             Rotation.Y * DegToRad,
                             Rotation.Z * DegToRad
                         );
-                        WEE.Interface.CurrentEntity.SetTransformDirty();
+                        Entity.SetTransformDirty();
                     }
                     
-                    Vector3 Scale = new Vector3(WEE.Interface.CurrentEntity.Transform.Scale.X, WEE.Interface.CurrentEntity.Transform.Scale.Y, WEE.Interface.CurrentEntity.Transform.Scale.Z);
+                    Vector3 Scale = new Vector3(Entity.Transform.Scale.X, Entity.Transform.Scale.Y, Entity.Transform.Scale.Z);
 
                     if(ImGui.DragFloat3("Размер", ref Scale, 0.1f, 0, 0, "%g")){
-                        WEE.Interface.CurrentEntity.Transform.Scale = new Vector3F(Scale.X, Scale.Y, Scale.Z);
-                        WEE.Interface.CurrentEntity.SetTransformDirty();
+                        Entity.Transform.Scale = new Vector3F(Scale.X, Scale.Y, Scale.Z);
+                        Entity.SetTransformDirty();
                     }
                 }
 
                 ImGui.Separator();
 
-                foreach(Component Component in WEE.Interface.CurrentEntity.GetAllComponents().ToList()){
+                foreach(Component Component in Entity.GetAllComponents().ToList()){
                     GUI.CustomID(Component.GetHashCode(), () => {
                         bool ComponentOpen = ImGui.CollapsingHeader(Component.GetType().Name, ImGuiTreeNodeFlags.DefaultOpen);
 
-                        GUI.PopupContextItem("ComponentSettings", () => {
-                            if(ImGui.MenuItem("Удалить компонент")){
-                                WEE.Interface.CurrentEntity.RemoveComponent(Component);
-                            }
-                        });
+                        if(!Entity.IsPartOfPrefab){
+                            GUI.PopupContextItem("ComponentSettings", () => {
+                                if(ImGui.MenuItem("Удалить компонент")){
+                                    Entity.RemoveComponent(Component);
+                                }
+                            });   
+                        }
 
                         if(ComponentOpen){
+                            if(Entity.IsPartOfPrefab){ ImGui.BeginDisabled(); }
+                            
                             DrawComponentFields(Component);
+                            
+                            if(Entity.IsPartOfPrefab){ ImGui.EndDisabled(); }
                         }
                     });
                 }
 
-                ImGui.Separator();
+                if(!Entity.IsPartOfPrefab){
+                    ImGui.Separator();
 
-                if(ImGui.Button("Добавить компонент", new Vector2(-1, 0))){
-                    ImGui.OpenPopup("AddComponentPopup");
-                }
-
-                GUI.Popup("AddComponentPopup", () => {
-                    foreach(Type ComponentType in WEE.Registry.AvailableComponents){
-                        if(ImGui.MenuItem(ComponentType.Name)){
-                            MethodInfo Method = typeof(Entity).GetMethod("AddComponent")!;
-                            MethodInfo Generic = Method.MakeGenericMethod(ComponentType);
-                            Generic.Invoke(WEE.Interface.CurrentEntity, null);
-                        }
+                    if(ImGui.Button("Добавить компонент", new Vector2(-1, 0))){
+                        ImGui.OpenPopup("AddComponentPopup");
                     }
-                });
+
+                    GUI.Popup("AddComponentPopup", () => {
+                        foreach(Type ComponentType in WEE.Registry.AvailableComponents){
+                            if(ImGui.MenuItem(ComponentType.Name)){
+                                MethodInfo Method = typeof(Entity).GetMethod("AddComponent")!;
+                                MethodInfo Generic = Method.MakeGenericMethod(ComponentType);
+                                Generic.Invoke(WEE.Interface.CurrentEntity, null);
+                            }
+                        }
+                    });
+                }
             }
         });
     }

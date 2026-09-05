@@ -29,7 +29,9 @@ public struct Asset<T> : WLI.Packable where T : class{
         UseCache = true;
         __Cache = Cache;
     }
-    
+
+    public void Invalidate(){ __ID = -1; }
+
     public T? Resolve(){
         if(UseCache){ return __Cache; }
 

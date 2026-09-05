@@ -9,8 +9,9 @@ using WLO.Math;
 namespace WEE_Interface;
 
 public static class I_Menu{
-    public static string __SceneFilePath      = null!;
-    private const string __SceneFileExtension = "we_scene";
+    public static string __SceneFilePath       = null!;
+    private const string __SceneFileExtension  = "we_scene";
+    private const string __PrefabFileExtension = "we_prefab";
     
     public static void Update(){
         ImGUI GUI = WEE.Interface.ImGUI;
@@ -159,7 +160,7 @@ public static class I_Menu{
 
             WEE.Interface.CurrentScene.__EditorInfo = EditorInfo;
             
-            string JSON = WEE.Interface.CurrentScene.SaveToJSON();
+            string JSON = WEE.Interface.CurrentScene.ToJSON();
             File.WriteAllText(Path, JSON);
             __SceneFilePath = Path;
             WL.Logger.Info($"Сцена сохранена: {Path}");
@@ -175,7 +176,7 @@ public static class I_Menu{
             
             CloseScene();
             
-            WEE.Interface.CurrentScene = Scene.LoadFromJSON(JSON);
+            WEE.Interface.CurrentScene = Scene.FromJSON(JSON);
 
             WEE.Interface.CurrentScene.DoUpdate       = false;
             WEE.Interface.CurrentScene.DoEngineUpdate = true;
@@ -201,6 +202,18 @@ public static class I_Menu{
             WEE.Registry.RunMethods<WEE_OnSceneLoad>(true, WEE.Interface.CurrentScene);
         }catch(Exception e){
             WL.Logger.Error($"Ошибка загрузки:", e);
+        }
+    }
+
+    public static void SaveEntityAsPrefab(Entity Entity){
+        DialogResult? Result = NativeFileDialogSharp.Dialog.FileSave(__PrefabFileExtension);
+        if(Result.IsOk){
+            string Path = Result.Path;
+            if(!Path.EndsWith($".{__PrefabFileExtension}")){ Path += $".{__PrefabFileExtension}"; }
+
+            File.WriteAllText(Path, Prefab.FromEntity(Entity).ToJSON());
+            
+            WL.Logger.Info($"Prefab создан: {Path}");
         }
     }
 }

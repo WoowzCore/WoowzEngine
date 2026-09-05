@@ -11,12 +11,73 @@ public class Entity : WLI.Packable, WLI.Hierarchical<Entity>{
     
     public Scene? Scene{ get; internal set; }
 
+    // ----------------------------------------------------------------------
+
+    private Asset<Prefab>? __SourcePrefab;
+    public Asset<Prefab>? SourcePrefab{
+        get => __SourcePrefab;
+        set{
+            __SourcePrefab = value;
+            UpdatePrefabStatus();
+        }
+    }
+    
+    public Entity? PrefabRoot{ get; private set; }
+    public bool IsPartOfPrefab => PrefabRoot != null;
+
+    private void UpdatePrefabStatus(){
+        Entity? NewRoot = null;
+
+        if(__SourcePrefab.HasValue){
+            NewRoot = this;
+        }else{
+            NewRoot = Node.Parent?.Owner.PrefabRoot;
+        }
+
+        if(PrefabRoot != NewRoot){
+            PrefabRoot = NewRoot;
+
+            foreach(HierarchyNode<Entity> Child in Node.Children){
+                Child.Owner.UpdatePrefabStatus();
+            }
+        }
+    }
+
+    public void SyncFromPrefab(){
+        if(!SourcePrefab.HasValue){ return; }
+        Prefab? Prefab = SourcePrefab.Value.Resolve();
+        if(Prefab == null){ return; }
+
+        // todo, я уверен можно проще
+        
+        string OldName = Name;
+        Dictionary<string, object?>? OldTransformData = WL.Packer.Pack(Transform) as Dictionary<string, object?>;
+        HierarchyNode<Entity>? OldParent = Node.Parent;
+
+        DestroyChildrens();
+        RemoveAllComponents();
+
+        WL.Packer.Unpack(this, Prefab.EntityData);
+
+        Name = OldName;
+        if(OldTransformData != null){
+            WL.Packer.Unpack(Transform, OldTransformData);
+        }
+        Node.SetParent(OldParent);
+        
+        UpdatePrefabStatus();
+    }
+    
+    // ----------------------------------------------------------------------
+    
     private static          uint                     __NextID = 1;
     private static readonly Dictionary<uint, Entity> __IDMap  = [];
     public uint ID{ get; internal set; }
-
+    
     public static Entity? GetFromID(uint ID) => __IDMap.TryGetValue(ID, out Entity? Entity) ? Entity : null;
 
+    // ----------------------------------------------------------------------
+    
     public static void DestroyAllEntities(){
         foreach(KeyValuePair<uint, Entity> KVP in __IDMap){
             KVP.Value.Destroy();
@@ -45,6 +106,7 @@ public class Entity : WLI.Packable, WLI.Hierarchical<Entity>{
         Node.OnParentChanged += (Self, OldParent, NewParent) => {
             Transform.Parent = NewParent?.Owner.Transform;
             SetTransformDirty();
+            UpdatePrefabStatus();
         };
     }
     
@@ -91,6 +153,18 @@ public class Entity : WLI.Packable, WLI.Hierarchical<Entity>{
         }
     }
 
+    public void DestroyChildrens(){
+        foreach(HierarchyNode<Entity> Child in Node.Children.ToList()){
+            Child.Owner.Destroy();
+        }
+    }
+
+    public void RemoveAllComponents(){
+        foreach(Component Component in GetAllComponents().ToList()){
+            RemoveComponent(Component);
+        }
+    }
+    
     public void Destroy(){
         foreach(HierarchyNode<Entity> Child in Node.Children.ToList()){ Child.Owner.Destroy(); }
 
@@ -113,27 +187,37 @@ public class Entity : WLI.Packable, WLI.Hierarchical<Entity>{
     // ----------------------------------------------------------------------
 
     public void SetFrom(Entity Other){
+        SourcePrefab = Other.SourcePrefab;
         Transform.SetFrom(Other.Transform);
-        
-        List<Component> OldComponents = __Components.ToList();
-        foreach(Component Component in OldComponents){ RemoveComponent(Component); }
-        
-        foreach(Component OtherComponent in Other.__Components){
-            Component NewComponent = (Component)Activator.CreateInstance(OtherComponent.GetType())!;
-            NewComponent.Owner = this;
 
-            WL.Packer.Unpack(NewComponent, WL.Packer.Pack(OtherComponent) as Dictionary<string, object>);
-            
-            __Components.Add(NewComponent);
-            Scene?.RegisterComponent(NewComponent);
-            
-            NewComponent.OnAdd();
-        }
+        if(SourcePrefab != null){
+            Prefab? Prefab = SourcePrefab.Value.Resolve();
+            if(Prefab != null){
+                WL.Packer.Unpack(this, Prefab.EntityData);
+            }
+        }else{
+            List<Component> OldComponents = __Components.ToList();
+            foreach(Component Component in OldComponents){ RemoveComponent(Component); }
+        
+            foreach(Component OtherComponent in Other.__Components){
+                Component NewComponent = (Component)Activator.CreateInstance(OtherComponent.GetType())!;
+                NewComponent.Owner = this;
 
-        foreach(HierarchyNode<Entity> Children in Other.Node.Children){
-            Entity DuplicateChild = Children.Owner.Duplicate();
-            DuplicateChild.Node.SetParent(Node);
+                WL.Packer.Unpack(NewComponent, WL.Packer.Pack(OtherComponent) as Dictionary<string, object>);
+            
+                __Components.Add(NewComponent);
+                Scene?.RegisterComponent(NewComponent);
+            
+                NewComponent.OnAdd();
+            }
+
+            foreach(HierarchyNode<Entity> Children in Other.Node.Children){
+                Entity DuplicateChild = Children.Owner.Duplicate();
+                DuplicateChild.Node.SetParent(Node);
+            }
         }
+        
+        UpdatePrefabStatus();
     }
     
     public Entity Duplicate(){
@@ -143,20 +227,40 @@ public class Entity : WLI.Packable, WLI.Hierarchical<Entity>{
         
         return Duplicate;
     }
+
+    public static Entity FromPrefab(Asset<Prefab> PrefabAsset){
+        Prefab? Prefab = PrefabAsset.Resolve();
+        if(Prefab == null){ return null!; }
+
+        Entity Entity = new Entity();
+
+        WL.Packer.Unpack(Entity, Prefab.EntityData);
+        Entity.SourcePrefab = PrefabAsset;
+
+        return Entity;
+    }
     
     // ----------------------------------------------------------------------
-    
-    public Dictionary<string, object?> __Pack() => new Dictionary<string, object?>{
-        ["Name"      ] = Name,
-        ["Transform" ] = Transform,
-        ["Components"] = __Components,
-        ["Hierarchy" ] = Node,
-        ["ID"        ] = ID
-    };
+
+    public Dictionary<string, object?> __Pack(){
+        Dictionary<string, object?> Data = [];
+
+        Data["ID"] = ID;
+        Data["Name"] = Name;
+        Data["Transform"] = Transform;
+
+        if(SourcePrefab.HasValue){
+            Data["SourcePrefab"] = SourcePrefab;
+        }else{
+            Data["Components"] = __Components;
+            Data["Hierarchy"] = Node;
+        }
+        
+        return Data;
+    }
     
     public void __Unpack(Dictionary<string, object?> Data){
         uint SavedID = WL.Packer.Get(Data, "ID", 0U);
-
         if(SavedID != 0){
             __IDMap.Remove(ID);
             
@@ -171,27 +275,41 @@ public class Entity : WLI.Packable, WLI.Hierarchical<Entity>{
             
             if(ID >= __NextID){ __NextID = ID + 1; }
         }
+
+        if(Data.ContainsKey("SourcePrefab")){
+            SourcePrefab = WL.Packer.Get<Asset<Prefab>?>(Data, "SourcePrefab");
+            Prefab? Prefab = SourcePrefab?.Resolve();
+            if(Prefab != null){
+                WL.Packer.Unpack(this, Prefab.EntityData);
+            }
+        }
         
         Name = WL.Packer.Get(Data, "Name", Name)!;
         
         Dictionary<string, object?>? TransformData = WL.Packer.Get<Dictionary<string, object?>>(Data, "Transform", Raw: true);
         if(TransformData != null){ WL.Packer.Unpack(Transform, TransformData); }
-        
-        List<Component>? ComponentsList = WL.Packer.Get<List<Component>>(Data, "Components");
-        if(ComponentsList != null){
-            foreach(Component Component in __Components.ToList()){ RemoveComponent(Component); }
-            
-            foreach(Component? Component in ComponentsList){
-                if(Component != null!){
-                    Component.Owner = this;
-                    __Components.Add(Component);
-                    Scene?.RegisterComponent(Component);
-                    Component.OnAdd();
+
+        if(Data.ContainsKey("Components")){
+            List<Component>? ComponentsList = WL.Packer.Get<List<Component>>(Data, "Components");
+            if(ComponentsList != null){
+                foreach(Component Component in __Components.ToList()){ RemoveComponent(Component); }
+
+                foreach(Component? Component in ComponentsList){
+                    if(Component != null!){
+                        Component.Owner = this;
+                        __Components.Add(Component);
+                        Scene?.RegisterComponent(Component);
+                        Component.OnAdd();
+                    }
                 }
             }
         }
 
-        Dictionary<string, object?>? HierarchyData = WL.Packer.Get<Dictionary<string, object?>>(Data, "Hierarchy", Raw: true);
-        if(HierarchyData != null){ WL.Packer.Unpack(Node, HierarchyData); }
+        if(Data.ContainsKey("Hierarchy")){
+            Dictionary<string, object?>? HierarchyData = WL.Packer.Get<Dictionary<string, object?>>(Data, "Hierarchy", Raw: true);
+            if(HierarchyData != null){ WL.Packer.Unpack(Node, HierarchyData); }
+        }
+        
+        UpdatePrefabStatus();
     }
 }

@@ -2,6 +2,7 @@
 	"Name": "TSCENETESTV.1AGAIN",
 	"Entities": [
 		{
+			"ID": "A1",
 			"Name": "TTriangle",
 			"Transform": {
 				"Position": {
@@ -44,10 +45,10 @@
 				"Children": [],
 				"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 			},
-			"ID": "A1",
 			"PackType": "TWoowzEngine|WEO.Entity"
 		},
 		{
+			"ID": "A2",
 			"Name": "TCube",
 			"Transform": {
 				"Position": {
@@ -90,10 +91,10 @@
 				"Children": [],
 				"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 			},
-			"ID": "A2",
 			"PackType": "TWoowzEngine|WEO.Entity"
 		},
 		{
+			"ID": "A16",
 			"Name": "TTestEntity",
 			"Transform": {
 				"Position": {
@@ -127,10 +128,10 @@
 				"Children": [],
 				"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 			},
-			"ID": "A16",
 			"PackType": "TWoowzEngine|WEO.Entity"
 		},
 		{
+			"ID": "A3",
 			"Name": "TNewModels",
 			"Transform": {
 				"Position": {
@@ -151,6 +152,7 @@
 			"Hierarchy": {
 				"Children": [
 					{
+						"ID": "A4",
 						"Name": "TArrow",
 						"Transform": {
 							"Position": {
@@ -193,10 +195,10 @@
 							"Children": [],
 							"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 						},
-						"ID": "A4",
 						"PackType": "TWoowzEngine|WEO.Entity"
 					},
 					{
+						"ID": "A5",
 						"Name": "TCar",
 						"Transform": {
 							"Position": {
@@ -239,10 +241,10 @@
 							"Children": [],
 							"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 						},
-						"ID": "A5",
 						"PackType": "TWoowzEngine|WEO.Entity"
 					},
 					{
+						"ID": "A6",
 						"Name": "TCoral",
 						"Transform": {
 							"Position": {
@@ -285,10 +287,10 @@
 							"Children": [],
 							"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 						},
-						"ID": "A6",
 						"PackType": "TWoowzEngine|WEO.Entity"
 					},
 					{
+						"ID": "A7",
 						"Name": "TCubeHuman",
 						"Transform": {
 							"Position": {
@@ -331,10 +333,10 @@
 							"Children": [],
 							"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 						},
-						"ID": "A7",
 						"PackType": "TWoowzEngine|WEO.Entity"
 					},
 					{
+						"ID": "A8",
 						"Name": "THuman",
 						"Transform": {
 							"Position": {
@@ -377,10 +379,10 @@
 							"Children": [],
 							"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 						},
-						"ID": "A8",
 						"PackType": "TWoowzEngine|WEO.Entity"
 					},
 					{
+						"ID": "A9",
 						"Name": "TPear",
 						"Transform": {
 							"Position": {
@@ -423,10 +425,10 @@
 							"Children": [],
 							"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 						},
-						"ID": "A9",
 						"PackType": "TWoowzEngine|WEO.Entity"
 					},
 					{
+						"ID": "A10",
 						"Name": "TPlatonic",
 						"Transform": {
 							"Position": {
@@ -469,10 +471,10 @@
 							"Children": [],
 							"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 						},
-						"ID": "A10",
 						"PackType": "TWoowzEngine|WEO.Entity"
 					},
 					{
+						"ID": "A11",
 						"Name": "TSkySphere",
 						"Transform": {
 							"Position": {
@@ -515,10 +517,10 @@
 							"Children": [],
 							"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 						},
-						"ID": "A11",
 						"PackType": "TWoowzEngine|WEO.Entity"
 					},
 					{
+						"ID": "A12",
 						"Name": "TSphere",
 						"Transform": {
 							"Position": {
@@ -598,10 +600,10 @@
 							"Children": [],
 							"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 						},
-						"ID": "A12",
 						"PackType": "TWoowzEngine|WEO.Entity"
 					},
 					{
+						"ID": "A13",
 						"Name": "TSphereFlat",
 						"Transform": {
 							"Position": {
@@ -644,10 +646,10 @@
 							"Children": [],
 							"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 						},
-						"ID": "A13",
 						"PackType": "TWoowzEngine|WEO.Entity"
 					},
 					{
+						"ID": "A14",
 						"Name": "TSphereWireframe",
 						"Transform": {
 							"Position": {
@@ -690,10 +692,10 @@
 							"Children": [],
 							"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 						},
-						"ID": "A14",
 						"PackType": "TWoowzEngine|WEO.Entity"
 					},
 					{
+						"ID": "A15",
 						"Name": "TTeapot",
 						"Transform": {
 							"Position": {
@@ -736,16 +738,15 @@
 							"Children": [],
 							"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 						},
-						"ID": "A15",
 						"PackType": "TWoowzEngine|WEO.Entity"
 					}
 				],
 				"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 			},
-			"ID": "A3",
 			"PackType": "TWoowzEngine|WEO.Entity"
 		},
 		{
+			"ID": "A17",
 			"Name": "TErrorQuad",
 			"Transform": {
 				"Position": {
@@ -766,6 +767,7 @@
 			"Hierarchy": {
 				"Children": [
 					{
+						"ID": "A18",
 						"Name": "TQuad",
 						"Transform": {
 							"Position": {
@@ -808,10 +810,10 @@
 							"Children": [],
 							"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 						},
-						"ID": "A18",
 						"PackType": "TWoowzEngine|WEO.Entity"
 					},
 					{
+						"ID": "A19",
 						"Name": "TQuad",
 						"Transform": {
 							"Position": {
@@ -854,10 +856,10 @@
 							"Children": [],
 							"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 						},
-						"ID": "A19",
 						"PackType": "TWoowzEngine|WEO.Entity"
 					},
 					{
+						"ID": "A20",
 						"Name": "TQuad",
 						"Transform": {
 							"Position": {
@@ -900,16 +902,15 @@
 							"Children": [],
 							"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 						},
-						"ID": "A20",
 						"PackType": "TWoowzEngine|WEO.Entity"
 					}
 				],
 				"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 			},
-			"ID": "A17",
 			"PackType": "TWoowzEngine|WEO.Entity"
 		},
 		{
+			"ID": "A68",
 			"Name": "TErrorQuad",
 			"Transform": {
 				"Position": {
@@ -930,6 +931,7 @@
 			"Hierarchy": {
 				"Children": [
 					{
+						"ID": "A69",
 						"Name": "TQuad",
 						"Transform": {
 							"Position": {
@@ -972,10 +974,10 @@
 							"Children": [],
 							"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 						},
-						"ID": "A69",
 						"PackType": "TWoowzEngine|WEO.Entity"
 					},
 					{
+						"ID": "A70",
 						"Name": "TQuad",
 						"Transform": {
 							"Position": {
@@ -1018,10 +1020,10 @@
 							"Children": [],
 							"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 						},
-						"ID": "A70",
 						"PackType": "TWoowzEngine|WEO.Entity"
 					},
 					{
+						"ID": "A71",
 						"Name": "TQuad",
 						"Transform": {
 							"Position": {
@@ -1064,16 +1066,15 @@
 							"Children": [],
 							"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 						},
-						"ID": "A71",
 						"PackType": "TWoowzEngine|WEO.Entity"
 					}
 				],
 				"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 			},
-			"ID": "A68",
 			"PackType": "TWoowzEngine|WEO.Entity"
 		},
 		{
+			"ID": "A21",
 			"Name": "TTriangle",
 			"Transform": {
 				"Position": {
@@ -1116,10 +1117,10 @@
 				"Children": [],
 				"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 			},
-			"ID": "A21",
 			"PackType": "TWoowzEngine|WEO.Entity"
 		},
 		{
+			"ID": "A22",
 			"Name": "TTriangle",
 			"Transform": {
 				"Position": {
@@ -1162,10 +1163,10 @@
 				"Children": [],
 				"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 			},
-			"ID": "A22",
 			"PackType": "TWoowzEngine|WEO.Entity"
 		},
 		{
+			"ID": "A23",
 			"Name": "TTriangle",
 			"Transform": {
 				"Position": {
@@ -1208,10 +1209,10 @@
 				"Children": [],
 				"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 			},
-			"ID": "A23",
 			"PackType": "TWoowzEngine|WEO.Entity"
 		},
 		{
+			"ID": "A24",
 			"Name": "TTriangle",
 			"Transform": {
 				"Position": {
@@ -1254,10 +1255,10 @@
 				"Children": [],
 				"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 			},
-			"ID": "A24",
 			"PackType": "TWoowzEngine|WEO.Entity"
 		},
 		{
+			"ID": "A29",
 			"Name": "TNewModels",
 			"Transform": {
 				"Position": {
@@ -1278,6 +1279,7 @@
 			"Hierarchy": {
 				"Children": [
 					{
+						"ID": "A30",
 						"Name": "TArrow",
 						"Transform": {
 							"Position": {
@@ -1320,10 +1322,10 @@
 							"Children": [],
 							"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 						},
-						"ID": "A30",
 						"PackType": "TWoowzEngine|WEO.Entity"
 					},
 					{
+						"ID": "A31",
 						"Name": "TCar",
 						"Transform": {
 							"Position": {
@@ -1366,10 +1368,10 @@
 							"Children": [],
 							"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 						},
-						"ID": "A31",
 						"PackType": "TWoowzEngine|WEO.Entity"
 					},
 					{
+						"ID": "A32",
 						"Name": "TCoral",
 						"Transform": {
 							"Position": {
@@ -1411,6 +1413,7 @@
 						"Hierarchy": {
 							"Children": [
 								{
+									"ID": "A33",
 									"Name": "TCubeHuman",
 									"Transform": {
 										"Position": {
@@ -1453,16 +1456,15 @@
 										"Children": [],
 										"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 									},
-									"ID": "A33",
 									"PackType": "TWoowzEngine|WEO.Entity"
 								}
 							],
 							"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 						},
-						"ID": "A32",
 						"PackType": "TWoowzEngine|WEO.Entity"
 					},
 					{
+						"ID": "A34",
 						"Name": "THuman",
 						"Transform": {
 							"Position": {
@@ -1505,10 +1507,10 @@
 							"Children": [],
 							"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 						},
-						"ID": "A34",
 						"PackType": "TWoowzEngine|WEO.Entity"
 					},
 					{
+						"ID": "A35",
 						"Name": "TPear",
 						"Transform": {
 							"Position": {
@@ -1551,10 +1553,10 @@
 							"Children": [],
 							"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 						},
-						"ID": "A35",
 						"PackType": "TWoowzEngine|WEO.Entity"
 					},
 					{
+						"ID": "A36",
 						"Name": "TPlatonic",
 						"Transform": {
 							"Position": {
@@ -1597,10 +1599,10 @@
 							"Children": [],
 							"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 						},
-						"ID": "A36",
 						"PackType": "TWoowzEngine|WEO.Entity"
 					},
 					{
+						"ID": "A37",
 						"Name": "TSkySphere",
 						"Transform": {
 							"Position": {
@@ -1643,10 +1645,10 @@
 							"Children": [],
 							"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 						},
-						"ID": "A37",
 						"PackType": "TWoowzEngine|WEO.Entity"
 					},
 					{
+						"ID": "A38",
 						"Name": "TSphere",
 						"Transform": {
 							"Position": {
@@ -1689,10 +1691,10 @@
 							"Children": [],
 							"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 						},
-						"ID": "A38",
 						"PackType": "TWoowzEngine|WEO.Entity"
 					},
 					{
+						"ID": "A39",
 						"Name": "TSphereFlat",
 						"Transform": {
 							"Position": {
@@ -1735,10 +1737,10 @@
 							"Children": [],
 							"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 						},
-						"ID": "A39",
 						"PackType": "TWoowzEngine|WEO.Entity"
 					},
 					{
+						"ID": "A40",
 						"Name": "TSphereWireframe",
 						"Transform": {
 							"Position": {
@@ -1781,10 +1783,10 @@
 							"Children": [],
 							"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 						},
-						"ID": "A40",
 						"PackType": "TWoowzEngine|WEO.Entity"
 					},
 					{
+						"ID": "A41",
 						"Name": "TTeapot",
 						"Transform": {
 							"Position": {
@@ -1827,10 +1829,10 @@
 							"Children": [],
 							"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 						},
-						"ID": "A41",
 						"PackType": "TWoowzEngine|WEO.Entity"
 					},
 					{
+						"ID": "A42",
 						"Name": "TCoral BIG",
 						"Transform": {
 							"Position": {
@@ -1873,16 +1875,15 @@
 							"Children": [],
 							"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 						},
-						"ID": "A42",
 						"PackType": "TWoowzEngine|WEO.Entity"
 					}
 				],
 				"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 			},
-			"ID": "A29",
 			"PackType": "TWoowzEngine|WEO.Entity"
 		},
 		{
+			"ID": "A43",
 			"Name": "TLIGHT",
 			"Transform": {
 				"Position": {
@@ -1935,10 +1936,10 @@
 				"Children": [],
 				"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 			},
-			"ID": "A43",
 			"PackType": "TWoowzEngine|WEO.Entity"
 		},
 		{
+			"ID": "A44",
 			"Name": "TLIGHT",
 			"Transform": {
 				"Position": {
@@ -1991,10 +1992,10 @@
 				"Children": [],
 				"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 			},
-			"ID": "A44",
 			"PackType": "TWoowzEngine|WEO.Entity"
 		},
 		{
+			"ID": "A45",
 			"Name": "TLIGHT",
 			"Transform": {
 				"Position": {
@@ -2047,10 +2048,10 @@
 				"Children": [],
 				"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 			},
-			"ID": "A45",
 			"PackType": "TWoowzEngine|WEO.Entity"
 		},
 		{
+			"ID": "A46",
 			"Name": "TLIGHT",
 			"Transform": {
 				"Position": {
@@ -2103,10 +2104,10 @@
 				"Children": [],
 				"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 			},
-			"ID": "A46",
 			"PackType": "TWoowzEngine|WEO.Entity"
 		},
 		{
+			"ID": "A47",
 			"Name": "TEnvironment",
 			"Transform": {
 				"Position": {
@@ -2137,10 +2138,10 @@
 				"Children": [],
 				"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 			},
-			"ID": "A47",
 			"PackType": "TWoowzEngine|WEO.Entity"
 		},
 		{
+			"ID": "A48",
 			"Name": "TLIGHT DIR",
 			"Transform": {
 				"Position": {
@@ -2193,10 +2194,10 @@
 				"Children": [],
 				"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 			},
-			"ID": "A48",
 			"PackType": "TWoowzEngine|WEO.Entity"
 		},
 		{
+			"ID": "A49",
 			"Name": "TPHYS_WORLD",
 			"Transform": {
 				"Position": {
@@ -2217,14 +2218,15 @@
 			"Hierarchy": {
 				"Children": [
 					{
+						"ID": "A54",
 						"Name": "TPLATFORM",
 						"Transform": {
 							"Position": {
-								"XYZ": "T-11,965945|-72,27061|-1,1773912",
+								"XYZ": "T-11,971685|-72,270935|-1,1813948",
 								"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
 							},
 							"Rotation": {
-								"XYZ": "T-3,14079|-1,3855839|-1,570227",
+								"XYZ": "T3,1399593|-1,3855793|-1,5724633",
 								"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
 							},
 							"Scale": {
@@ -2273,18 +2275,18 @@
 							"Children": [],
 							"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 						},
-						"ID": "A54",
 						"PackType": "TWoowzEngine|WEO.Entity"
 					},
 					{
+						"ID": "A50",
 						"Name": "TPLATFORM",
 						"Transform": {
 							"Position": {
-								"XYZ": "T0,7812526|-89,12057|-1,5151551",
+								"XYZ": "T0,7851644|-89,12059|-1,4987295",
 								"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
 							},
 							"Rotation": {
-								"XYZ": "T-0,0061323713|0,23389171|3,1340752",
+								"XYZ": "T0,005812383|0,28808126|3,1314223",
 								"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
 							},
 							"Scale": {
@@ -2333,10 +2335,10 @@
 							"Children": [],
 							"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 						},
-						"ID": "A50",
 						"PackType": "TWoowzEngine|WEO.Entity"
 					},
 					{
+						"ID": "A53",
 						"Name": "TPLATFORM",
 						"Transform": {
 							"Position": {
@@ -2393,18 +2395,18 @@
 							"Children": [],
 							"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 						},
-						"ID": "A53",
 						"PackType": "TWoowzEngine|WEO.Entity"
 					},
 					{
+						"ID": "A55",
 						"Name": "TPLATFORM",
 						"Transform": {
 							"Position": {
-								"XYZ": "T-6,814777|-90,62126|0,67124283",
+								"XYZ": "T-6,8150077|-90,62126|0,67114794",
 								"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
 							},
 							"Rotation": {
-								"XYZ": "T3,1415925|-1,1620413|3,1415925",
+								"XYZ": "T3,1415925|-1,1620498|3,1415925",
 								"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
 							},
 							"Scale": {
@@ -2453,18 +2455,18 @@
 							"Children": [],
 							"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 						},
-						"ID": "A55",
 						"PackType": "TWoowzEngine|WEO.Entity"
 					},
 					{
+						"ID": "A56",
 						"Name": "TPLATFORM",
 						"Transform": {
 							"Position": {
-								"XYZ": "T-4,7156863|-90,17124|1,2987214",
+								"XYZ": "T-4,721224|-90,17124|1,2949896",
 								"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
 							},
 							"Rotation": {
-								"XYZ": "T1,7103096E-07|-0,5130429|1,5707959",
+								"XYZ": "T1,53928E-07|-0,5130441|1,570796",
 								"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
 							},
 							"Scale": {
@@ -2513,18 +2515,18 @@
 							"Children": [],
 							"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 						},
-						"ID": "A56",
 						"PackType": "TWoowzEngine|WEO.Entity"
 					},
 					{
+						"ID": "A57",
 						"Name": "TPLATFORM",
 						"Transform": {
 							"Position": {
-								"XYZ": "T1,4222945|-86,82124|6,1580973",
+								"XYZ": "T1,4244165|-86,821236|6,159417",
 								"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
 							},
 							"Rotation": {
-								"XYZ": "T1,2602506E-08|-0,10064371|-2,6793145E-08",
+								"XYZ": "T-2,3084189E-08|-0,10064376|5,8761906E-08",
 								"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
 							},
 							"Scale": {
@@ -2573,16 +2575,15 @@
 							"Children": [],
 							"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 						},
-						"ID": "A57",
 						"PackType": "TWoowzEngine|WEO.Entity"
 					}
 				],
 				"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 			},
-			"ID": "A49",
 			"PackType": "TWoowzEngine|WEO.Entity"
 		},
 		{
+			"ID": "A58",
 			"Name": "TLIGHT DIR",
 			"Transform": {
 				"Position": {
@@ -2635,10 +2636,10 @@
 				"Children": [],
 				"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 			},
-			"ID": "A58",
 			"PackType": "TWoowzEngine|WEO.Entity"
 		},
 		{
+			"ID": "A59",
 			"Name": "TLIGHT DIR",
 			"Transform": {
 				"Position": {
@@ -2691,7 +2692,54 @@
 				"Children": [],
 				"PackType": "TWoowzLib.Core|WLO.HierarchyNode(WoowzEngine|WEO.Entity)"
 			},
-			"ID": "A59",
+			"PackType": "TWoowzEngine|WEO.Entity"
+		},
+		{
+			"ID": "A105",
+			"Name": "TSphereFlat",
+			"Transform": {
+				"Position": {
+					"XYZ": "T66,1|6,6|9,8",
+					"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
+				},
+				"Rotation": {
+					"XYZ": "T0|0|0",
+					"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
+				},
+				"Scale": {
+					"XYZ": "T1|1|1",
+					"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
+				},
+				"PackType": "TWoowzEngine|WEO.Transform"
+			},
+			"SourcePrefab": {
+				"Key": "TPrefab/Sphere",
+				"PackType": "TWoowzEngine|WEO.Asset(WoowzEngine|WEO.Prefab)"
+			},
+			"PackType": "TWoowzEngine|WEO.Entity"
+		},
+		{
+			"ID": "A106",
+			"Name": "TSphereFlat",
+			"Transform": {
+				"Position": {
+					"XYZ": "T66,7|7,3|9,8",
+					"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
+				},
+				"Rotation": {
+					"XYZ": "T0|0|0",
+					"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
+				},
+				"Scale": {
+					"XYZ": "T1|1|1",
+					"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
+				},
+				"PackType": "TWoowzEngine|WEO.Transform"
+			},
+			"SourcePrefab": {
+				"Key": "TPrefab/Sphere",
+				"PackType": "TWoowzEngine|WEO.Asset(WoowzEngine|WEO.Prefab)"
+			},
 			"PackType": "TWoowzEngine|WEO.Entity"
 		}
 	],
@@ -2701,18 +2749,18 @@
 			"PackType": "TWoowzLib.Core|WLO.Math.Color4B"
 		},
 		"CameraPosition": {
-			"XYZ": "T69,20626|3,8017747|2,318274",
+			"XYZ": "T64,11483|9,062308|13,963935",
 			"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
 		},
 		"CameraRotation": {
-			"XYZ": "T0,5533523|24,591091|0",
+			"XYZ": "T0,39089882|25,605684|0",
 			"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
 		},
 		"CameraPerspective": "Z1",
 		"CameraSpeed": "F1",
 		"CameraFar": "F1000",
 		"CreationTime": "L639235303249196046",
-		"LastSaveTime": "L639242245850201164",
+		"LastSaveTime": "L639242344402436190",
 		"PackType": "TWoowzEngine|WEO.Scene.EditorInfo"
 	},
 	"PackType": "TWoowzEngine|WEO.Scene"

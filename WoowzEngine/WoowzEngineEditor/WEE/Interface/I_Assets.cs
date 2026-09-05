@@ -18,6 +18,14 @@ public static class I_Assets{
         GLImGUI GUI = WEE.Interface.ImGUI;
         
         GUI.Window("Ресурсы###Assets", ref WEE.Interface.WindowAssetsActive, () => {
+            GUI.Group(() => {
+                if(ImGui.Button("Обновить ресурсы")){
+                    WEE.Registry.ReloadAssets(false);
+                }
+            });
+            
+            ImGui.Separator();
+            
             List<Type> AssetTypes = WE.Asset.ExplicitTypes.OrderBy(T => T.Name).ToList();
 
             if(AssetTypes.Count == 0){
@@ -108,7 +116,7 @@ public static class I_Assets{
         GLView OldView = WEE.Render.API.Pool.GetView();
         WEE.Render.API.Pool.SetView(__SharedPreviewView);
 
-        __SharedPreviewView!.SetTexture(Texture);
+        __SharedPreviewView.SetTexture(Texture);
 
         GLMesh?    TargetMesh    = null;
         GLProgram? TargetProgram = null;
@@ -122,17 +130,16 @@ public static class I_Assets{
                 break;
         }
         
-        WEE.Render.API.Render(() => {
-            WEE.Registry.RunFirstDelegate<WEE_OnRenderPreview, Action<OpenGL, GLMesh?, GLProgram?, DeltaTimeInfo, object, int, string>>(true,
-                WEE.Render.API,
-                TargetMesh,
-                TargetProgram,
-                WEE.Cycle.Render_DTI,
-                Asset,
-                ID,
-                Key
-            );
-        });
+        WEE.Registry.RunFirstDelegate<WEE_OnRenderPreview, Action<OpenGL, GLMesh?, GLProgram?, DeltaTimeInfo, object, int, string, GLView>>(true,
+            WEE.Render.API,
+            TargetMesh,
+            TargetProgram,
+            WEE.Cycle.Render_DTI,
+            Asset,
+            ID,
+            Key,
+            __SharedPreviewView
+        );
         
         WEE.Render.API.Pool.SetView(OldView);
     }

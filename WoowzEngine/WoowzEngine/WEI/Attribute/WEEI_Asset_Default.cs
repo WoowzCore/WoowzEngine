@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 using ImGuiNET;
+using WEI;
 
 namespace WEI_Attribute;
 
@@ -13,6 +14,8 @@ public class WEEI_Asset_Default : WEEI_InspectorProperty{
 
         if(Value == null){ return; }
 
+        bool IsLocked = Target is Component Component && Component.Owner.IsPartOfPrefab;
+        
         string CurrentKey = (string)(MemberType.GetField("Key")!.GetValue(Value) ?? "");
         
         ImGui.BeginGroup();
@@ -29,7 +32,7 @@ public class WEEI_Asset_Default : WEEI_InspectorProperty{
                 Setter(MemberType.GetConstructor([typeof(string)])!.Invoke([TempKey]));
             }
 
-            if(!string.IsNullOrEmpty(CurrentKey) && ImGui.BeginDragDropSource()){
+            if(!IsLocked && !string.IsNullOrEmpty(CurrentKey) && ImGui.BeginDragDropSource()){
                 IntPtr Ptr = Marshal.StringToHGlobalAnsi(CurrentKey);
                 ImGui.SetDragDropPayload("ASSET_KEY", Ptr, (uint)CurrentKey.Length + 1);
                 Marshal.FreeHGlobal(Ptr);
@@ -37,7 +40,7 @@ public class WEEI_Asset_Default : WEEI_InspectorProperty{
                 ImGui.EndDragDropSource();
             }
 
-            if(ImGui.BeginDragDropTarget()){
+            if(!IsLocked && ImGui.BeginDragDropTarget()){
                 unsafe{
                     ImGuiPayloadPtr Payload = ImGui.AcceptDragDropPayload("ASSET_KEY");
                     if (Payload.NativePtr != null) {

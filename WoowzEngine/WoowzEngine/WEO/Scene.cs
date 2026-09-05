@@ -166,9 +166,9 @@ public class Scene : WLI.Packable{
         }
     }
 
-    public string SaveToJSON() => WL.String.ToJSON(WL.Packer.Pack(this));
+    public string ToJSON() => WL.String.ToJSON(WL.Packer.Pack(this));
 
-    public static Scene LoadFromJSON(string JSON){
+    public static Scene FromJSON(string JSON){
         Dictionary<string, object?>? Data = WL.String.FromJSON(JSON) as Dictionary<string, object?>;
         
         Scene Result = new Scene();
@@ -185,6 +185,8 @@ public class Scene : WLI.Packable{
         if(!DoUpdate){ return; }
         
         foreach(Component C in GetComponents<Component>()){
+            if(C.Owner.IsPartOfPrefab){ continue; }
+
             C.OnUpdate(DTI);
         }
     }
