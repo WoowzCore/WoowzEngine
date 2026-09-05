@@ -14,7 +14,7 @@ public class WEEI_Asset_Default : WEEI_InspectorProperty{
 
         if(Value == null){ return; }
 
-        bool IsLocked = Target is Component Component && Component.Owner.IsPartOfPrefab;
+        bool IsLocked = Target is Component Component && Component.Owner != null && Component.Owner.IsPartOfPrefab;
         
         string CurrentKey = (string)(MemberType.GetField("Key")!.GetValue(Value) ?? "");
         

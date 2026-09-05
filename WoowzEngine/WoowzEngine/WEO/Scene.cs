@@ -122,26 +122,45 @@ public class Scene : WLI.Packable{
     }
 
     internal void RegisterComponent(Component Component){
-        Type? Type = Component.GetType();
-        while(Type != null && Type != typeof(object)){
+        Type ConcreteType = Component.GetType();
+
+        void AddToTypePool(Type Type, Component Component){
             if(!__Components.TryGetValue(Type, out HashSet<Component>? Pool)){
                 Pool = new HashSet<Component>();
                 __Components[Type] = Pool;
             }
-
-            Pool!.Add(Component);
+            Pool.Add(Component);
+        }
+        
+        Type? Type = Component.GetType();
+        while(Type != null && Type != typeof(object)){
+            AddToTypePool(Type, Component);
             Type = Type.BaseType;
+        }
+
+        foreach(Type Interface in ConcreteType.GetInterfaces()){
+            AddToTypePool(Interface, Component);
         }
     }
 
     internal void UnregisterComponent(Component Component){
-        Type? Type = Component.GetType();
-        while(Type != null && Type != typeof(object)){
+        Type ConcreteType = Component.GetType();
+        
+        void RemoveFromTypePool(Type Type, Component Component){
             if(__Components.TryGetValue(Type, out HashSet<Component>? Pool)){
                 Pool.Remove(Component);
                 if(Pool.Count == 0){ __Components.Remove(Type); }
             }
+        }
+        
+        Type? Type = Component.GetType();
+        while(Type != null && Type != typeof(object)){
+            RemoveFromTypePool(Type, Component);
             Type = Type.BaseType;
+        }
+
+        foreach(Type Interface in ConcreteType.GetInterfaces()){
+            RemoveFromTypePool(Interface, Component);
         }
     }
     
@@ -205,9 +224,11 @@ public class Scene : WLI.Packable{
         foreach(RenderComponent C in GetComponents<RenderComponent>()){
             C.OnRender(DTI, CameraPosition);
         }
-        
-        foreach(EngineComponent C in GetComponents<EngineComponent>()){
-            C.OnEngineRender(DTI, CameraPosition, false /* todo */);
+
+        if(WE.Editor.IsEditor){
+            foreach(EngineComponent C in GetComponents<EngineComponent>()){
+                C.OnEngineRender(DTI, CameraPosition, false /* todo */);
+            }
         }
     }
     
