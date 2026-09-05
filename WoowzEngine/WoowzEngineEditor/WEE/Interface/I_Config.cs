@@ -3,15 +3,18 @@ using System.Reflection;
 using ImGuiNET;
 using NativeFileDialogSharp;
 using WEO;
+using WLO.Interface;
 
 namespace WEE_Interface;
 
 public static class I_Config{
     public static void Update(){
         if(!WEE.Interface.WindowConfigActive || WEE.Interface.Config == null){ return; }
+
+        ImGUI GUI = WEE.Interface.ImGUI;
         
         ImGui.SetNextWindowSize(new Vector2(450, 250), ImGuiCond.FirstUseEver);
-        if(ImGui.Begin("Конфиг###Config", ref WEE.Interface.WindowConfigActive)){
+        GUI.Window("Конфиг###Config", ref WEE.Interface.WindowConfigActive, () => {
             ImGui.TextDisabled($"Путь к конфигу: {WEE.Interface.ConfigPath}");
             
             ImGui.Spacing();
@@ -67,6 +70,6 @@ public static class I_Config{
                 WEE.Interface.Config.Save(WEE.Interface.ConfigPath);
                 WL.Logger.Info("Конфиг сохранён!");
             }
-        } ImGui.End();
+        });
     }
 }

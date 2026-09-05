@@ -7,6 +7,9 @@ namespace WEE_Interface;
 
 public static class I_Hierarchy{
     private static Entity? __DraggedEntity;
+
+    private static Entity? __LastSelectedEntity;
+    private static bool    __NeedToScroll;
     
     public static void Update(){
         if(!WEE.Interface.WindowHierarchyActive){ return; }
@@ -16,11 +19,16 @@ public static class I_Hierarchy{
                 if(WEE.Interface.CurrentScene == null){
                     ImGui.Text("Нет активной сцены");
                 }else{
+                    if(WEE.Interface.CurrentEntity != __LastSelectedEntity){
+                        __LastSelectedEntity = WEE.Interface.CurrentEntity;
+                        if(__LastSelectedEntity != null){ __NeedToScroll = true; }
+                    }
+                    
                     List<Entity> AllEntities = WEE.Interface.CurrentScene.AllEntity.ToList();
                     ImGui.TextDisabled($"Всего: {AllEntities.Count}, Корней: {WEE.Interface.CurrentScene.Roots.Count()}");
 
                     try{
-                        if(ImGui.BeginChild("HierarchyList", new Vector2(0, -ImGui.GetFrameHeightWithSpacing()), ImGuiChildFlags.None, ImGuiWindowFlags.None)){
+                        if(ImGui.BeginChild("HierarchyList", Vector2.Zero, ImGuiChildFlags.None, ImGuiWindowFlags.None)){
                             foreach(Entity Entity in WEE.Interface.CurrentScene.Roots.ToList()){
                                 if(Entity.Node.Parent == null){
                                     DrawEntityNode(Entity);
@@ -28,13 +36,13 @@ public static class I_Hierarchy{
                             }
 
                             Vector2 RemainingSpace = ImGui.GetContentRegionAvail();
-                            ImGui.InvisibleButton("##EmptySpace", new Vector2(ImGui.GetWindowWidth(), Math.Max(RemainingSpace.Y, 50)));
-
+                            RemainingSpace.Y = Math.Max(RemainingSpace.Y, 25);
+                            ImGui.Dummy(RemainingSpace);
                             if(ImGui.IsItemClicked(ImGuiMouseButton.Left)){
                                 WEE.Interface.CurrentEntity = null;
                             }
 
-                            if(ImGui.BeginPopupContextWindow("HierarchyContext")){
+                            if(ImGui.BeginPopupContextWindow("HierarchyContext", ImGuiPopupFlags.MouseButtonRight | ImGuiPopupFlags.NoOpenOverItems)){
                                 if(ImGui.MenuItem("Создать Entity")){
                                     Entity NewEntity = new Entity();
                                     WEE.Interface.CurrentScene.Add(NewEntity);
@@ -75,6 +83,11 @@ public static class I_Hierarchy{
             ImGui.SetNextItemOpen(true);
         }
 
+        if(IsSelected && __NeedToScroll){
+            ImGui.SetScrollHereY(0.5f);
+            __NeedToScroll = false;
+        }
+
         ImGuiTreeNodeFlags Flags = IsSelected || IsParentOfSelected ? ImGuiTreeNodeFlags.Selected : 0;
         Flags |= ImGuiTreeNodeFlags.OpenOnArrow | ImGuiTreeNodeFlags.SpanAvailWidth | ImGuiTreeNodeFlags.AllowOverlap;
 
@@ -83,12 +96,12 @@ public static class I_Hierarchy{
         
         int PushedColors = 0;
         if(IsSelected){
-            ImGui.PushStyleColor(ImGuiCol.Header, new Vector4(0.26f, 0.59f, 0.98f, 0.67f)); 
-            ImGui.PushStyleColor(ImGuiCol.HeaderHovered, new Vector4(0.26f, 0.59f, 0.98f, 0.8f));
+            ImGui.PushStyleColor(ImGuiCol.Header, new Vector4(1.0f, 0.8f, 0.0f, 0.6f)); 
+            ImGui.PushStyleColor(ImGuiCol.HeaderHovered, new Vector4(1.0f, 0.85f, 0.2f, 0.75f));
             PushedColors = 2;
         }else if(IsParentOfSelected){
-            ImGui.PushStyleColor(ImGuiCol.Header, new Vector4(0.4f, 0.4f, 0.4f, 0.3f));
-            ImGui.PushStyleColor(ImGuiCol.HeaderHovered, new Vector4(0.5f, 0.5f, 0.5f, 0.4f));
+            ImGui.PushStyleColor(ImGuiCol.Header, new Vector4(0.5f, 0.45f, 0.0f, 0.3f));
+            ImGui.PushStyleColor(ImGuiCol.HeaderHovered, new Vector4(0.6f, 0.55f, 0.1f, 0.4f));
             PushedColors = 2;
         }
 
@@ -174,17 +187,23 @@ public static class I_Hierarchy{
 
             if(ImGui.MenuItem("Дублировать")){
                 Entity Dupe = Entity.Duplicate();
+                
                 if(Entity.Node.Parent != null){
                     Dupe.Node.SetParent(Entity.Node.Parent);
+                    int Index = Entity.Node.Parent.Children.IndexOf(Entity.Node);
+                    Entity.Node.Parent.MoveChild(Dupe.Node, Index + 1);
                 }else{
-                    WEE.Interface.CurrentScene?.Add(Dupe);
+                    WEE.Interface.CurrentScene!.Add(Dupe);
+                    int Index = WEE.Interface.CurrentScene!.Roots.ToList().IndexOf(Entity);
+                    WEE.Interface.CurrentScene!.MoveRoot(Dupe, Index + 1);
                 }
+                
                 WEE.Interface.CurrentEntity = Dupe;
             }
             
             ImGui.Separator();
             
-            if(ImGui.MenuItem("Удалить")){ Entity.Destroy(); }
+            if(ImGui.MenuItem("Удалить")){ Entity.Destroy(); WEE.Interface.CurrentEntity = null; }
             
             ImGui.EndPopup();
         }

@@ -3,6 +3,7 @@ using ImGuiNET;
 using Silk.NET.OpenGL;
 using WEI_Attribute;
 using WEO;
+using WLO.Interface;
 using WLO.Math;
 using WLO.Render;
 
@@ -51,6 +52,8 @@ public static class I_View{
     public static void Update(){
         if(!WEE.Interface.WindowViewActive){ return; }
 
+        ImGUI GUI = WEE.Interface.ImGUI;
+        
         GLView? CameraLayout = null;
         List<PixelAttribute> SupportedPA = [];
         if(WEE.Registry.HasMethods<WEE_OnCameraPixelLayout>()){
@@ -62,13 +65,12 @@ public static class I_View{
                 }
             }
         }
-        
-        if(ImGui.Begin("Просмотр###View", ref WEE.Interface.WindowViewActive)){
 
+        GUI.Window("Просмотр###View", ref WEE.Interface.WindowViewActive, () => {
             FocusSceneView = ImGui.IsWindowFocused(ImGuiFocusedFlags.RootAndChildWindows);
             
-            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8, 0)); 
-            if(ImGui.BeginChild("SceneToolbar", new Vector2(0, 35), ImGuiChildFlags.Borders, ImGuiWindowFlags.NoScrollbar)){
+            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8, 0));
+            GUI.Child("SceneToolbar", new Vector2(0, 35), ImGuiChildFlags.Borders, ImGuiWindowFlags.NoScrollbar, () => {
                 ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 5); 
                 ImGui.Indent(5);
 
@@ -152,30 +154,23 @@ public static class I_View{
                 if(ImGui.Button(SelectedAttachment != null ? SelectedAttachment.Value.Name : SelectedEffect!.Value.Name)){
                     ImGui.OpenPopup("GBufferMenu");
                 }
-                
-                if(ImGui.BeginPopup("GBufferMenu")){
-                    if(ImGui.BeginMenu("Канал")){
+
+                GUI.Popup("GBufferMenu", () => {
+                    GUI.Menu("Канал", () => {
                         void MenuItem(PixelAttribute PA){ if(ImGui.MenuItem(PA.Name, "", SelectedAttachment == PA)){ SelectedAttachment = PA; SelectedEffect = null; } }
                     
                         MenuItem(PA_Default);
                         foreach(PixelAttribute PA in SupportedPA){ MenuItem(PA); }
                         MenuItem(PA_Picking);
-                        
-                        ImGui.EndMenu();
-                    }
-                    
-                    if(ImGui.BeginMenu("Эффекты")){
+                    });
+
+                    GUI.Menu("Эффекты", () => {
                         foreach(KeyValuePair<string, string> Effect in AvailableEffects){
                             if(ImGui.MenuItem(Effect.Key, "", SelectedEffect?.Asset == Effect.Value)){ SelectedEffect = (Effect.Key, Effect.Value); SelectedAttachment = null; }
                         }
-                        
-                        ImGui.EndMenu();
-                    }
-                    
-                    ImGui.EndPopup();
-                }
-                
-            } ImGui.EndChild();
+                    });
+                });
+            });
             ImGui.PopStyleVar();
 
             Vector2 __SceneViewport = ImGui.GetContentRegionAvail();
@@ -237,7 +232,7 @@ public static class I_View{
                 ));
                 ImGui.TextColored(new Vector4(1, 0.4f, 0, 1), WarningText);
             }
-        } ImGui.End();
+        });
     }
     
     public static void ClickToView(){

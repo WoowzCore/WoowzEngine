@@ -3,6 +3,7 @@ using ImGuiNET;
 using NativeFileDialogSharp;
 using WEI_Attribute;
 using WEO;
+using WLO.Interface;
 using WLO.Math;
 
 namespace WEE_Interface;
@@ -12,8 +13,10 @@ public static class I_Menu{
     private const string __SceneFileExtension = "we_scene";
     
     public static void Update(){
-        if(ImGui.BeginMainMenuBar()){
-            if(ImGui.BeginMenu("Файл")){
+        ImGUI GUI = WEE.Interface.ImGUI;
+
+        GUI.MainMenuBar(() => {
+            GUI.Menu("Файл", () => {
                 if(ImGui.MenuItem("Новая сцена")){
                     CloseScene();
                     WEE.Interface.CurrentScene = new Scene();
@@ -48,17 +51,14 @@ public static class I_Menu{
                     }
                     if(ImGui.IsItemHovered()){ ImGui.SetTooltip(ScenePath); }
                 }
-                
-                ImGui.EndMenu();
-            }
+            });
 
-            if(ImGui.BeginMenu("Редактировать", false)){
-                if(ImGui.MenuItem("Отменить")){  }
-                if(ImGui.MenuItem("Вернуть")){  }
-                ImGui.EndMenu();
-            }
-            
-            if(ImGui.BeginMenu("Окно")){
+            GUI.Menu("Редактировать", false, () => {
+                if(ImGui.MenuItem("Отменить")){}
+                if(ImGui.MenuItem("Вернуть")){}
+            });
+
+            GUI.Menu("Окно", () => {
                 ImGui.MenuItem("Просмотр сцены", "", ref WEE.Interface.WindowViewActive);
                 ImGui.MenuItem("Просмотр", "", ref WEE.Interface.WindowInspectorActive);
                 ImGui.MenuItem("Иерархия", "", ref WEE.Interface.WindowHierarchyActive);
@@ -69,14 +69,11 @@ public static class I_Menu{
                 ImGui.Separator();
 
                 ImGui.MenuItem("ImGUI Demo", "", ref WEE.Interface.WindowImGUIDemoActive);
-                
-                ImGui.EndMenu();
-            }
-            
-            if(ImGui.BeginMenu("Помощь")){
+            });
+
+            GUI.Menu("Остальное", () => {
                 if(ImGui.MenuItem("Открыть GitHub...")){ Process.Start(new ProcessStartInfo("https://github.com/WoowzCore/WoowzEngine"){ UseShellExecute = true }); }
-                ImGui.EndMenu();
-            }
+            });
 
             if(WEE.Interface.CurrentScene != null){
                 ImGui.SameLine();
@@ -97,8 +94,7 @@ public static class I_Menu{
             ImGui.SameLine(ImGui.GetWindowWidth() - TextSize.X - 10);
             ImGui.TextDisabled(MenuText);
             if(ImGui.IsItemHovered()){ ImGui.SetTooltip("FPS стороны редактора"); }
-            ImGui.EndMainMenuBar();
-        }
+        });
     }
     
     private static void CloseScene(){

@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using ImGuiNET;
+using WLO.Interface;
 
 namespace WEE_Interface;
 
@@ -13,9 +14,11 @@ public static class I_Console{
     public static void Update(){
         if(!WEE.Interface.WindowConsoleActive){ return; }
 
-        string WindowTitle = (__UnreadCount > 0 ? $"Консоль [{__UnreadCount}]" : "Консоль") + "###Console";
+        ImGUI GUI = WEE.Interface.ImGUI;
         
-        if(ImGui.Begin(WindowTitle, ref WEE.Interface.WindowConsoleActive)){
+        string WindowTitle = (__UnreadCount > 0 ? $"Консоль [{__UnreadCount}]" : "Консоль") + "###Console";
+
+        bool Showen = GUI.Window(WindowTitle, ref WEE.Interface.WindowConsoleActive, () => {
             if(ImGui.IsWindowFocused(ImGuiFocusedFlags.RootAndChildWindows)){
                 __UnreadCount = 0;
                 __InFocused = true;
@@ -29,16 +32,17 @@ public static class I_Console{
             
             ImGui.Separator();
 
-            if(ImGui.BeginChild("ScrollingRegion", Vector2.Zero, ImGuiChildFlags.None, ImGuiWindowFlags.HorizontalScrollbar)){
+            GUI.Child("ScrollingRegion", Vector2.Zero, ImGuiChildFlags.None, ImGuiWindowFlags.HorizontalScrollbar, () => {
                 ImGui.TextUnformatted(__FullLogBuffer);
 
                 if(__ScrollToBottom){
                     ImGui.SetScrollHereY(1);
                     __ScrollToBottom = false;
                 }
-            }
-            ImGui.EndChild();
-        }else{ __InFocused = false; } ImGui.End();
+            });
+        });
+
+        if(!Showen){ __InFocused = false; }
     }
 
     public static void Start(){

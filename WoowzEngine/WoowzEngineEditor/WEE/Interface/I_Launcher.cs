@@ -2,6 +2,7 @@
 using ImGuiNET;
 using NativeFileDialogSharp;
 using WEEO;
+using WLO.Interface;
 
 namespace WEE_Interface;
 
@@ -12,7 +13,9 @@ public static class I_Launcher{
     public static void Update(){
         ImGui.SetNextWindowPos(ImGui.GetMainViewport().GetCenter(), ImGuiCond.Always, new Vector2(0.5f, 0.5f));
 
-        if(ImGui.Begin("Загрузчик", ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoCollapse)){
+        ImGUI GUI = WEE.Interface.ImGUI;
+
+        GUI.Window("Загрузчик", ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoCollapse, () => {
             if(!string.IsNullOrEmpty(WEE.Prefs.LastConfigPath) && File.Exists(WEE.Prefs.LastConfigPath)){
                 ImGui.TextColored(new Vector4(0.4f, 1, 0.4f, 1), "Последний проект:");
                 if(ImGui.Button($"{Path.GetFileName(WEE.Prefs.LastConfigPath)}###RecentProject", new Vector2(-1, 40))){
@@ -41,9 +44,7 @@ public static class I_Launcher{
             if(ImGui.Button("Выбрать файл конфига", new Vector2(-1, 30))){
                 OpenExistingProject();
             }
-            
-            ImGui.End();
-        }
+        });
     }
     
     private static void CreateNewProject(){

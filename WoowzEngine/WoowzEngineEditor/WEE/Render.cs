@@ -120,12 +120,11 @@ public static class Render{
             
             API.Pool.GetView().Viewport = WEE.Window.MainWindow.Size;
             
-            API.FrameStart();
+            API.Render(() => {
                 API.Clear(new Color4B(50, 25, 25));
                 
                 WEE.Interface.Render();
-                
-            API.FrameStop();
+            });
         }catch(Exception e){
             throw new ExceptionWEE("Произошла ошибка в главном рендере!", e);
         }
