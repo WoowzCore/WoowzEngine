@@ -134,148 +134,23 @@ public static class I_Inspector{
     }
     
     private static void HandleMember(object Component, string Label, Type MemberType, Func<object?> Getter, Action<object?> Setter, MemberInfo Info){
-        ImGui.PushID(Label);
-            
-            object? Value = Getter();
-
-            if(Value == null && MemberType == typeof(string)){ Value = ""; }
-
-            if(MemberType.IsGenericType && MemberType.GetGenericTypeDefinition() == typeof(WEO.Asset<>)){
-                Type AssetTargetType = MemberType.GetGenericArguments()[0];
-
-                string CurrentKey = (string)(MemberType.GetField("Key")!.GetValue(Value) ?? "");
-                bool   UseCache   = (bool)MemberType.GetField("UseCache")!.GetValue(Value)!;
-                
-                ImGui.BeginGroup();
-
-                    float AvailableWidth = ImGui.GetContentRegionAvail().X;
-                    float LabelWidth = ImGui.CalcTextSize(Label).X + 20;
-                    const float ButtonWidth = 35;
-                    
-                    ImGui.SetNextItemWidth(AvailableWidth - LabelWidth - ButtonWidth - ImGui.GetStyle().ItemSpacing.X * 2);
-
-                    string TempKey = CurrentKey;
-                    if(ImGui.InputText($"##in_{Label}", ref TempKey, 256)){
-                        ConstructorInfo? Constructor = MemberType.GetConstructor([typeof(string)]);
-                        Setter(Constructor!.Invoke([TempKey]));
-                    }
-
-                    if(!string.IsNullOrEmpty(CurrentKey) && ImGui.BeginDragDropSource()){
-                        IntPtr Ptr = Marshal.StringToHGlobalAnsi(CurrentKey);
-                        ImGui.SetDragDropPayload("ASSET_KEY", Ptr, (uint)CurrentKey.Length + 1);
-                        Marshal.FreeHGlobal(Ptr);
-
-                        ImGui.Text($"Передать ассет: {CurrentKey}");
-                        ImGui.EndDragDropSource();
-                    }
-
-                    if(ImGui.BeginDragDropTarget()){
-                        unsafe{
-                            ImGuiPayloadPtr Payload = ImGui.AcceptDragDropPayload("ASSET_KEY");
-                            if(Payload.NativePtr != null){
-                                string DroppedKey = Marshal.PtrToStringAnsi(Payload.Data)!;
-
-                                bool IsValidType = WE.Asset.GetKeysForType(AssetTargetType).Contains(DroppedKey);
-
-                                if(IsValidType){
-                                    if(ImGui.IsMouseReleased(ImGuiMouseButton.Left)){
-                                        ConstructorInfo? Constructor = MemberType.GetConstructor([typeof(string)]);
-                                        Setter(Constructor!.Invoke([DroppedKey]));
-                                    }
-                                    
-                                    ImGui.GetWindowDrawList().AddRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), ImGui.GetColorU32(new Vector4(0.2f, 1, 0.2f, 1)), 4.0f);
-                                }else{
-                                    ImGui.SetTooltip($"Недопустимый тип! Ожидается: {AssetTargetType.Name}");
-                                    ImGui.GetWindowDrawList().AddRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), ImGui.GetColorU32(new Vector4(1, 0.2f, 0.2f, 1)), 4);
-                                }
-                            }
-                        }
-                        ImGui.EndDragDropTarget();
-                    }
-                    
-                    ImGui.SameLine();
-                    if(ImGui.Button("...", new Vector2(ButtonWidth, 0))){
-                        ImGui.OpenPopup("AssetPicker");
-                    }
-                    
-                    ImGui.SameLine();
-                    ImGui.Text(Label);
-                    
-                ImGui.EndGroup();
-
-                if(ImGui.IsItemHovered()){ ImGui.SetTooltip($"Тип: {AssetTargetType.Name}"); }
-
-                if(ImGui.BeginPopup("AssetPicker")){
-                    foreach(string Key in WE.Asset.GetKeysForType(AssetTargetType).OrderBy(K => K)){
-                        if(ImGui.Selectable(Key, Key == CurrentKey)){
-                            ConstructorInfo? Constructor = MemberType.GetConstructor([typeof(string)]);
-                            Setter(Constructor!.Invoke([Key]));
-                        }
-                    }
-                    ImGui.EndPopup();
-                }
-            }else if(MemberType == typeof(float)){
-                float V = (float)Value!;
-                if(ImGui.DragFloat(Label, ref V, 0.1f)){ Setter(V); }
-            }else if(MemberType == typeof(int)){
-                int V = (int)Value!;
-                if(ImGui.DragInt(Label, ref V)){ Setter(V); }
-            }else if(MemberType == typeof(bool)){
-                bool V = (bool)Value!;
-                if(ImGui.Checkbox(Label, ref V)){ Setter(V); }
-            }else if(MemberType == typeof(string)){
-                string V = (string)Value!;
-
-                WEEI_MultilineString? MultilineAttribute = Info.GetCustomAttribute<WEEI_MultilineString>();
-
-                if(MultilineAttribute != null){
-                    ImGui.Text(Label);
-                    if(ImGui.InputTextMultiline($"##{Label}", ref V, 5000, new Vector2(-1, MultilineAttribute.Height))){
-                        Setter(V);
-                    }
-                }else{
-                    if(ImGui.InputText(Label, ref V, 200)){
-                        Setter(V);
-                    }
-                }
-            }else if(MemberType == typeof(Vector3F)){
-                Vector3F V = (Vector3F)Value!;
-                Vector3 SysV = new Vector3(V.X, V.Y, V.Z);
-                if(ImGui.DragFloat3(Label, ref SysV, 0.1f, 0, 0, "%g")){
-                    Setter(new Vector3F(SysV.X, SysV.Y, SysV.Z));
-                }
-            }else if(MemberType == typeof(Vector2F)){
-                Vector2F V = (Vector2F)Value!;
-                Vector2 SysV = new Vector2(V.X, V.Y);
-                if(ImGui.DragFloat2(Label, ref SysV, 0.1f, 0, 0, "%g")){
-                    Setter(new Vector2F(SysV.X, SysV.Y));
-                }
-            }else if(MemberType == typeof(Color4B)){
-                Color4B V = (Color4B)Value!;
-                Vector4 SysV = new Vector4(V.R / 255f, V.G / 255f, V.B / 255f, V.A / 255f);
-                if(ImGui.ColorEdit4(Label, ref SysV)){
-                    Setter(new Color4B((byte)(SysV.X * 255), (byte)(SysV.Y * 255), (byte)(SysV.Z * 255), (byte)(SysV.W * 255)));
-                }
-            }else if(MemberType.IsEnum){
-                string[] Names = Enum.GetNames(MemberType);
-                string CurrentName = Value!.ToString()!;
-
-                if(ImGui.BeginCombo(Label, CurrentName)){
-                    foreach(string Name in Names){
-                        bool IsSelected = CurrentName == Name;
-                        if(ImGui.Selectable(Name, IsSelected)){
-                            Setter(Enum.Parse(MemberType, Name));
-                        }
-
-                        if(IsSelected){
-                            ImGui.SetItemDefaultFocus();
-                        }
-                    }
-                    
-                    ImGui.EndCombo();
-                }
+        ImGUI GUI = WEE.Interface.ImGUI;
+        
+        GUI.CustomID(Label, () => {
+            foreach(WEEI_InspectorDecorator Decorator in Info.GetCustomAttributes<WEEI_InspectorDecorator>()){
+                Decorator.Draw(Label, Component, Info);
             }
-            
-        ImGui.PopID();
+
+            WEEI_InspectorProperty? PropertyAttribute = Info.GetCustomAttribute<WEEI_InspectorProperty>();
+            if(PropertyAttribute == null){
+                PropertyAttribute = WE.Editor.GetDefault(MemberType);
+            }
+
+            if(PropertyAttribute != null){
+                PropertyAttribute.Draw(Label, Component, Info, Getter, Setter);
+            }else{
+                ImGui.TextDisabled($"{Label}: {MemberType.Name}");   
+            }
+        });
     }
 }

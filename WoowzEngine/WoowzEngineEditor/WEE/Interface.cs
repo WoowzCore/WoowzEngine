@@ -84,9 +84,9 @@ public static class Interface{
         Colors[(int)ImGuiCol.TextSelectedBg] = new Vector4(0.90f, 0.20f, 0.20f, 0.35f);
 
         Style.WindowRounding = 0;
-        Style.FrameRounding = 12;
+        Style.FrameRounding = 6;
         Style.PopupRounding = 0;
-        Style.GrabRounding = 12;
+        Style.GrabRounding = 6;
         Style.TabRounding = 0;
 
         Style.TabBorderSize = 1;

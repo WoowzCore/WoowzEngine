@@ -4,8 +4,8 @@ namespace WEO;
 
 public class UnknownComponent : WEI.Component{
     [WE_Save] public string OriginalType = "";
-    [WEEI_MultilineString(500)]
-    [WE_Save] public string RawJSONData = "";
+    [WEEI_String_Multiline(500)]
+    [WE_Save] public string RawJSONData  = "";
 
     public override Dictionary<string, object?> __Pack(){
         try{

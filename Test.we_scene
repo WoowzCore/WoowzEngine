@@ -555,6 +555,43 @@
 								},
 								"Active": "Z1",
 								"PackType": "TWoowzCore|WC.Component.CMeshRenderer"
+							},
+							{
+								"BOOL": "Z1",
+								"INT": "I1258",
+								"FLOAT": "F22.4",
+								"FLOAT_SPEED_1": "F5695",
+								"FLOAT_SPEED_0_001": "F6.897",
+								"FLOAT_RANGE": "F-5.583",
+								"VECTOR2F": {
+									"XY": "T0|0",
+									"PackType": "TWoowzLib.Core|WLO.Math.Vector2F"
+								},
+								"VECTOR3F": {
+									"XYZ": "T54,8|-8,9|-9,9",
+									"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
+								},
+								"STRING": "THi, welcome here!kkkkkkkk",
+								"STRING_MULTILINE": "THi, welcome here!\nHi, welcome here!\nHi, welcome here!pppppp\nHi, welcome here!",
+								"STRING_MULTILINE_HEIGHT_1000": "T1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1",
+								"COLOR4B": {
+									"RGBA": "T128|50|25|255",
+									"PackType": "TWoowzLib.Core|WLO.Math.Color4B"
+								},
+								"MESH": {
+									"Key": "TMesh/CubeHuman",
+									"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Mesh)"
+								},
+								"TEXTURE": {
+									"Key": "TTexture/Error",
+									"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Texture)"
+								},
+								"PROGRAM": {
+									"Key": "TShader/Debug/Prikol1",
+									"PackType": "TWoowzEngine|WEO.Asset(WoowzLib.Render|WLI.GPU.Program)"
+								},
+								"that_need_for_decor": "F0",
+								"PackType": "TWoowzCore|WC.Component.CInspectorExample"
 							}
 						],
 						"Hierarchy": {
@@ -2183,11 +2220,11 @@
 						"Name": "TPLATFORM",
 						"Transform": {
 							"Position": {
-								"XYZ": "T-11,972762|-72,27102|-1,18353",
+								"XYZ": "T-11,965945|-72,27061|-1,1773912",
 								"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
 							},
 							"Rotation": {
-								"XYZ": "T3,1400976|-1,3857408|-1,5722355",
+								"XYZ": "T-3,14079|-1,3855839|-1,570227",
 								"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
 							},
 							"Scale": {
@@ -2243,11 +2280,11 @@
 						"Name": "TPLATFORM",
 						"Transform": {
 							"Position": {
-								"XYZ": "T0,77998304|-89,12054|-1,5185827",
+								"XYZ": "T0,7812526|-89,12057|-1,5151551",
 								"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
 							},
 							"Rotation": {
-								"XYZ": "T-0,008166979|0,20218968|3,1349208",
+								"XYZ": "T-0,0061323713|0,23389171|3,1340752",
 								"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
 							},
 							"Scale": {
@@ -2363,11 +2400,11 @@
 						"Name": "TPLATFORM",
 						"Transform": {
 							"Position": {
-								"XYZ": "T-6,814548|-90,621254|0,6712553",
+								"XYZ": "T-6,814777|-90,62126|0,67124283",
 								"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
 							},
 							"Rotation": {
-								"XYZ": "T-3,1415925|-1,1620381|-3,1415925",
+								"XYZ": "T3,1415925|-1,1620413|3,1415925",
 								"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
 							},
 							"Scale": {
@@ -2423,11 +2460,11 @@
 						"Name": "TPLATFORM",
 						"Transform": {
 							"Position": {
-								"XYZ": "T-4,7104|-90,17124|1,3016244",
+								"XYZ": "T-4,7156863|-90,17124|1,2987214",
 								"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
 							},
 							"Rotation": {
-								"XYZ": "T3,4206202E-08|-0,5130432|1,5707955",
+								"XYZ": "T1,7103096E-07|-0,5130429|1,5707959",
 								"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
 							},
 							"Scale": {
@@ -2483,11 +2520,11 @@
 						"Name": "TPLATFORM",
 						"Transform": {
 							"Position": {
-								"XYZ": "T1,42083|-86,821236|6,1572785",
+								"XYZ": "T1,4222945|-86,82124|6,1580973",
 								"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
 							},
 							"Rotation": {
-								"XYZ": "T-2,2957959E-08|-0,10064371|5,8233653E-08",
+								"XYZ": "T1,2602506E-08|-0,10064371|-2,6793145E-08",
 								"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
 							},
 							"Scale": {
@@ -2664,18 +2701,18 @@
 			"PackType": "TWoowzLib.Core|WLO.Math.Color4B"
 		},
 		"CameraPosition": {
-			"XYZ": "T74,04813|4,1642327|2,3468256",
+			"XYZ": "T69,20626|3,8017747|2,318274",
 			"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
 		},
 		"CameraRotation": {
-			"XYZ": "T0,6195428|24,944809|0",
+			"XYZ": "T0,5533523|24,591091|0",
 			"PackType": "TWoowzLib.Core|WLO.Math.Vector3F"
 		},
 		"CameraPerspective": "Z1",
 		"CameraSpeed": "F1",
 		"CameraFar": "F1000",
 		"CreationTime": "L639235303249196046",
-		"LastSaveTime": "L639242162725036552",
+		"LastSaveTime": "L639242245850201164",
 		"PackType": "TWoowzEngine|WEO.Scene.EditorInfo"
 	},
 	"PackType": "TWoowzEngine|WEO.Scene"
