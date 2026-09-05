@@ -31,9 +31,7 @@ public class Camera{
     
     public Vector3F Up => Vector3F.Cross(Right, Forward).Normalized;
 
-    public Matrix4F GetViewMatrix() => Matrix4F.CreateRotationX(Rotation.X) *
-                                       Matrix4F.CreateRotationY(Rotation.Y) *
-                                       Matrix4F.CreateRotationZ(Rotation.Z) *
+    public Matrix4F GetViewMatrix() => Matrix4F.CreateRotation(Rotation) *
                                        Matrix4F.CreateTranslation(Position.Negative);
 
     public Matrix4F GetProjectionMatrix(){

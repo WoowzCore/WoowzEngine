@@ -3,6 +3,11 @@
 namespace WEO;
 
 public class Transform : WLI.Packable{
+    public event Action<Transform>? OnChanged;
+    public event Action<Transform, Vector3F>? OnChangedPosition;
+    public event Action<Transform, Vector3F>? OnChangedRotation;
+    public event Action<Transform, Vector3F>? OnChangedScale;
+    
     private Vector3F __Position = new Vector3F(0, 0, 0);
     private Vector3F __Rotation = new Vector3F(0, 0, 0);
     private Vector3F __Scale    = new Vector3F(1, 1, 1);
@@ -13,6 +18,9 @@ public class Transform : WLI.Packable{
             if(__Position == value){ return; }
             __Position = value;
             __IsDirty = true;
+            
+            OnChanged?.Invoke(this);
+            OnChangedPosition?.Invoke(this, value);
         }
     }
     public Vector3F Rotation{
@@ -21,6 +29,9 @@ public class Transform : WLI.Packable{
             if(__Rotation == value){ return; }
             __Rotation = value;
             __IsDirty = true;
+            
+            OnChanged?.Invoke(this);
+            OnChangedRotation?.Invoke(this, value);
         }
     }
     public Vector3F Scale{
@@ -29,6 +40,9 @@ public class Transform : WLI.Packable{
             if(__Scale == value){ return; }
             __Scale = value;
             __IsDirty = true;
+            
+            OnChanged?.Invoke(this);
+            OnChangedScale?.Invoke(this, value);
         }
     }
 
@@ -40,9 +54,7 @@ public class Transform : WLI.Packable{
     public bool __IsDirty = true;
     
     public Matrix4F GetLocalMatrix() => Matrix4F.CreateTranslation(Position) *
-                                        Matrix4F.CreateRotationX(Rotation.X) *
-                                        Matrix4F.CreateRotationY(Rotation.Y) *
-                                        Matrix4F.CreateRotationZ(Rotation.Z) *
+                                        Matrix4F.CreateRotation(Rotation) *
                                         Matrix4F.CreateScale(Scale);
 
     private Matrix4F __WorldMatrix = Matrix4F.Identity;
