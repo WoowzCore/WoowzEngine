@@ -18,13 +18,18 @@ public class Scene : WLI.Packable{
     private readonly HashSet    <Entity> __Registry = [];
     public           IEnumerable<Entity> AllEntity => __Registry;
 
-    public IEnumerable<Entity> Roots => __Registry.Where(E => E.Node.Parent == null);
+    private readonly List<Entity> __Roots = [];
+    public IEnumerable<Entity> Roots => __Roots;
     
     public bool Add(Entity Entity){
         if(!__Registry.Add(Entity)){ return false; }
 
         Entity.Scene = this;
 
+        if(Entity.Node.Parent == null && !__Roots.Contains(Entity)){
+            __Roots.Add(Entity);
+        }
+        
         foreach(Component Component in Entity.GetAllComponents()){ RegisterComponent(Component); }
         
         Entity.Node.OnChildAdded    += OnChildAddedToEntity;
@@ -43,9 +48,9 @@ public class Scene : WLI.Packable{
         foreach(Component Component in Entity.GetAllComponents()){ UnregisterComponent(Component); }
         
         Entity.Scene = null;
-        
         __Registry.Remove(Entity);
-
+        __Roots.Remove(Entity);
+        
         Entity.Node.OnChildAdded    -= OnChildAddedToEntity;
         Entity.Node.OnParentChanged -= OnEntityParentChanged;
         
@@ -61,6 +66,12 @@ public class Scene : WLI.Packable{
     }
     
     private void OnEntityParentChanged(HierarchyNode<Entity> Self, HierarchyNode<Entity>? OldParent, HierarchyNode<Entity>? NewParent){
+        if(NewParent == null){
+            if(!__Roots.Contains(Self.Owner)){ __Roots.Add(Self.Owner); }
+        }else{
+            __Roots.Remove(Self.Owner);
+        }
+        
         if(NewParent != null){
             if(__Registry.Contains(NewParent.Owner)){
                 Add(Self.Owner);
@@ -70,7 +81,19 @@ public class Scene : WLI.Packable{
         }
     }
 
+    public void MoveRoot(Entity Entity, int Index){
+        if(Entity.Node.Parent != null || !__Roots.Contains(Entity)){ return; }
+
+        __Roots.Remove(Entity);
+
+        if(Index < 0){ Index = 0; }
+        if(Index > __Roots.Count){ Index = __Roots.Count; }
+        
+        __Roots.Insert(Index, Entity);
+    }
+    
     public void Clear(bool ClearAllEntities = false){
+        __Roots.Clear();
         foreach(Entity Entity in __Registry.ToList()){
             Remove(Entity);
         }

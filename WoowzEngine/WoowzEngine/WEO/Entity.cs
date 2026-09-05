@@ -34,6 +34,8 @@ public class Entity : WLI.Packable, WLI.Hierarchical<Entity>{
         Node = new HierarchyNode<Entity>(this);
         Transform = new Transform();
 
+        Transform.OnChanged += (T) => SetTransformDirty();
+        
         Node.ChildFactory = Data => {
             Entity Entity = new Entity();
             WL.Packer.Unpack(Entity, Data!);
@@ -42,7 +44,7 @@ public class Entity : WLI.Packable, WLI.Hierarchical<Entity>{
 
         Node.OnParentChanged += (Self, OldParent, NewParent) => {
             Transform.Parent = NewParent?.Owner.Transform;
-            Transform.__IsDirty = true;
+            SetTransformDirty();
         };
     }
     
@@ -82,12 +84,10 @@ public class Entity : WLI.Packable, WLI.Hierarchical<Entity>{
     public IEnumerable<T> GetComponents<T>() where T : Component => __Components.OfType<T>();
     
     public void SetTransformDirty(){
-        if(Transform.__IsDirty){ return; }
+        Transform.IsDirty = true;
 
-        Transform.__IsDirty = true;
-
-        foreach(HierarchyNode<Entity> Child in Node.Children.ToList()){
-            Child.Owner.SetTransformDirty();
+        foreach(HierarchyNode<Entity> Child in Node.Children){
+            if(!Child.Owner.Transform.IsDirty){ Child.Owner.SetTransformDirty(); }
         }
     }
 

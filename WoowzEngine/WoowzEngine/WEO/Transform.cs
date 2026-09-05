@@ -17,7 +17,7 @@ public class Transform : WLI.Packable{
         set{
             if(__Position == value){ return; }
             __Position = value;
-            __IsDirty = true;
+            IsDirty = true;
             
             OnChanged?.Invoke(this);
             OnChangedPosition?.Invoke(this, value);
@@ -28,7 +28,7 @@ public class Transform : WLI.Packable{
         set{
             if(__Rotation == value){ return; }
             __Rotation = value;
-            __IsDirty = true;
+            IsDirty = true;
             
             OnChanged?.Invoke(this);
             OnChangedRotation?.Invoke(this, value);
@@ -39,7 +39,7 @@ public class Transform : WLI.Packable{
         set{
             if(__Scale == value){ return; }
             __Scale = value;
-            __IsDirty = true;
+            IsDirty = true;
             
             OnChanged?.Invoke(this);
             OnChangedScale?.Invoke(this, value);
@@ -51,7 +51,7 @@ public class Transform : WLI.Packable{
     
     public Transform? Parent;
     
-    public bool __IsDirty = true;
+    public bool IsDirty = true;
     
     public Matrix4F GetLocalMatrix() => Matrix4F.CreateTranslation(Position) *
                                         Matrix4F.CreateRotation(Rotation) *
@@ -59,14 +59,14 @@ public class Transform : WLI.Packable{
 
     private Matrix4F __WorldMatrix = Matrix4F.Identity;
     public Matrix4F GetWorldMatrix(){
-        if(__IsDirty){
+        if(IsDirty){
             if(Parent == null){
                 __WorldMatrix = GetLocalMatrix();
             }else{
                 __WorldMatrix = Parent.GetWorldMatrix() * GetLocalMatrix();
             }
 
-            __IsDirty = false;
+            IsDirty = false;
         }
 
         return __WorldMatrix;
@@ -93,6 +93,6 @@ public class Transform : WLI.Packable{
         Rotation = WL.Packer.Get(Data, "Rotation", new Vector3F());
         Scale    = WL.Packer.Get(Data, "Scale"   , new Vector3F());
 
-        __IsDirty = true;
+        IsDirty = true;
     }
 }
