@@ -44,52 +44,71 @@ public static class Interface{
         ImGuiStylePtr Style = ImGui.GetStyle();
         RangeAccessor<Vector4> Colors = Style.Colors;
 
-        Vector4 mainRed = new Vector4(0.70f, 0.00f, 0.00f, 1.00f);
-        Vector4 hoverRed = new Vector4(0.85f, 0.10f, 0.10f, 1.00f);
-        Vector4 activeRed = new Vector4(1.00f, 0.00f, 0.00f, 1.00f);
-        Vector4 darkRed = new Vector4(0.40f, 0.00f, 0.00f, 1.00f);
+        Vector4 BgDeep    = new Vector4(0.12f, 0.12f, 0.12f, 1);
+        Vector4 BgMid     = new Vector4(0.18f, 0.18f, 0.18f, 1);
+        Vector4 BgLight   = new Vector4(0.24f, 0.24f, 0.24f, 1);
+        Vector4 MainRed   = new Vector4(0.70f, 0.00f, 0.00f, 1);
+        Vector4 HoverRed  = new Vector4(0.85f, 0.10f, 0.10f, 1);
+        Vector4 ActiveRed = new Vector4(1.00f, 0.00f, 0.00f, 1);
+        Vector4 DarkRed   = new Vector4(0.40f, 0.00f, 0.00f, 1);
 
-        Colors[(int)ImGuiCol.TitleBg] = new Vector4(0.15f, 0.00f, 0.00f, 1.00f);
-        Colors[(int)ImGuiCol.TitleBgActive] = darkRed;
-        Colors[(int)ImGuiCol.TitleBgCollapsed] = new Vector4(0.00f, 0.00f, 0.00f, 0.51f);
+        Colors[(int)ImGuiCol.WindowBg]               = BgMid;
+        Colors[(int)ImGuiCol.ChildBg]                = new Vector4(0.00f, 0.00f, 0.00f, 0.00f);
+        Colors[(int)ImGuiCol.PopupBg]                = BgDeep;
+        Colors[(int)ImGuiCol.Border]                 = new Vector4(0.30f, 0.30f, 0.30f, 0.50f);
+        Colors[(int)ImGuiCol.Text]                   = new Vector4(0.95f, 0.95f, 0.95f, 1.00f);
+        Colors[(int)ImGuiCol.TextDisabled]           = new Vector4(0.50f, 0.50f, 0.50f, 1.00f);
 
-        Colors[(int)ImGuiCol.Button] = mainRed;
-        Colors[(int)ImGuiCol.ButtonHovered] = hoverRed;
-        Colors[(int)ImGuiCol.ButtonActive] = activeRed;
+        Colors[(int)ImGuiCol.TitleBg]                = new Vector4(0.25f, 0.05f, 0.05f, 1.00f);
+        Colors[(int)ImGuiCol.TitleBgActive]          = DarkRed;
+        Colors[(int)ImGuiCol.TitleBgCollapsed]       = new Vector4(0.15f, 0.00f, 0.00f, 0.51f);
+        Colors[(int)ImGuiCol.MenuBarBg]              = BgDeep;
 
-        Colors[(int)ImGuiCol.FrameBg] = new Vector4(0.20f, 0.05f, 0.05f, 0.54f);
-        Colors[(int)ImGuiCol.FrameBgHovered] = new Vector4(0.40f, 0.10f, 0.10f, 0.40f);
-        Colors[(int)ImGuiCol.FrameBgActive] = new Vector4(0.50f, 0.10f, 0.10f, 0.67f);
+        Colors[(int)ImGuiCol.Button]                 = MainRed;
+        Colors[(int)ImGuiCol.ButtonHovered]          = HoverRed;
+        Colors[(int)ImGuiCol.ButtonActive]           = ActiveRed;
 
-        Colors[(int)ImGuiCol.Tab] = darkRed;
-        Colors[(int)ImGuiCol.TabHovered] = hoverRed;
-        Colors[(int)ImGuiCol.TabSelected] = activeRed;
-        Colors[(int)ImGuiCol.TabSelectedOverline] = activeRed;
-        Colors[(int)ImGuiCol.TabDimmed] = darkRed;
-        Colors[(int)ImGuiCol.TabDimmedSelected] = mainRed;
+        Colors[(int)ImGuiCol.CheckMark]              = ActiveRed;
+        Colors[(int)ImGuiCol.SliderGrab]             = MainRed;
+        Colors[(int)ImGuiCol.SliderGrabActive]       = HoverRed;
 
-        Colors[(int)ImGuiCol.Header] = darkRed;
-        Colors[(int)ImGuiCol.HeaderHovered] = mainRed;
-        Colors[(int)ImGuiCol.HeaderActive] = hoverRed;
+        Colors[(int)ImGuiCol.FrameBg]                = BgDeep;
+        Colors[(int)ImGuiCol.FrameBgHovered]         = BgLight;
+        Colors[(int)ImGuiCol.FrameBgActive]          = new Vector4(0.40f, 0.10f, 0.10f, 0.40f);
 
-        Colors[(int)ImGuiCol.CheckMark] = activeRed;
-        Colors[(int)ImGuiCol.SliderGrab] = mainRed;
-        Colors[(int)ImGuiCol.SliderGrabActive] = hoverRed;
-        Colors[(int)ImGuiCol.SeparatorHovered] = hoverRed;
-        Colors[(int)ImGuiCol.SeparatorActive] = activeRed;
-        Colors[(int)ImGuiCol.ResizeGrip] = darkRed;
-        Colors[(int)ImGuiCol.ResizeGripHovered] = mainRed;
-        Colors[(int)ImGuiCol.ResizeGripActive] = activeRed;
-        Colors[(int)ImGuiCol.DockingPreview] = mainRed;
-        Colors[(int)ImGuiCol.TextSelectedBg] = new Vector4(0.90f, 0.20f, 0.20f, 0.35f);
+        Colors[(int)ImGuiCol.Tab]                    = BgDeep;
+        Colors[(int)ImGuiCol.TabHovered]             = HoverRed;
+        Colors[(int)ImGuiCol.TabSelected]            = MainRed;
+        Colors[(int)ImGuiCol.TabSelectedOverline]    = ActiveRed;
+        Colors[(int)ImGuiCol.TabDimmed]              = BgDeep;
+        Colors[(int)ImGuiCol.TabDimmedSelected]      = new Vector4(0.30f, 0.10f, 0.10f, 1.00f);
 
-        Style.WindowRounding = 0;
-        Style.FrameRounding = 6;
-        Style.PopupRounding = 0;
-        Style.GrabRounding = 6;
-        Style.TabRounding = 0;
+        Colors[(int)ImGuiCol.Header]                 = new Vector4(0.50f, 0.00f, 0.00f, 0.35f);
+        Colors[(int)ImGuiCol.HeaderHovered]          = MainRed;
+        Colors[(int)ImGuiCol.HeaderActive]           = ActiveRed;
 
-        Style.TabBorderSize = 1;
+        Colors[(int)ImGuiCol.Separator]              = new Vector4(0.30f, 0.30f, 0.30f, 1.00f);
+        Colors[(int)ImGuiCol.SeparatorHovered]       = MainRed;
+        Colors[(int)ImGuiCol.SeparatorActive]        = ActiveRed;
+
+        Colors[(int)ImGuiCol.ScrollbarBg]            = BgDeep;
+        Colors[(int)ImGuiCol.ScrollbarGrab]          = BgLight;
+        Colors[(int)ImGuiCol.ScrollbarGrabHovered]   = new Vector4(0.40f, 0.40f, 0.40f, 1.00f);
+        Colors[(int)ImGuiCol.ScrollbarGrabActive]    = MainRed;
+
+        Colors[(int)ImGuiCol.DockingPreview]         = MainRed;
+        Colors[(int)ImGuiCol.DockingEmptyBg]         = BgDeep;
+        Colors[(int)ImGuiCol.TextSelectedBg]         = new Vector4(0.70f, 0.00f, 0.00f, 0.35f);
+        Colors[(int)ImGuiCol.NavWindowingHighlight]  = MainRed;
+
+        Style.WindowRounding    = 0;
+        Style.FrameRounding     = 4;
+        Style.PopupRounding     = 0;
+        Style.GrabRounding      = 4;
+        Style.TabRounding       = 0;
+        
+        Style.WindowBorderSize  = 1;
+        Style.FrameBorderSize   = 0;
         
         WEE.Prefs.Load();
         
