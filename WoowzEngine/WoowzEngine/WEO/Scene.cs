@@ -200,13 +200,24 @@ public class Scene : WLI.Packable{
     
     // ----------------------------------------------------------------------
 
+    public void FixedUpdate(DeltaTimeInfo DTI){
+        if(!DoUpdate){ return; }
+        
+        foreach(Component C in GetComponents<Component>()){
+            if(WE.Editor.IsEditor && C.Owner.IsPartOfPrefab){ continue; }
+
+            C.__FixedUpdate(DTI);
+        }
+    }
+    
+    /// TODO, ВЫЗЫВАТЬ В RENDER ПОТОКЕ! А FIXEDUPDATE В ОБЫЧНОМ!
     public void Update(DeltaTimeInfo DTI){
         if(!DoUpdate){ return; }
         
         foreach(Component C in GetComponents<Component>()){
-            if(C.Owner.IsPartOfPrefab){ continue; }
+            if(WE.Editor.IsEditor && C.Owner.IsPartOfPrefab){ continue; }
 
-            C.OnUpdate(DTI);
+            C.__Update(DTI);
         }
     }
     

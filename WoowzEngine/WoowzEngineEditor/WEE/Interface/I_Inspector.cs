@@ -137,9 +137,13 @@ public static class I_Inspector{
     
     private static void DrawComponentFields(WEI.Component Component){
         Type Type = Component.GetType();
+
+        bool CanDraw(MemberInfo Info){
+            return Info.GetCustomAttribute<WE_Save>() != null && Info.GetCustomAttribute<WEEI_Hide>() == null;
+        }
         
         foreach(FieldInfo Field in Type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)){
-            if(Field.GetCustomAttribute<WE_Save>() == null){ continue; }
+            if(!CanDraw(Field)){ continue; }
             HandleMember(
                 Component,
                 Field.Name,
@@ -151,7 +155,7 @@ public static class I_Inspector{
         }
 
         foreach(PropertyInfo Property in Type.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)){
-            if(Property.GetCustomAttribute<WE_Save>() == null || !Property.CanWrite || !Property.CanRead){ continue; }
+            if(!CanDraw(Property) || !Property.CanWrite || !Property.CanRead){ continue; }
             HandleMember(
                 Component,
                 Property.Name,
@@ -166,9 +170,20 @@ public static class I_Inspector{
     private static void HandleMember(object Component, string Label, Type MemberType, Func<object?> Getter, Action<object?> Setter, MemberInfo Info){
         ImGUI GUI = WEE.Interface.ImGUI;
         
+        WEI.Component? Component__ = Component as WEI.Component;
+
+        bool IsOverriden = Component__ != null && Component__.OverridesValues.Contains(Info.Name);
+        
+        object Template = WEI.Component.Template.GetDefault(Component.GetType());
+        object? DefaultValue = Info is FieldInfo F ? F.GetValue(Template) : ((PropertyInfo)Info).GetValue(Template);
+        
         GUI.CustomID(Label, () => {
             foreach(WEEI_InspectorDecorator Decorator in Info.GetCustomAttributes<WEEI_InspectorDecorator>()){
                 Decorator.Draw(Label, Component, Info);
+            }
+            
+            if(!IsOverriden){
+                ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 0.5f);
             }
 
             WEEI_InspectorProperty? PropertyAttribute = Info.GetCustomAttribute<WEEI_InspectorProperty>();
@@ -177,10 +192,28 @@ public static class I_Inspector{
             }
 
             if(PropertyAttribute != null){
-                PropertyAttribute.Draw(Label, Component, Info, Getter, Setter);
+                PropertyAttribute.Draw(Label, Component, Info, Getter, (NewValue) => {
+                    Setter(NewValue);
+                    Component__!.OverridesValues.Add(Info.Name);
+                });
             }else{
                 ImGui.TextDisabled($"{Label}: {MemberType.Name}");   
             }
+
+            if(!IsOverriden){
+                ImGui.PopStyleVar();
+            }
+
+            GUI.PopupContextItem($"Context_{Label}", () => {
+                if(IsOverriden){
+                    if(ImGui.MenuItem("Сбросить по умолчанию")){
+                        Component__!.OverridesValues.Remove(Info.Name);
+                        Setter(DefaultValue);
+                    }
+                }else{
+                    ImGui.TextDisabled("Это значение по умолчанию");   
+                }
+            });
         });
     }
 }
