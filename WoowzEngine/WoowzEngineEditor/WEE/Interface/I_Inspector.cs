@@ -88,6 +88,12 @@ public static class I_Inspector{
                         Entity.Transform.Scale = new Vector3F(Scale.X, Scale.Y, Scale.Z);
                         Entity.SetTransformDirty();
                     }
+                    
+                    ImGui.TextDisabled("Наследование:");
+
+                    ImGui.SameLine(); if(ImGui.Checkbox("Поз.", ref Entity.Transform.InheritPosition)){ Entity.SetTransformDirty(); }
+                    ImGui.SameLine(); if(ImGui.Checkbox("Пов.", ref Entity.Transform.InheritRotation)){ Entity.SetTransformDirty(); }
+                    ImGui.SameLine(); if(ImGui.Checkbox("Раз.", ref Entity.Transform.InheritScale   )){ Entity.SetTransformDirty(); }
                 }
 
                 ImGui.Separator();

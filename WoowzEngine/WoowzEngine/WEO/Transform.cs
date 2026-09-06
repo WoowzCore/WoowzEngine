@@ -7,6 +7,10 @@ public class Transform : WLI.Packable{
     public event Action<Transform, Vector3F>? OnChangedPosition;
     public event Action<Transform, Vector3F>? OnChangedRotation;
     public event Action<Transform, Vector3F>? OnChangedScale;
+
+    public bool InheritPosition = true;
+    public bool InheritRotation = true;
+    public bool InheritScale    = true;
     
     private Vector3F __Position = new Vector3F(0, 0, 0);
     private Vector3F __Rotation = new Vector3F(0, 0, 0);
@@ -46,24 +50,45 @@ public class Transform : WLI.Packable{
         }
     }
 
-    //todo
-    public Vector3F WorldPosition => GetWorldMatrix().Translation;
+    public Vector3F WorldPosition => GetWorldMatrix().Position;
+    public Vector3F WorldRotation => GetWorldMatrix().Rotation;
+    public Vector3F WorldScale    => GetWorldMatrix().Scale;
     
     public Transform? Parent;
+
+    public bool IsDirty{ get; private set; } = true;
+    public void SetDirty(){
+        if(IsDirty){ return; } IsDirty = true;
+        OnChanged?.Invoke(this);
+    }
     
-    public bool IsDirty = true;
-    
-    public Matrix4F GetLocalMatrix() => Matrix4F.CreateTranslation(Position) *
+    public Matrix4F GetLocalMatrix() => Matrix4F.CreatePosition(Position) *
                                         Matrix4F.CreateRotation(Rotation) *
                                         Matrix4F.CreateScale(Scale);
 
     private Matrix4F __WorldMatrix = Matrix4F.Identity;
     public Matrix4F GetWorldMatrix(){
-        if(IsDirty){
+        bool ParentDirty = Parent != null && Parent.IsDirty;
+        
+        if(IsDirty || ParentDirty){
             if(Parent == null){
                 __WorldMatrix = GetLocalMatrix();
             }else{
-                __WorldMatrix = Parent.GetWorldMatrix() * GetLocalMatrix();
+                Matrix4F ParentWorld = Parent.GetWorldMatrix();
+
+                if(InheritPosition && InheritRotation && InheritScale){
+                    __WorldMatrix = ParentWorld * GetLocalMatrix();
+                }else{
+                    Vector3F ParentPosition = InheritPosition ? ParentWorld.Position : Vector3F.Zero;
+                    Vector3F ParentRotation = InheritRotation ? ParentWorld.Rotation : Vector3F.Zero;
+                    Vector3F ParentScale    = InheritScale    ? ParentWorld.Scale    : Vector3F.One;
+                    
+                    Matrix4F FilteredParent = Matrix4F.CreatePosition(ParentPosition) *
+                                              Matrix4F.CreateRotation(ParentRotation) *
+                                              Matrix4F.CreateScale(ParentScale);
+                    
+                    __WorldMatrix = FilteredParent * GetLocalMatrix();
+                }
             }
 
             IsDirty = false;
@@ -85,7 +110,11 @@ public class Transform : WLI.Packable{
     public Dictionary<string, object?> __Pack() => new Dictionary<string, object?>{
         ["Position"] = Position,
         ["Rotation"] = Rotation,
-        ["Scale"   ] = Scale
+        ["Scale"   ] = Scale,
+        
+        ["InheritPosition"] = InheritPosition,
+        ["InheritRotation"] = InheritRotation,
+        ["InheritScale"]    = InheritScale
     };
     
     public void __Unpack(Dictionary<string, object?> Data){
@@ -93,6 +122,10 @@ public class Transform : WLI.Packable{
         Rotation = WL.Packer.Get(Data, "Rotation", new Vector3F());
         Scale    = WL.Packer.Get(Data, "Scale"   , new Vector3F());
 
-        IsDirty = true;
+        InheritPosition = WL.Packer.Get(Data, "InheritPosition", true);
+        InheritRotation = WL.Packer.Get(Data, "InheritRotation", true);
+        InheritScale    = WL.Packer.Get(Data, "InheritScale"   , true);
+        
+        SetDirty();
     }
 }

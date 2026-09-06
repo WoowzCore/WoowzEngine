@@ -32,7 +32,7 @@ public class Camera{
     public Vector3F Up => Vector3F.Cross(Right, Forward).Normalized;
 
     public Matrix4F GetViewMatrix() => Matrix4F.CreateRotation(Rotation) *
-                                       Matrix4F.CreateTranslation(Position.Negative);
+                                       Matrix4F.CreatePosition(Position.Negative);
 
     public Matrix4F GetProjectionMatrix(){
         if(IsOrthographic){

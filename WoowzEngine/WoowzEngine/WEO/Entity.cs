@@ -145,14 +145,17 @@ public class Entity : WLI.Packable, WLI.Hierarchical<Entity>{
 
     public IEnumerable<T> GetComponents<T>() where T : Component => __Components.OfType<T>();
     
+    // TODO, В САМОМ TRANSFORM, или где..... бля надо продумать, ДЕТИ НЕ ГРЯЗНЫЕ!
     public void SetTransformDirty(){
-        Transform.IsDirty = true;
+        Transform.SetDirty();
 
         foreach(HierarchyNode<Entity> Child in Node.Children){
             if(!Child.Owner.Transform.IsDirty){ Child.Owner.SetTransformDirty(); }
         }
     }
 
+    public Entity? FindChildByName(string Name) => Node.FindChild(E => E.Name == Name);
+    
     public void DestroyChildrens(){
         foreach(HierarchyNode<Entity> Child in Node.Children.ToList()){
             Child.Owner.Destroy();
@@ -183,7 +186,7 @@ public class Entity : WLI.Packable, WLI.Hierarchical<Entity>{
         __IDMap.Remove(ID);
         ID = 0;
     }
-
+    
     // ----------------------------------------------------------------------
 
     public void SetFrom(Entity Other){
