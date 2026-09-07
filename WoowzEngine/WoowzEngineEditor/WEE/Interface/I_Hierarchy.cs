@@ -17,20 +17,20 @@ public static class I_Hierarchy{
 
         if(ImGui.Begin("Иерархия###Hierarchy", ref WEE.Interface.WindowHierarchyActive)){
             try{
-                if(WEE.Interface.CurrentScene == null){
+                if(WEE.D.Selected.Scene == null){
                     ImGui.Text("Нет активной сцены");
                 }else{
-                    if(WEE.Interface.CurrentEntity != __LastSelectedEntity){
-                        __LastSelectedEntity = WEE.Interface.CurrentEntity;
+                    if(WEE.D.Selected.Entity != __LastSelectedEntity){
+                        __LastSelectedEntity = WEE.D.Selected.Entity;
                         if(__LastSelectedEntity != null){ __NeedToScroll = true; }
                     }
                     
-                    List<Entity> AllEntities = WEE.Interface.CurrentScene.AllEntity.ToList();
-                    ImGui.TextDisabled($"Всего: {AllEntities.Count}, Корней: {WEE.Interface.CurrentScene.Roots.Count()}");
+                    List<Entity> AllEntities = WEE.D.Selected.Scene.AllEntity.ToList();
+                    ImGui.TextDisabled($"Всего: {AllEntities.Count}, Корней: {WEE.D.Selected.Scene.Roots.Count()}");
 
                     try{
                         if(ImGui.BeginChild("HierarchyList", Vector2.Zero, ImGuiChildFlags.None, ImGuiWindowFlags.None)){
-                            foreach(Entity Entity in WEE.Interface.CurrentScene.Roots.ToList()){
+                            foreach(Entity Entity in WEE.D.Selected.Scene.Roots.ToList()){
                                 if(Entity.Node.Parent == null){
                                     DrawEntityNode(Entity);
                                 }
@@ -40,7 +40,7 @@ public static class I_Hierarchy{
                             RemainingSpace.Y = Math.Max(RemainingSpace.Y, 25);
                             ImGui.Dummy(RemainingSpace);
                             if(ImGui.IsItemClicked(ImGuiMouseButton.Left)){
-                                WEE.Interface.CurrentEntity = null;
+                                WEE.D.Selected.Entity = null;
                             }
                             
                             __HandleHierarchyDragDrop(null);
@@ -48,8 +48,8 @@ public static class I_Hierarchy{
                             if(ImGui.BeginPopupContextWindow("HierarchyContext", ImGuiPopupFlags.MouseButtonRight | ImGuiPopupFlags.NoOpenOverItems)){
                                 if(ImGui.MenuItem("Создать Entity")){
                                     Entity NewEntity = new Entity();
-                                    WEE.Interface.CurrentScene.Add(NewEntity);
-                                    WEE.Interface.CurrentEntity = NewEntity;
+                                    WEE.D.Selected.Scene.Add(NewEntity);
+                                    WEE.D.Selected.Entity = NewEntity;
                                 }
                                 ImGui.EndPopup();
                             }
@@ -65,13 +65,13 @@ public static class I_Hierarchy{
     }
     
      private static void DrawEntityNode(Entity Entity){
-        bool IsSelected = WEE.Interface.CurrentEntity == Entity;
+        bool IsSelected = WEE.D.Selected.Entity == Entity;
         bool IsParentOfSelected = false;
         bool IsPrefab = Entity.IsPartOfPrefab;
         bool CanDrag = !IsPrefab || Entity == Entity.PrefabRoot;
 
-        if(WEE.Interface.CurrentEntity != null && !IsSelected){
-            IsParentOfSelected = WEE.Interface.CurrentEntity.Node.IsDescendantOf(Entity.Node);
+        if(WEE.D.Selected.Entity != null && !IsSelected){
+            IsParentOfSelected = WEE.D.Selected.Entity.Node.IsDescendantOf(Entity.Node);
         }
 
         if(IsParentOfSelected){
@@ -110,7 +110,7 @@ public static class I_Hierarchy{
 
         if(PushedColors > 0){ ImGui.PopStyleColor(PushedColors); }
 
-        if(ImGui.IsItemClicked(ImGuiMouseButton.Left) || ImGui.IsItemClicked(ImGuiMouseButton.Right)){ WEE.Interface.CurrentEntity = Entity; }
+        if(ImGui.IsItemClicked(ImGuiMouseButton.Left) || ImGui.IsItemClicked(ImGuiMouseButton.Right)){ WEE.D.Selected.Entity = Entity; }
 
         if(CanDrag && ImGui.BeginDragDropSource()){
             __DraggedEntity = Entity;
@@ -122,13 +122,13 @@ public static class I_Hierarchy{
         __HandleHierarchyDragDrop(Entity);
 
         if(ImGui.BeginPopupContextItem()){
-            WEE.Interface.CurrentEntity = Entity;
+            WEE.D.Selected.Entity = Entity;
 
             if(!Entity.IsPartOfPrefab){
                 if(ImGui.MenuItem("Создать Entity")){
                     Entity NewEntity = new Entity();
                     NewEntity.Node.SetParent(Entity.Node);
-                    WEE.Interface.CurrentEntity = NewEntity;
+                    WEE.D.Selected.Entity = NewEntity;
                 }
 
                 if(ImGui.MenuItem("Превратить в Prefab")){
@@ -148,17 +148,17 @@ public static class I_Hierarchy{
                     int Index = Entity.Node.Parent.Children.IndexOf(Entity.Node);
                     Entity.Node.Parent.MoveChild(Dupe.Node, Index + 1);
                 }else{
-                    WEE.Interface.CurrentScene!.Add(Dupe);
-                    int Index = WEE.Interface.CurrentScene!.Roots.ToList().IndexOf(Entity);
-                    WEE.Interface.CurrentScene!.MoveRoot(Dupe, Index + 1);
+                    WEE.D.Selected.Scene!.Add(Dupe);
+                    int Index = WEE.D.Selected.Scene!.Roots.ToList().IndexOf(Entity);
+                    WEE.D.Selected.Scene!.MoveRoot(Dupe, Index + 1);
                 }
                 
-                WEE.Interface.CurrentEntity = Dupe;
+                WEE.D.Selected.Entity = Dupe;
             }
             
             ImGui.Separator();
             
-            if(ImGui.MenuItem("Удалить")){ Entity.Destroy(); WEE.Interface.CurrentEntity = null; }
+            if(ImGui.MenuItem("Удалить")){ Entity.Destroy(); WEE.D.Selected.Entity = null; }
             
             ImGui.EndPopup();
         }
@@ -187,7 +187,7 @@ public static class I_Hierarchy{
                     ParentNode.MoveChild(Dragged.Node, Math.Clamp(TargetIndex + Direction, 0, ParentNode.Children.Count));
                 }
             }else{
-                Scene? Scene = WEE.Interface.CurrentScene;
+                Scene? Scene = WEE.D.Selected.Scene;
                 if(Scene != null){
                     List<Entity> Roots = Scene.Roots.ToList();
                     int TargetIndex = Roots.IndexOf(Target);
@@ -253,7 +253,7 @@ public static class I_Hierarchy{
 
                         if(Asset is Prefab){
                             Subject = Entity.FromPrefab(new Asset<Prefab>(Key));
-                            WEE.Interface.CurrentScene?.Add(Subject);
+                            WEE.D.Selected.Scene?.Add(Subject);
                         }
                     }
 
@@ -277,7 +277,7 @@ public static class I_Hierarchy{
                             }
                         }
 
-                        WEE.Interface.CurrentEntity = Subject;
+                        WEE.D.Selected.Entity = Subject;
                     }
                 }
             }

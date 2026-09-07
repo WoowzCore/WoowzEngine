@@ -15,7 +15,7 @@ public static class I_Assets{
     public static void Update(){
         if(!WEE.Interface.WindowAssetsActive){ return; }
 
-        GLImGUI GUI = WEE.Interface.ImGUI;
+        GLImGUI GUI = WEE.D.ImGUI;
         
         GUI.Window("Ресурсы###Assets", ref WEE.Interface.WindowAssetsActive, () => {
             GUI.Group(() => {
@@ -47,7 +47,7 @@ public static class I_Assets{
 
                         float WindowVisibleRightEdge = ImGui.GetCursorScreenPos().X + ImGui.GetContentRegionAvail().X;
 
-                        WEE.Registry.RunMethods<WEE_OnPreAllRenderPreview>(false, WEE.Render.API, WEE.Cycle.Render_DTI, WEE.Cycle.Render_Time);
+                        WEE.Registry.RunMethods<WEE_OnPreAllRenderPreview>(false, WEE.Render.API, WEE.D.Time.Render.DTI, WEE.D.Time.Render.Elapsed);
                         
                         for(int i = 0; i < Keys.Count; i++){
                             string Key = Keys[i];
@@ -134,7 +134,7 @@ public static class I_Assets{
             WEE.Render.API,
             TargetMesh,
             TargetProgram,
-            WEE.Cycle.Render_DTI,
+            WEE.D.Time.Render.DTI,
             Asset,
             ID,
             Key,

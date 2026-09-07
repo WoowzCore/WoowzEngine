@@ -1,10 +1,11 @@
 ﻿using System.Reflection;
 using ImGuiNET;
+using WLO.Interface;
 
 namespace WEI_Attribute;
 
 public class WEEI_Enum_Default : WEEI_InspectorProperty{
-    public override void Draw(string Label, object Target, MemberInfo Member, Func<object?> Getter, Action<object?> Setter){
+    public override void Draw(string Label, object Target, MemberInfo Member, Func<object?> Getter, Action<object?> Setter, ImGUI GUI){
         object? Value = Getter();
         if(Value == null){ return; }
 
@@ -12,7 +13,7 @@ public class WEEI_Enum_Default : WEEI_InspectorProperty{
         string[] Names = Enum.GetNames(EnumType);
         string CurrentName = Value.ToString()!;
 
-        if(ImGui.BeginCombo(Label, CurrentName)){
+        GUI.Combo(Label, CurrentName, () => {
             foreach(string Name in Names){
                 bool IsSelected = CurrentName == Name;
                 if(ImGui.Selectable(Name, IsSelected)){
@@ -20,7 +21,6 @@ public class WEEI_Enum_Default : WEEI_InspectorProperty{
                 }
                 if(IsSelected){ ImGui.SetItemDefaultFocus(); }
             }
-            ImGui.EndCombo();
-        }
+        });
     }
 }

@@ -13,7 +13,7 @@ public static class I_Launcher{
     public static void Update(){
         ImGui.SetNextWindowPos(ImGui.GetMainViewport().GetCenter(), ImGuiCond.Always, new Vector2(0.5f, 0.5f));
 
-        ImGUI GUI = WEE.Interface.ImGUI;
+        ImGUI GUI = WEE.D.ImGUI;
 
         GUI.Window("Загрузчик", ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoCollapse, () => {
             if(!string.IsNullOrEmpty(WEE.Prefs.LastConfigPath) && File.Exists(WEE.Prefs.LastConfigPath)){

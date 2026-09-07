@@ -12,8 +12,6 @@ namespace WEE;
 // todo, NativeFileDialogSharp
 
 public static class Interface{
-    public static GLImGUI ImGUI{ get; private set; } = null!;
-
     public static bool WindowViewActive      = true;
     public static bool WindowConfigActive    = false;
     public static bool WindowAssetsActive    = true;
@@ -27,19 +25,15 @@ public static class Interface{
     public static EditorConfig? Config     = null!;
     public static string        ConfigPath = "";
     
-    public static Scene?  CurrentScene;
-    
-    public static Entity? CurrentEntity = null!;
-    
     // ----------------------------------------------------------------------
     
     public static void Start(){
-        ImGUI = new GLImGUI(WEE.Render.API, true);
+        WEE.D.ImGUI = new GLImGUI(WEE.Render.API, true);
 
-        ImGUI.IO.ConfigFlags |= ImGuiConfigFlags.DockingEnable;
-        ImGUI.IO.ConfigFlags |= ImGuiConfigFlags.NavEnableKeyboard;
+        WEE.D.ImGUI.IO.ConfigFlags |= ImGuiConfigFlags.DockingEnable;
+        WEE.D.ImGUI.IO.ConfigFlags |= ImGuiConfigFlags.NavEnableKeyboard;
 
-        ImGUI.IO.ConfigWindowsMoveFromTitleBarOnly = true;
+        WEE.D.ImGUI.IO.ConfigWindowsMoveFromTitleBarOnly = true;
         
         ImGuiStylePtr Style = ImGui.GetStyle();
         RangeAccessor<Vector4> Colors = Style.Colors;
@@ -116,7 +110,7 @@ public static class Interface{
     }
     
     public static void Stop(){
-        if(ImGUI != null!){ ImGUI.Stop(); }
+        if(WEE.D.ImGUI != null!){ WEE.D.ImGUI.Stop(); WEE.D.ImGUI = null!; }
     }
     
     // ----------------------------------------------------------------------
@@ -158,8 +152,7 @@ public static class Interface{
     private static bool __FirstFrame = true;
     
     public static void Update(){
-        ImGUI.FrameStart((float)WEE.Cycle.Render_DTI.DT, WEE.Window.MainWindow.Size);
-
+        WEE.D.ImGUI.Build((float)WEE.D.Time.Render.DTI.DT, WEE.D.Window.Size, () => {
             if(!__IsProjectLoaded){
                 I_Launcher.Update(); 
             }else{
@@ -210,9 +203,8 @@ public static class Interface{
 
                 if(WindowImGUIDemoActive){ ImGui.ShowDemoWindow(ref WindowImGUIDemoActive); }
             }
-        
-        ImGUI.FrameEnd();
+        });
     }
 
-    public static void Render() => ImGUI.Render();
+    public static void Draw() => WEE.D.ImGUI.Draw();
 }

@@ -139,8 +139,8 @@ public static class Registry{
         
         RunMethods<WEE_OnAssetsLoad>(true, WEE.Render.API, First);
 
-        if(!First && WEE.Interface.CurrentScene != null){
-            __RefreshAssetsScene(WEE.Interface.CurrentScene);    
+        if(!First && WEE.D.Selected.Scene != null){
+            __RefreshAssetsScene(WEE.D.Selected.Scene);    
         }
     }
 

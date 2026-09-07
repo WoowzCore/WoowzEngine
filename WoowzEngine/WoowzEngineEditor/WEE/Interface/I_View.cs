@@ -10,18 +10,12 @@ using WLO.Render;
 namespace WEE_Interface;
 
 public static class I_View{
-    public static bool FocusSceneView{ get; private set; }
-
-    public static Vector2I SceneViewSize{ get; private set; }
-
-    public static Vector2I ViewMousePosition;
-
     private static bool __Is2DView = false;
     public static bool Is2DView{
         get => __Is2DView;
         set{
             __Is2DView = value;
-            WEE.Editor.ViewCamera.IsOrthographic = __Is2DView;
+            WEE.D.View.Camera.IsOrthographic = __Is2DView;
         }
     }
     
@@ -52,7 +46,7 @@ public static class I_View{
     public static void Update(){
         if(!WEE.Interface.WindowViewActive){ return; }
 
-        ImGUI GUI = WEE.Interface.ImGUI;
+        ImGUI GUI = WEE.D.ImGUI;
         
         GLView? CameraLayout = null;
         List<PixelAttribute> SupportedPA = [];
@@ -67,14 +61,14 @@ public static class I_View{
         }
 
         GUI.Window("Просмотр###View", ref WEE.Interface.WindowViewActive, () => {
-            FocusSceneView = ImGui.IsWindowFocused(ImGuiFocusedFlags.RootAndChildWindows);
+            WEE.D.View.IsFocus = ImGui.IsWindowFocused(ImGuiFocusedFlags.RootAndChildWindows);
             
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8, 0));
             GUI.Child("SceneToolbar", new Vector2(0, 35), ImGuiChildFlags.Borders, ImGuiWindowFlags.NoScrollbar, () => {
                 ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 5); 
                 ImGui.Indent(5);
 
-                ImGui.Text($"({SceneViewSize.W}x{SceneViewSize.H}), R-FPS: {WEE.Cycle.Render_DTI.FPS:F1}");
+                ImGui.Text($"({WEE.D.View.Size.W}x{WEE.D.View.Size.H}), R-FPS: {WEE.D.Time.Render.DTI.FPS:F1}");
 
                 ImGui.SameLine();
                 ImGui.TextDisabled("|");
@@ -91,10 +85,10 @@ public static class I_View{
 
                 ImGui.TextDisabled("Поз.:");
                 ImGui.SameLine();
-                Vector3 CameraPosition = new Vector3(WEE.Editor.ViewCamera.Position.X, WEE.Editor.ViewCamera.Position.Y, WEE.Editor.ViewCamera.Position.Z);
+                Vector3 CameraPosition = new Vector3(WEE.D.View.Camera.Position.X, WEE.D.View.Camera.Position.Y, WEE.D.View.Camera.Position.Z);
                 ImGui.SetNextItemWidth(200);
                 if(ImGui.DragFloat3("##CameraPosition", ref CameraPosition, 0.1f, 0, 0, "%g")){
-                    WEE.Editor.ViewCamera.Position = new Vector3F(CameraPosition.X, CameraPosition.Y, CameraPosition.Z);
+                    WEE.D.View.Camera.Position = new Vector3F(CameraPosition.X, CameraPosition.Y, CameraPosition.Z);
                 }
 
                 ImGui.SameLine();
@@ -103,10 +97,10 @@ public static class I_View{
 
                 ImGui.TextDisabled("Пов.:");
                 ImGui.SameLine();
-                Vector3 CameraRotation = new Vector3(WEE.Editor.ViewCamera.Rotation.X, WEE.Editor.ViewCamera.Rotation.Y, WEE.Editor.ViewCamera.Rotation.Z);
+                Vector3 CameraRotation = new Vector3(WEE.D.View.Camera.Rotation.X, WEE.D.View.Camera.Rotation.Y, WEE.D.View.Camera.Rotation.Z);
                 ImGui.SetNextItemWidth(200);
                 if(ImGui.DragFloat3("##CameraRotation", ref CameraRotation, 0.1f, 0, 0, "%g")){
-                    WEE.Editor.ViewCamera.Rotation = new Vector3F(CameraRotation.X, CameraRotation.Y, CameraRotation.Z);
+                    WEE.D.View.Camera.Rotation = new Vector3F(CameraRotation.X, CameraRotation.Y, CameraRotation.Z);
                 }
 
                 ImGui.SameLine();
@@ -116,7 +110,7 @@ public static class I_View{
                 ImGui.TextDisabled("Скор.:");
                 ImGui.SameLine();
                 ImGui.SetNextItemWidth(50);
-                ImGui.DragFloat("##CameraSpeed", ref WEE.Editor.CameraSpeed, 0.1f, 0.001f, 1000, "%g");
+                ImGui.DragFloat("##CameraSpeed", ref WEE.D.View.CameraSpeed, 0.1f, 0.001f, 1000, "%g");
                 
                 ImGui.SameLine();
                 ImGui.TextDisabled("|");
@@ -125,15 +119,15 @@ public static class I_View{
                 ImGui.TextDisabled("Far.:");
                 ImGui.SameLine();
                 ImGui.SetNextItemWidth(50);
-                ImGui.DragFloat("##CameraFar", ref WEE.Editor.ViewCamera.Far, 0.1f, 0.001f, 100000, "%g");
+                ImGui.DragFloat("##CameraFar", ref WEE.D.View.Camera.Far, 0.1f, 0.001f, 100000, "%g");
 
                 ImGui.SameLine();
                 ImGui.TextDisabled("|");
                 ImGui.SameLine();
 
                 if(ImGui.Button("Сброс")){
-                    WEE.Editor.ViewCamera.Position = WEE.Editor.ViewCamera.Rotation = new Vector3F();
-                    WEE.Editor.CameraSpeed = 1;
+                    WEE.D.View.Camera.Position = WEE.D.View.Camera.Rotation = new Vector3F();
+                    WEE.D.View.CameraSpeed = 1;
                 }
                 if(ImGui.IsItemHovered()){ ImGui.SetTooltip("Сбросить настройки камеры на дефолтные значения"); }
 
@@ -141,7 +135,7 @@ public static class I_View{
                 ImGui.TextDisabled("|");
                 ImGui.SameLine();
 
-                Vector3 BackgroundColor__ = new Vector3(BackgroundColor.R / 255f, BackgroundColor.G / 255f, BackgroundColor.B / 255f);
+                Vector3 BackgroundColor__ = new Vector3(BackgroundColor.R * WL.Math.Inverse255, BackgroundColor.G * WL.Math.Inverse255, BackgroundColor.B * WL.Math.Inverse255);
                 if(ImGui.ColorEdit3("##BackgroundColor", ref BackgroundColor__, ImGuiColorEditFlags.NoInputs | ImGuiColorEditFlags.NoLabel)){
                     BackgroundColor = new Color4B((byte)(BackgroundColor__.X * 255), (byte)(BackgroundColor__.Y * 255), (byte)(BackgroundColor__.Z * 255));
                 }
@@ -176,9 +170,11 @@ public static class I_View{
             Vector2 __SceneViewport = ImGui.GetContentRegionAvail();
             __SceneViewport.X = System.Math.Max(1, __SceneViewport.X);
             __SceneViewport.Y = System.Math.Max(1, __SceneViewport.Y);
-            SceneViewSize = new Vector2I((int)__SceneViewport.X, (int)__SceneViewport.Y);
+            WEE.D.View.Size = new Vector2I((int)__SceneViewport.X, (int)__SceneViewport.Y);
 
-            if(WEE.Interface.CurrentScene != null){
+            WEE.D.View.IsMouseOver = false;
+            
+            if(WEE.D.Selected.Scene != null){
                 if(WEE.Registry.HasMethods<WEE_OnRenderView>()){
                     if(WEE.Render.SceneView != null!){
                         PixelAttribute PA = SelectedAttachment ?? PA_Default;
@@ -194,10 +190,13 @@ public static class I_View{
                         }
             
                         ImGui.Image((IntPtr)TextureID, __SceneViewport, new Vector2(0, 1), new Vector2(1, 0));
+
+                        WEE.D.View.IsMouseOver = ImGui.IsItemHovered(ImGuiHoveredFlags.None);
+                        
                         Vector2 ImagePositionMin = ImGui.GetItemRectMin();
-                        ViewMousePosition = new Vector2I(
-                            (int)(WEE.Control.MousePosition.X - ImagePositionMin.X),
-                            (int)(WEE.Control.MousePosition.Y - ImagePositionMin.Y)
+                        WEE.D.View.LocalMousePosition = new Vector2I(
+                            (int)(WEE.D.Input.M.Position.X - ImagePositionMin.X),
+                            (int)(WEE.D.Input.M.Position.Y - ImagePositionMin.Y)
                         );
                     }else{
                         // todo, Я ВСЁ ЕЩЁ МЕГАТРОН ДЕЛАЯ ПОВТОРЫ
@@ -236,14 +235,14 @@ public static class I_View{
     }
     
     public static void ClickToView(){
-        if(ViewMousePosition.X < 0 || ViewMousePosition.Y < 0 || ViewMousePosition.X > SceneViewSize.X || ViewMousePosition.Y > SceneViewSize.Y){ return; }
+        if(WEE.D.View.LocalMousePosition.X < 0 || WEE.D.View.LocalMousePosition.Y < 0 || WEE.D.View.LocalMousePosition.X > WEE.D.View.Size.X || WEE.D.View.LocalMousePosition.Y > WEE.D.View.Size.Y){ return; }
 
         // flip y
-        Vector2I PickPosition = new Vector2I(ViewMousePosition.X, SceneViewSize.Y - ViewMousePosition.Y);
+        Vector2I PickPosition = new Vector2I(WEE.D.View.LocalMousePosition.X, WEE.D.View.Size.Y - WEE.D.View.LocalMousePosition.Y);
         
         Color4B Color = WEE.Render.PickingView.GetRect(new Rect2I(PickPosition, new Vector2I(1, 1)))[0];
         uint ID = Color.ToUInt();
         
-        WEE.Interface.CurrentEntity = ID != 0 ? Entity.GetFromID(ID) : null;
+        WEE.D.Selected.Entity = ID != 0 ? Entity.GetFromID(ID) : null;
     }
 }

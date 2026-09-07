@@ -1,22 +1,20 @@
 ﻿using System.Numerics;
 using System.Reflection;
 using ImGuiNET;
+using WLO.Interface;
 using WLO.Math;
 
 namespace WEI_Attribute;
 
 public class WEEI_Color4B_Default : WEEI_InspectorProperty{
-    public override void Draw(string Label, object Target, MemberInfo Member, Func<object?> Getter, Action<object?> Setter){
+    public override void Draw(string Label, object Target, MemberInfo Member, Func<object?> Getter, Action<object?> Setter, ImGUI GUI){
         Color4B Value = (Color4B)Getter()!;
 
-        // TODO
-        const float Div = 1f / 255;
-        
         Vector4 SystemValue = new Vector4(
-            Value.R * Div,
-            Value.G * Div,
-            Value.B * Div,
-            Value.A * Div
+            Value.R * WL.Math.Inverse255,
+            Value.G * WL.Math.Inverse255,
+            Value.B * WL.Math.Inverse255,
+            Value.A * WL.Math.Inverse255
         );
 
         if(ImGui.ColorEdit4(Label, ref SystemValue)){

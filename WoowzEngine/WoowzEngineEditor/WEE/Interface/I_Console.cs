@@ -14,7 +14,7 @@ public static class I_Console{
     public static void Update(){
         if(!WEE.Interface.WindowConsoleActive){ return; }
 
-        ImGUI GUI = WEE.Interface.ImGUI;
+        ImGUI GUI = WEE.D.ImGUI;
         
         string WindowTitle = (__UnreadCount > 0 ? $"Консоль [{__UnreadCount}]" : "Консоль") + "###Console";
 

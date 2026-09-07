@@ -3,11 +3,12 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using ImGuiNET;
 using WEI;
+using WLO.Interface;
 
 namespace WEI_Attribute;
 
 public class WEEI_Asset_Default : WEEI_InspectorProperty{
-    public override void Draw(string Label, object Target, MemberInfo Member, Func<object?> Getter, Action<object?> Setter){
+    public override void Draw(string Label, object Target, MemberInfo Member, Func<object?> Getter, Action<object?> Setter, ImGUI GUI){
         object? Value = Getter();
         Type MemberType = Member is FieldInfo f ? f.FieldType : ((PropertyInfo)Member).PropertyType;
         Type AssetTargetType = MemberType.GetGenericArguments()[0];
@@ -18,12 +19,12 @@ public class WEEI_Asset_Default : WEEI_InspectorProperty{
         
         string CurrentKey = (string)(MemberType.GetField("Key")!.GetValue(Value) ?? "");
         
-        ImGui.BeginGroup();
-            float TotalW = ImGui.CalcItemWidth();
-            float FrameH = ImGui.GetFrameHeight();
+        GUI.Group(() => {
+            float TotalW  = ImGui.CalcItemWidth();
+            float FrameH  = ImGui.GetFrameHeight();
             float ButtonW = ImGui.CalcTextSize("...").X + ImGui.GetStyle().FramePadding.X * 2;
             float Spacing = ImGui.GetStyle().ItemSpacing.X;
-            float InputW = TotalW - ButtonW - Spacing;
+            float InputW  = TotalW - ButtonW - Spacing;
             
             ImGui.SetNextItemWidth(InputW);
             string TempKey = CurrentKey;
@@ -40,22 +41,23 @@ public class WEEI_Asset_Default : WEEI_InspectorProperty{
                 ImGui.EndDragDropSource();
             }
 
-            if(!IsLocked && ImGui.BeginDragDropTarget()){
-                unsafe{
-                    ImGuiPayloadPtr Payload = ImGui.AcceptDragDropPayload("ASSET_KEY");
-                    if (Payload.NativePtr != null) {
-                        string DroppedKey = Marshal.PtrToStringAnsi(Payload.Data)!;
-                        if (WE.Asset.GetKeysForType(AssetTargetType).Contains(DroppedKey)) {
-                            if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
-                                Setter(MemberType.GetConstructor([typeof(string)])!.Invoke([DroppedKey]));
-                            ImGui.GetWindowDrawList().AddRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), ImGui.GetColorU32(new Vector4(0.2f, 1, 0.2f, 1)), 4.0f);
-                        } else {
-                            ImGui.SetTooltip($"Недопустимый тип! Ожидается: {AssetTargetType.Name}");
-                            ImGui.GetWindowDrawList().AddRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), ImGui.GetColorU32(new Vector4(1, 0.2f, 0.2f, 1)), 4);
+            if(!IsLocked){
+                GUI.DragDropTarget(() => {
+                    unsafe{
+                        ImGuiPayloadPtr Payload = ImGui.AcceptDragDropPayload("ASSET_KEY");
+                        if (Payload.NativePtr != null) {
+                            string DroppedKey = Marshal.PtrToStringAnsi(Payload.Data)!;
+                            if (WE.Asset.GetKeysForType(AssetTargetType).Contains(DroppedKey)) {
+                                if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
+                                    Setter(MemberType.GetConstructor([typeof(string)])!.Invoke([DroppedKey]));
+                                ImGui.GetWindowDrawList().AddRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), ImGui.GetColorU32(new Vector4(0.2f, 1, 0.2f, 1)), 4.0f);
+                            } else {
+                                ImGui.SetTooltip($"Недопустимый тип! Ожидается: {AssetTargetType.Name}");
+                                ImGui.GetWindowDrawList().AddRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), ImGui.GetColorU32(new Vector4(1, 0.2f, 0.2f, 1)), 4);
+                            }
                         }
                     }
-                }
-                ImGui.EndDragDropTarget();
+                });
             }
             
             ImGui.SameLine(0, Spacing);
@@ -63,7 +65,7 @@ public class WEEI_Asset_Default : WEEI_InspectorProperty{
             
             ImGui.SameLine(0, Spacing);
             ImGui.Text(Label);
-        ImGui.EndGroup();
+        });
 
         if(ImGui.IsItemHovered()){ ImGui.SetTooltip($"Тип ассета: {AssetTargetType.Name}\nПуть: {(string.IsNullOrEmpty(CurrentKey) ? "Не задан" : CurrentKey)}"); }
 

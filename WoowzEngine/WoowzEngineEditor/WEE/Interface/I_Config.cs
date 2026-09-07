@@ -11,7 +11,7 @@ public static class I_Config{
     public static void Update(){
         if(!WEE.Interface.WindowConfigActive || WEE.Interface.Config == null){ return; }
 
-        ImGUI GUI = WEE.Interface.ImGUI;
+        ImGUI GUI = WEE.D.ImGUI;
         
         ImGui.SetNextWindowSize(new Vector2(450, 250), ImGuiCond.FirstUseEver);
         GUI.Window("Конфиг###Config", ref WEE.Interface.WindowConfigActive, () => {
@@ -23,13 +23,13 @@ public static class I_Config{
             
             ImGui.TextDisabled("Информация об сцене");
 
-            if(WEE.Interface.CurrentScene == null){
+            if(WEE.D.Selected.Scene == null){
                 ImGui.TextDisabled("Сцена не открыта");
             }else{
-                if(!WEE.Interface.CurrentScene.__EditorInfo.HasValue){
+                if(!WEE.D.Selected.Scene.__EditorInfo.HasValue){
                     ImGui.TextDisabled("У сцены нет информации");
                 }else{
-                    Scene.EditorInfo EditorInfo = WEE.Interface.CurrentScene.__EditorInfo!.Value;
+                    Scene.EditorInfo EditorInfo = WEE.D.Selected.Scene.__EditorInfo!.Value;
                 
                     ImGui.TextDisabled($"Создана: {new DateTime(EditorInfo.CreationTime):dd.MM.yyyy HH:mm:ss}");
                     ImGui.TextDisabled($"Сохранён: {(EditorInfo.LastSaveTime > 0 ? new DateTime(EditorInfo.LastSaveTime).ToString("dd.MM.yyyy HH:mm:ss") : "Ни разу не сохранялась")}");

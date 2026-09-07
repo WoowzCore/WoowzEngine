@@ -13,7 +13,7 @@ namespace WEE;
 
 public static class Render{
     public static void Start(){
-        API = new OpenGL(WEE.Window.MainWindow.GetProcAddress, new OpenGL.StartParameters{
+        API = new OpenGL(WEE.D.Window.GetProcAddress, new OpenGL.StartParameters{
             DebugLogger = true,
             UseThisLogger = WL.Logger.CurrentLogger
         }, true);
@@ -105,25 +105,25 @@ public static class Render{
         try{
             WEE.Main.Pipeline.Run("SceneRender",
                 DTI,
-                WEE.Interface.CurrentScene,
-                I_View.SceneViewSize,
+                WEE.D.Selected.Scene,
+                WEE.D.View.Size,
                 SceneView,
                 PickingView,
                 WEE.Render.API,
-                WEE.Editor.ViewCamera,
+                WEE.D.View.Camera,
                 I_View.BackgroundColor,
-                WEE.Cycle.Render_Time,
+                WEE.D.Time.Render.Elapsed,
                 I_View.SelectedEffect?.Asset
             );
             
             API.Pool.SetView(null);
             
-            API.Pool.GetView().Viewport = WEE.Window.MainWindow.Size;
+            API.Pool.GetView().Viewport = WEE.D.Window.Size;
             
             API.Render(() => {
                 API.Clear(new Color4B(50, 25, 25));
                 
-                WEE.Interface.Render();
+                WEE.Interface.Draw();
             });
         }catch(Exception e){
             throw new ExceptionWEE("Произошла ошибка в главном рендере!", e);

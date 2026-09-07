@@ -17,7 +17,6 @@ public static class Main{
             Pipeline = new Pipeline();
             
             WEE.Window.Start();
-            WEE.Control.Start();
             WEE.Render.Start();
             WEE.Interface.Start();
             

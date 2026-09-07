@@ -14,13 +14,13 @@ public static class I_Inspector{
     public static void Update(){
         if(!WEE.Interface.WindowInspectorActive){ return; }
 
-        ImGUI GUI = WEE.Interface.ImGUI;
+        ImGUI GUI = WEE.D.ImGUI;
 
         GUI.Window("Инспектор###Inspector", ref WEE.Interface.WindowInspectorActive, () => {
-            if(WEE.Interface.CurrentEntity == null){
+            if(WEE.D.Selected.Entity == null){
                 ImGui.TextDisabled("Выберите объект в иерархии...");
             }else{
-                Entity Entity = WEE.Interface.CurrentEntity;
+                Entity Entity = WEE.D.Selected.Entity;
                 
                 string Prefix = $"[{Entity.ID}]";
                 ImGui.AlignTextToFramePadding();
@@ -113,7 +113,7 @@ public static class I_Inspector{
                         if(ComponentOpen){
                             if(Entity.IsPartOfPrefab){ ImGui.BeginDisabled(); }
                             
-                            DrawComponentFields(Component);
+                            DrawComponentFields(Component, GUI);
                             
                             if(Entity.IsPartOfPrefab){ ImGui.EndDisabled(); }
                         }
@@ -132,7 +132,7 @@ public static class I_Inspector{
                             if(ImGui.MenuItem(ComponentType.Name)){
                                 MethodInfo Method = typeof(Entity).GetMethod("AddComponent")!;
                                 MethodInfo Generic = Method.MakeGenericMethod(ComponentType);
-                                Generic.Invoke(WEE.Interface.CurrentEntity, null);
+                                Generic.Invoke(WEE.D.Selected.Entity, null);
                             }
                         }
                     });
@@ -141,7 +141,7 @@ public static class I_Inspector{
         });
     }
     
-    private static void DrawComponentFields(WEI.Component Component){
+    private static void DrawComponentFields(WEI.Component Component, ImGUI GUI){
         Type Type = Component.GetType();
 
         bool CanDraw(MemberInfo Info){
@@ -156,7 +156,8 @@ public static class I_Inspector{
                 Field.FieldType,
                 () => Field.GetValue(Component),
                 Value => Field.SetValue(Component, Value),
-                Field
+                Field,
+                GUI
             );
         }
 
@@ -168,14 +169,13 @@ public static class I_Inspector{
                 Property.PropertyType,
                 () => Property.GetValue(Component),
                 Value => Property.SetValue(Component, Value),
-                Property
+                Property,
+                GUI
             );
         }
     }
     
-    private static void HandleMember(object Component, string Label, Type MemberType, Func<object?> Getter, Action<object?> Setter, MemberInfo Info){
-        ImGUI GUI = WEE.Interface.ImGUI;
-        
+    private static void HandleMember(object Component, string Label, Type MemberType, Func<object?> Getter, Action<object?> Setter, MemberInfo Info, ImGUI GUI){
         WEI.Component? Component__ = Component as WEI.Component;
 
         bool IsOverriden = Component__ != null && Component__.OverridesValues.Contains(Info.Name);
@@ -185,7 +185,7 @@ public static class I_Inspector{
         
         GUI.CustomID(Label, () => {
             foreach(WEEI_InspectorDecorator Decorator in Info.GetCustomAttributes<WEEI_InspectorDecorator>()){
-                Decorator.Draw(Label, Component, Info);
+                Decorator.Draw(Label, Component, Info, GUI);
             }
             
             if(!IsOverriden){
@@ -201,7 +201,7 @@ public static class I_Inspector{
                 PropertyAttribute.Draw(Label, Component, Info, Getter, (NewValue) => {
                     Setter(NewValue);
                     Component__!.OverridesValues.Add(Info.Name);
-                });
+                }, GUI);
             }else{
                 ImGui.TextDisabled($"{Label}: {MemberType.Name}");   
             }

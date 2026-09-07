@@ -4,33 +4,42 @@ using WLO;
 namespace WEE;
 
 public static class Cycle{
-    public static uint MaxEngineFPS = 30;
-    public static uint MaxRenderFPS = 120;
+    private static double Accumulator = 0;
+    private static double PhysicStep;
+    private static long   LastTicks;
     
-    private static DeltaTimeInfo? __Engine_DTI;
-    private static DeltaTimeInfo? __Render_DTI;
     public static void Start(){
-        while(!WEE.Window.MainWindow.IsClosed){
+        LastTicks = System.Diagnostics.Stopwatch.GetTimestamp();
+
+        DeltaTimeInfo? __Render_DTI = null;
+        
+        while(!WEE.D.Window.IsClosed){
             try{
                 try{
                     SharedCycle();
                 }catch(Exception e){
                     WL.Logger.Error("Ошибка в SHARED цикле!", e);   
                 }
+
+                PhysicStep = DeltaTimeInfo.FPSToDT(WEE.D.Time.Engine.MaxFPS);
                 
-                if(WL.Thread.LimitByFPS(MaxEngineFPS, ref __Engine_DTI)){
-                    Engine_DTI = __Engine_DTI!.Value;
+                Accumulator += WL.Thread.GetRawDT(ref LastTicks);
+                
+                if(WL.Thread.NeedFixedUpdate(ref Accumulator, PhysicStep)){
+                    WEE.D.Time.Engine.DTI = new DeltaTimeInfo(0, PhysicStep);
                     try{
-                        EngineCycle(Engine_DTI);
+                        EngineCycle();
                     }catch(Exception e){
                         WL.Logger.Error("Ошибка в ENGINE цикле!", e);   
                     }
                 }
-            
-                if(WL.Thread.LimitByFPS(MaxRenderFPS, ref __Render_DTI)){
-                    Render_DTI = __Render_DTI!.Value;
+
+                WEE.D.Time.Render.EngineAlpha = (float)(Accumulator / PhysicStep);
+                
+                if(WL.Thread.LimitByFPS(WEE.D.Time.Render.MaxFPS, ref __Render_DTI)){
+                    WEE.D.Time.Render.DTI = __Render_DTI!.Value;
                     try{
-                        RenderCycle(Render_DTI);
+                        RenderCycle();
                     }catch(Exception e){
                         WL.Logger.Error("Ошибка в RENDER цикле!", e);
                     }
@@ -42,34 +51,26 @@ public static class Cycle{
     }
 
     public static void SharedCycle(){
-        WEE.Window.MainWindow.PollEvents();
+        WEE.D.Window.PollEvents();
     }
     
-    public static void EngineCycle(DeltaTimeInfo DTI){
+    public static void EngineCycle(){
         WEE.Window.UpdateTitle();
 
-        WEE.Main.Pipeline.Run("SceneUpdate", DTI, WEE.Interface.CurrentScene);
+        WEE.Main.Pipeline.Run("SceneUpdate", WEE.D.Time.Engine.DTI, WEE.D.Selected.Scene);
     }
     
-    public static void RenderCycle(DeltaTimeInfo DTI){
-        WEE.Control.Update();
-        WEE.Editor.UpdateSceneView();
+    public static void RenderCycle(){
+        WEE.D.Time.Render.Elapsed += WEE.D.Time.Render.DT;
         
-        WEE.Window.MainWindow.PollEvents2();
-
-        Render_Time += Render_DTI.DT;
+        WEE.Editor.UpdateCamera();
         
         WEE.Interface.Update();
         
-        WEE.Render.MainRender(DTI);
+        WEE.Render.MainRender(WEE.D.Time.Render.DTI);
         
-        WEE.Window.MainWindow.SwapBuffers();
+        WEE.D.Window.SwapBuffers();
+        
+        WEE.D.Window.PollEvents2();
     }
-    
-    // ----------------------------------------------------------------------
-
-    public static DeltaTimeInfo Render_DTI;
-    public static DeltaTimeInfo Engine_DTI;
-    
-    public static double Render_Time;
 }

@@ -14,15 +14,15 @@ public static class I_Menu{
     private const string __PrefabFileExtension = "we_prefab";
     
     public static void Update(){
-        ImGUI GUI = WEE.Interface.ImGUI;
+        ImGUI GUI = WEE.D.ImGUI;
 
         GUI.MainMenuBar(() => {
             GUI.Menu("Файл", () => {
                 if(ImGui.MenuItem("Новая сцена")){
                     CloseScene();
-                    WEE.Interface.CurrentScene = new Scene();
-                    WEE.Interface.CurrentScene.DoUpdate = false;
-                    WEE.Interface.CurrentScene.DoEngineUpdate = true;
+                    WEE.D.Selected.Scene = new Scene();
+                    WEE.D.Selected.Scene.DoUpdate = false;
+                    WEE.D.Selected.Scene.DoEngineUpdate = true;
                 }
                 
                 ImGui.Separator();
@@ -31,18 +31,18 @@ public static class I_Menu{
                     OpenScene();
                 }
                 
-                if(ImGui.MenuItem("Сохранить", "", false, WEE.Interface.CurrentScene != null)){
+                if(ImGui.MenuItem("Сохранить", "", false, WEE.D.Selected.Scene != null)){
                     SaveScene();
                 }
                 
-                if(ImGui.MenuItem("Сохранить как", "", false, WEE.Interface.CurrentScene != null)){
+                if(ImGui.MenuItem("Сохранить как", "", false, WEE.D.Selected.Scene != null)){
                     SaveSceneAs();
                 }
                 
                 ImGui.Separator();
                 
-                if(ImGui.MenuItem("Закрыть сцену", "", false, WEE.Interface.CurrentScene != null)){ CloseScene(); }
-                if(ImGui.MenuItem("Выйти", "")){ WEE.Window.MainWindow.Close(); }
+                if(ImGui.MenuItem("Закрыть сцену", "", false, WEE.D.Selected.Scene != null)){ CloseScene(); }
+                if(ImGui.MenuItem("Выйти", "")){ WEE.D.Window.Close(); }
                 
                 ImGui.Separator();
 
@@ -76,13 +76,13 @@ public static class I_Menu{
                 if(ImGui.MenuItem("Открыть GitHub...")){ Process.Start(new ProcessStartInfo("https://github.com/WoowzCore/WoowzEngine"){ UseShellExecute = true }); }
             });
 
-            if(WEE.Interface.CurrentScene != null){
+            if(WEE.D.Selected.Scene != null){
                 ImGui.SameLine();
                 ImGui.TextDisabled("|");
                 ImGui.SameLine();
 
                 ImGui.SetNextItemWidth(300);
-                ImGui.InputText("##SceneNameInput", ref WEE.Interface.CurrentScene.Name, 128);
+                ImGui.InputText("##SceneNameInput", ref WEE.D.Selected.Scene.Name, 128);
                 if(ImGui.IsItemHovered()){ ImGui.SetTooltip("Название сцены"); }
                 
                 ImGui.SameLine();
@@ -90,7 +90,7 @@ public static class I_Menu{
                 ImGui.SameLine();
             }
             
-            string MenuText = $"E-FPS: {WEE.Cycle.Engine_DTI.FPS:F1}";
+            string MenuText = $"E-FPS: {WEE.D.Time.Engine.DTI.FPS:F1}";
             System.Numerics.Vector2 TextSize = ImGui.CalcTextSize(MenuText);
             ImGui.SameLine(ImGui.GetWindowWidth() - TextSize.X - 10);
             ImGui.TextDisabled(MenuText);
@@ -99,22 +99,22 @@ public static class I_Menu{
     }
     
     private static void CloseScene(){
-        WEE.Interface.CurrentScene?.Clear(true);
-        WEE.Interface.CurrentEntity = null;
-        WEE.Interface.CurrentScene = null;
+        WEE.D.Selected.Scene?.Clear(true);
+        WEE.D.Selected.Entity = null;
+        WEE.D.Selected.Scene = null;
 
         __SceneFilePath = null!;
         
-        I_View.BackgroundColor         = new Color4B(200, 200, 200);
-        WEE.Editor.ViewCamera.Position = new Vector3F();
-        WEE.Editor.ViewCamera.Rotation = new Vector3F();
-        I_View.Is2DView                = false;
-        WEE.Editor.CameraSpeed         = 1;
-        WEE.Editor.ViewCamera.Far      = 1000;
+        I_View.BackgroundColor     = new Color4B(200, 200, 200);
+        WEE.D.View.Camera.Position = new Vector3F();
+        WEE.D.View.Camera.Rotation = new Vector3F();
+        I_View.Is2DView             = false;
+        WEE.D.View.CameraSpeed      = 1;
+        WEE.D.View.Camera.Far      = 1000;
     }
 
     private static void SaveSceneAs(){
-        if(WEE.Interface.CurrentScene == null){ return; }
+        if(WEE.D.Selected.Scene == null){ return; }
         
         DialogResult? Result = Dialog.FileSave(__SceneFileExtension);
 
@@ -135,7 +135,7 @@ public static class I_Menu{
     }
 
     private static void SaveScene(){
-        if(WEE.Interface.CurrentScene == null){ return; }
+        if(WEE.D.Selected.Scene == null){ return; }
         if(string.IsNullOrEmpty(__SceneFilePath)){
             SaveSceneAs();
         }else{
@@ -144,23 +144,23 @@ public static class I_Menu{
     }
     
     private static void __SaveScene(string Path) {
-        if(WEE.Interface.CurrentScene == null){ return; }
+        if(WEE.D.Selected.Scene == null){ return; }
         try{
-            Scene.EditorInfo EditorInfo = WEE.Interface.CurrentScene.__EditorInfo ?? new Scene.EditorInfo();
+            Scene.EditorInfo EditorInfo = WEE.D.Selected.Scene.__EditorInfo ?? new Scene.EditorInfo();
 
             EditorInfo.BackgroundColor   =  I_View.BackgroundColor;
-            EditorInfo.CameraPosition    =  WEE.Editor.ViewCamera.Position;
-            EditorInfo.CameraRotation    =  WEE.Editor.ViewCamera.Rotation;
+            EditorInfo.CameraPosition    =  WEE.D.View.Camera.Position;
+            EditorInfo.CameraRotation    =  WEE.D.View.Camera.Rotation;
             EditorInfo.CameraPerspective = !I_View.Is2DView;
-            EditorInfo.CameraSpeed       =  WEE.Editor.CameraSpeed;
-            EditorInfo.CameraFar         =  WEE.Editor.ViewCamera.Far;
+            EditorInfo.CameraSpeed       =  WEE.D.View.CameraSpeed;
+            EditorInfo.CameraFar         =  WEE.D.View.Camera.Far;
             EditorInfo.LastSaveTime      =  DateTime.Now.Ticks;
                 
             if(EditorInfo.CreationTime == 0){ EditorInfo.CreationTime = DateTime.Now.Ticks; }
 
-            WEE.Interface.CurrentScene.__EditorInfo = EditorInfo;
+            WEE.D.Selected.Scene.__EditorInfo = EditorInfo;
             
-            string JSON = WEE.Interface.CurrentScene.ToJSON();
+            string JSON = WEE.D.Selected.Scene.ToJSON();
             File.WriteAllText(Path, JSON);
             __SceneFilePath = Path;
             WL.Logger.Info($"Сцена сохранена: {Path}");
@@ -176,30 +176,30 @@ public static class I_Menu{
             
             CloseScene();
             
-            WEE.Interface.CurrentScene = Scene.FromJSON(JSON);
+            WEE.D.Selected.Scene = Scene.FromJSON(JSON);
 
-            WEE.Interface.CurrentScene.DoUpdate       = false;
-            WEE.Interface.CurrentScene.DoEngineUpdate = true;
+            WEE.D.Selected.Scene.DoUpdate       = false;
+            WEE.D.Selected.Scene.DoEngineUpdate = true;
             
             __SceneFilePath = Path;
 
-            if(WEE.Interface.CurrentScene.__EditorInfo.HasValue){
-                I_View.BackgroundColor         =  WEE.Interface.CurrentScene.__EditorInfo.Value.BackgroundColor;
-                WEE.Editor.ViewCamera.Position =  WEE.Interface.CurrentScene.__EditorInfo.Value.CameraPosition;
-                WEE.Editor.ViewCamera.Rotation =  WEE.Interface.CurrentScene.__EditorInfo.Value.CameraRotation;
-                I_View.Is2DView                = !WEE.Interface.CurrentScene.__EditorInfo.Value.CameraPerspective;
-                WEE.Editor.CameraSpeed         =  WEE.Interface.CurrentScene.__EditorInfo.Value.CameraSpeed;
-                WEE.Editor.ViewCamera.Far      =  WEE.Interface.CurrentScene.__EditorInfo.Value.CameraFar;
+            if(WEE.D.Selected.Scene.__EditorInfo.HasValue){
+                I_View.BackgroundColor     =  WEE.D.Selected.Scene.__EditorInfo.Value.BackgroundColor;
+                WEE.D.View.Camera.Position =  WEE.D.Selected.Scene.__EditorInfo.Value.CameraPosition;
+                WEE.D.View.Camera.Rotation =  WEE.D.Selected.Scene.__EditorInfo.Value.CameraRotation;
+                I_View.Is2DView            = !WEE.D.Selected.Scene.__EditorInfo.Value.CameraPerspective;
+                WEE.D.View.CameraSpeed     =  WEE.D.Selected.Scene.__EditorInfo.Value.CameraSpeed;
+                WEE.D.View.Camera.Far      =  WEE.D.Selected.Scene.__EditorInfo.Value.CameraFar;
                 
-                if(WEE.Interface.CurrentScene.__EditorInfo.Value.CreationTime == 0){
-                    WEE.Interface.CurrentScene.__EditorInfo = WEE.Interface.CurrentScene.__EditorInfo.Value with{ CreationTime = DateTime.Now.Ticks };
+                if(WEE.D.Selected.Scene.__EditorInfo.Value.CreationTime == 0){
+                    WEE.D.Selected.Scene.__EditorInfo = WEE.D.Selected.Scene.__EditorInfo.Value with{ CreationTime = DateTime.Now.Ticks };
                 }
             }
             
             WEE.Prefs.AddRecentScene(Path);
             WL.Logger.Info($"Сцена загружена: {Path}");
             
-            WEE.Registry.RunMethods<WEE_OnSceneLoad>(true, WEE.Interface.CurrentScene);
+            WEE.Registry.RunMethods<WEE_OnSceneLoad>(true, WEE.D.Selected.Scene);
         }catch(Exception e){
             WL.Logger.Error($"Ошибка загрузки:", e);
         }
