@@ -4,10 +4,12 @@ using WLO;
 namespace WE;
 
 public struct Engine{
-    public static void Start(){
+    public static void Start(string[] Arguments){
         try{
             if(__Started){ throw new Exception("WoowzEngine и так был запущен!"); } __Started = true;
 
+            WL.Core.Arguments = Arguments;
+            
             WL.Core.EngineInfo = new ProjectInfo("WoowzEngine", Author: "Woowz11", License: "Look at Repo (WIP)"); //todo
             
             WL.Packer.SetFallback(typeof(WEI.Component), typeof(WEO.UnknownComponent));
