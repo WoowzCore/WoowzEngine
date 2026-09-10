@@ -131,15 +131,10 @@ public class Entity : WLI.Packable, WLI.Hierarchical<Entity>{
             foreach(HierarchyNode<Entity> Child in Node.Children.ToList()){ Child.Owner.Destroy(); }
 
             Scene?.Remove(this);
+
+            RemoveAllComponents();
             
             Node.SetParent(null);
-
-            foreach(Component Component in __Components){
-                Component.Owner = null!;
-            }
-            
-            __Components.Clear();
-            
             Scene = null;
 
             __IDMap.Remove(ID);
