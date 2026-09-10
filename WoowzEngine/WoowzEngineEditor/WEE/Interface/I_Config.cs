@@ -9,7 +9,7 @@ namespace WEE_Interface;
 
 public static class I_Config{
     public static void Update(){
-        if(!WEE.Interface.WindowConfigActive || WEE.Interface.Config == null){ return; }
+        if(WEE.Interface.Config == null){ return; }
 
         ImGUI GUI = WEE.D.ImGUI;
         

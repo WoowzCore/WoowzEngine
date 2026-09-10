@@ -13,8 +13,6 @@ namespace WEE_Interface;
 
 public static class I_Assets{
     public static void Update(){
-        if(!WEE.Interface.WindowAssetsActive){ return; }
-
         GLImGUI GUI = WEE.D.ImGUI;
         
         GUI.Window("Ресурсы###Assets", ref WEE.Interface.WindowAssetsActive, () => {

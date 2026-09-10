@@ -12,13 +12,11 @@ public static class I_Console{
     private static bool __InFocused   = false;
     
     public static void Update(){
-        if(!WEE.Interface.WindowConsoleActive){ return; }
-
         ImGUI GUI = WEE.D.ImGUI;
         
         string WindowTitle = (__UnreadCount > 0 ? $"Консоль [{__UnreadCount}]" : "Консоль") + "###Console";
 
-        bool Showen = GUI.Window(WindowTitle, ref WEE.Interface.WindowConsoleActive, () => {
+        bool Shown = GUI.Window(WindowTitle, ref WEE.Interface.WindowConsoleActive, () => {
             if(ImGui.IsWindowFocused(ImGuiFocusedFlags.RootAndChildWindows)){
                 __UnreadCount = 0;
                 __InFocused = true;
@@ -42,7 +40,7 @@ public static class I_Console{
             });
         });
 
-        if(!Showen){ __InFocused = false; }
+        if(!Shown){ __InFocused = false; }
     }
 
     public static void Start(){

@@ -20,9 +20,7 @@ public static class I_Menu{
             GUI.Menu("Файл", () => {
                 if(ImGui.MenuItem("Новая сцена")){
                     CloseScene();
-                    WEE.D.Selected.Scene = new Scene();
-                    WEE.D.Selected.Scene.DoUpdate = false;
-                    WEE.D.Selected.Scene.DoEngineUpdate = true;
+                    WEE.D.Selected.Scene = new Scene{ DoUpdate = false, DoEngineUpdate = true };
                 }
                 
                 ImGui.Separator();

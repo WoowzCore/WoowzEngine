@@ -12,8 +12,6 @@ namespace WEE_Interface;
 
 public static class I_Inspector{
     public static void Update(){
-        if(!WEE.Interface.WindowInspectorActive){ return; }
-
         ImGUI GUI = WEE.D.ImGUI;
 
         GUI.Window("Инспектор###Inspector", ref WEE.Interface.WindowInspectorActive, () => {

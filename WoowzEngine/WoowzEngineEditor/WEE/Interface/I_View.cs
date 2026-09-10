@@ -44,23 +44,21 @@ public static class I_View{
     // ----------------------------------------------------------------------
     
     public static void Update(){
-        if(!WEE.Interface.WindowViewActive){ return; }
-
         ImGUI GUI = WEE.D.ImGUI;
-        
-        GLView? CameraLayout = null;
-        List<PixelAttribute> SupportedPA = [];
-        if(WEE.Registry.HasMethods<WEE_OnCameraPixelLayout>()){
-            CameraLayout = WEE.Registry.RunFirstDelegate<WEE_OnCameraPixelLayout, Func<GLView>>(false) as GLView;
-
-            if(CameraLayout != null){
-                foreach(PixelAttribute PA in CameraLayout.Layout.Attributes){
-                    if(PA.IsTexture){ SupportedPA.Add(PA); }
-                }
-            }
-        }
 
         GUI.Window("Просмотр###View", ref WEE.Interface.WindowViewActive, () => {
+            GLView? CameraLayout = null;
+            List<PixelAttribute> SupportedPA = [];
+            if(WEE.Registry.HasMethods<WEE_OnCameraPixelLayout>()){
+                CameraLayout = WEE.Registry.RunFirstDelegate<WEE_OnCameraPixelLayout, Func<GLView>>(false) as GLView;
+
+                if(CameraLayout != null){
+                    foreach(PixelAttribute PA in CameraLayout.Layout.Attributes){
+                        if(PA.IsTexture){ SupportedPA.Add(PA); }
+                    }
+                }
+            }
+            
             WEE.D.View.IsFocus = ImGui.IsWindowFocused(ImGuiFocusedFlags.RootAndChildWindows);
             
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8, 0));

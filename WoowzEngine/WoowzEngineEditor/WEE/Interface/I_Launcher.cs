@@ -11,10 +11,9 @@ public static class I_Launcher{
     private const  string __ConfigFileExtension = "wee_config";
     
     public static void Update(){
-        ImGui.SetNextWindowPos(ImGui.GetMainViewport().GetCenter(), ImGuiCond.Always, new Vector2(0.5f, 0.5f));
-
         ImGUI GUI = WEE.D.ImGUI;
 
+        ImGui.SetNextWindowPos(ImGui.GetMainViewport().GetCenter(), ImGuiCond.Always, new Vector2(0.5f, 0.5f));
         GUI.Window("Загрузчик", ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoCollapse, () => {
             if(!string.IsNullOrEmpty(WEE.Prefs.LastConfigPath) && File.Exists(WEE.Prefs.LastConfigPath)){
                 ImGui.TextColored(new Vector4(0.4f, 1, 0.4f, 1), "Последний проект:");

@@ -152,7 +152,7 @@ public static class Interface{
     private static bool __FirstFrame = true;
     
     public static void Update(){
-        WEE.D.ImGUI.Build((float)WEE.D.Time.Render.DTI.DT, WEE.D.Window.Size, () => {
+        WEE.D.ImGUI.Build(WEE.D.Time.Render.DTF, WEE.D.Window.Size, () => {
             if(!__IsProjectLoaded){
                 I_Launcher.Update(); 
             }else{
@@ -194,12 +194,12 @@ public static class Interface{
                     ImGuiDockBuilder.igDockBuilderFinish(DockSpaceID);
                 }
                 
-                I_View.Update();
+                I_View     .Update();
                 I_Inspector.Update();
                 I_Hierarchy.Update();
-                I_Assets.Update();
-                I_Console.Update();
-                I_Config.Update();
+                I_Assets   .Update();
+                I_Console  .Update();
+                I_Config   .Update();
 
                 if(WindowImGUIDemoActive){ ImGui.ShowDemoWindow(ref WindowImGUIDemoActive); }
             }
