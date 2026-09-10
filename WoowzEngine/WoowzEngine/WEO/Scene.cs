@@ -5,66 +5,197 @@ using WLO.Math;
 namespace WEO;
 
 public class Scene : WLI.Packable{
-    public string Name = "New Scene";
+    #region Состояние сцены
 
-    public bool DoUpdate       = true;
-    public bool DoEngineUpdate = false;
-    public bool DoRender       = true;
+        public string      Name           = "New Scene";
+        public bool        DoUpdate       = true;
+        public bool        DoEngineUpdate = false;
+        public bool        DoRender       = true;
+        public EditorInfo? __EditorInfo;
+
+    #endregion
+
+
+    #region Доступ к сущностям
+
+        public IEnumerable<Entity> Roots => __Roots;
+        public           IEnumerable<Entity> AllEntity => __Registry;
+
+    #endregion
     
-    public EditorInfo? __EditorInfo;
+    // ----------------------------------------------------------------------
+
+    #region Управление сущностями
+
+        public bool Add(Entity Entity){
+            if(!__Registry.Add(Entity)){ return false; }
+
+            Entity.Scene = this;
+
+            if(Entity.Node.Parent == null && !__Roots.Contains(Entity)){
+                __Roots.Add(Entity);
+            }
+            
+            foreach(Component Component in Entity.GetAllComponents()){ RegisterComponent(Component); }
+            
+            Entity.Node.OnChildAdded    += OnChildAddedToEntity;
+            Entity.Node.OnParentChanged += OnEntityParentChanged;
+
+            foreach(HierarchyNode<Entity> Child in Entity.Node.Children.ToList()){
+                Add(Child.Owner);
+            }
+
+            return true;
+        }
+
+        public bool Remove(Entity Entity){
+            if(!__Registry.Contains(Entity)){ return false; }
+
+            foreach(Component Component in Entity.GetAllComponents()){ UnregisterComponent(Component); }
+            
+            Entity.Scene = null;
+            __Registry.Remove(Entity);
+            __Roots.Remove(Entity);
+            
+            Entity.Node.OnChildAdded    -= OnChildAddedToEntity;
+            Entity.Node.OnParentChanged -= OnEntityParentChanged;
+            
+            foreach(HierarchyNode<Entity> Child in Entity.Node.Children.ToList()){
+                Remove(Child.Owner);
+            }
+            
+            return true;
+        }
+
+        public void MoveRoot(Entity Entity, int Index){
+            if(Entity.Node.Parent != null || !__Roots.Contains(Entity)){ return; }
+
+            __Roots.Remove(Entity);
+
+            if(Index < 0){ Index = 0; }
+            if(Index > __Roots.Count){ Index = __Roots.Count; }
+        
+            __Roots.Insert(Index, Entity);
+        }
+        
+        public void Clear(bool ClearAllEntities = false){
+            __Roots.Clear();
+            foreach(Entity Entity in __Registry.ToList()){
+                Remove(Entity);
+            }
+
+            if(ClearAllEntities){ Entity.DestroyAllEntities(); }
+        }
+        
+    #endregion
+
+    
+    #region Работа с компонентами
+
+        public T? GetFirstComponent<T>() where T : class{
+            if(__Components.TryGetValue(typeof(T), out HashSet<Component>? Pool)){
+                foreach(Component Component in Pool){ return Component as T; }
+            }
+            
+            return null;
+        }
+        
+        public IEnumerable<T> GetComponents<T>() where T : class{
+            if(__Components.TryGetValue(typeof(T), out HashSet<Component>? Pool)){
+                return Pool.Cast<T>().ToList();
+            }
+
+            return [];
+        }
+
+    #endregion
+    
+    // ----------------------------------------------------------------------
+
+    #region Игровой цикл
+
+        public void FixedUpdate(DeltaTimeInfo DTI){
+            if(!DoUpdate){ return; }
+            
+            foreach(Component C in GetComponents<Component>()){
+                if(WE.Editor.IsEditor && C.Owner.IsPartOfPrefab){ continue; }
+                C.__FixedUpdate(DTI);
+            }
+        }
+        
+        /// TODO, ВЫЗЫВАТЬ В RENDER ПОТОКЕ! А FIXEDUPDATE В ОБЫЧНОМ!
+        public void Update(DeltaTimeInfo DTI){
+            if(!DoUpdate){ return; }
+            
+            foreach(Component C in GetComponents<Component>()){
+                if(WE.Editor.IsEditor && C.Owner.IsPartOfPrefab){ continue; }
+                C.__Update(DTI);
+            }
+        }
+        
+        public void UpdateEngine(DeltaTimeInfo DTI){
+            if(!DoEngineUpdate){ return; }
+
+            foreach(EngineComponent C in GetComponents<EngineComponent>()){ C.OnEngineUpdate(DTI, false /* todo */); }
+        }
+        
+        public void Render(DeltaTimeInfo DTI, Vector3F CameraPosition){
+            if(!DoRender){ return; }
+            
+            foreach(RenderComponent C in GetComponents<RenderComponent>()){ C.OnRender(DTI, CameraPosition); }
+
+            if(WE.Editor.IsEditor){
+                foreach(EngineComponent C in GetComponents<EngineComponent>()){ C.OnEngineRender(DTI, CameraPosition, false /* todo */); }
+            }
+        }
+
+    #endregion
+    
+    // ----------------------------------------------------------------------
+
+    #region JSON конвертация
+
+        public string ToJSON() => WL.String.ToJSON(WL.Packer.Pack(this));
+        public static Scene FromJSON(string JSON){
+            Dictionary<string, object?>? Data = WL.String.FromJSON(JSON) as Dictionary<string, object?>;
+            
+            Scene Result = new Scene();
+            if(Data != null){
+                WL.Packer.Unpack(Result, Data);
+            }
+            
+            return Result;
+        }
+
+    #endregion
+
+    
+    #region Pack/Unpack
+
+        public Dictionary<string, object?> __Pack() => new Dictionary<string, object?>{
+            ["Name"      ] = Name,
+            ["Entities"  ] = Roots.ToList(),
+            ["EditorInfo"] = __EditorInfo
+        };
+
+        public void __Unpack(Dictionary<string, object?> Data){
+            Clear();
+            
+            Name = WL.Packer.Get(Data, "Name", Name)!;
+
+            __EditorInfo = WL.Packer.Get<EditorInfo?>(Data, "EditorInfo");
+
+            List<Entity>? Entities = WL.Packer.Get<List<Entity>>(Data, "Entities");
+            if(Entities != null){
+                foreach(Entity Entity in Entities){ Add(Entity); }
+            }
+        }
+
+    #endregion
     
     // ----------------------------------------------------------------------
     
-    private readonly HashSet    <Entity> __Registry = [];
-    public           IEnumerable<Entity> AllEntity => __Registry;
-
-    private readonly List<Entity> __Roots = [];
-    public IEnumerable<Entity> Roots => __Roots;
-    
-    public bool Add(Entity Entity){
-        if(!__Registry.Add(Entity)){ return false; }
-
-        Entity.Scene = this;
-
-        if(Entity.Node.Parent == null && !__Roots.Contains(Entity)){
-            __Roots.Add(Entity);
-        }
-        
-        foreach(Component Component in Entity.GetAllComponents()){ RegisterComponent(Component); }
-        
-        Entity.Node.OnChildAdded    += OnChildAddedToEntity;
-        Entity.Node.OnParentChanged += OnEntityParentChanged;
-
-        foreach(HierarchyNode<Entity> Child in Entity.Node.Children.ToList()){
-            Add(Child.Owner);
-        }
-
-        return true;
-    }
-
-    public bool Remove(Entity Entity){
-        if(!__Registry.Contains(Entity)){ return false; }
-
-        foreach(Component Component in Entity.GetAllComponents()){ UnregisterComponent(Component); }
-        
-        Entity.Scene = null;
-        __Registry.Remove(Entity);
-        __Roots.Remove(Entity);
-        
-        Entity.Node.OnChildAdded    -= OnChildAddedToEntity;
-        Entity.Node.OnParentChanged -= OnEntityParentChanged;
-        
-        foreach(HierarchyNode<Entity> Child in Entity.Node.Children.ToList()){
-            Remove(Child.Owner);
-        }
-        
-        return true;
-    }
-
-    private void OnChildAddedToEntity(HierarchyNode<Entity> Self, HierarchyNode<Entity> Child) {
-        Add(Child.Owner);
-    }
-    
+    private void OnChildAddedToEntity(HierarchyNode<Entity> Self, HierarchyNode<Entity> Child) => Add(Child.Owner);
     private void OnEntityParentChanged(HierarchyNode<Entity> Self, HierarchyNode<Entity>? OldParent, HierarchyNode<Entity>? NewParent){
         if(NewParent == null){
             if(!__Roots.Contains(Self.Owner)){ __Roots.Add(Self.Owner); }
@@ -80,47 +211,8 @@ public class Scene : WLI.Packable{
             }
         }
     }
-
-    public void MoveRoot(Entity Entity, int Index){
-        if(Entity.Node.Parent != null || !__Roots.Contains(Entity)){ return; }
-
-        __Roots.Remove(Entity);
-
-        if(Index < 0){ Index = 0; }
-        if(Index > __Roots.Count){ Index = __Roots.Count; }
-        
-        __Roots.Insert(Index, Entity);
-    }
     
-    public void Clear(bool ClearAllEntities = false){
-        __Roots.Clear();
-        foreach(Entity Entity in __Registry.ToList()){
-            Remove(Entity);
-        }
-
-        if(ClearAllEntities){ Entity.DestroyAllEntities(); }
-    }
     
-    // ----------------------------------------------------------------------
-    
-    private readonly Dictionary<Type, HashSet<Component>> __Components = [];
-
-    public IEnumerable<T> GetComponents<T>() where T : class{
-        if(__Components.TryGetValue(typeof(T), out HashSet<Component>? Pool)){
-            return Pool.Cast<T>().ToList();
-        }
-
-        return [];
-    }
-
-    public T? GetFirstComponent<T>() where T : class{
-        if(__Components.TryGetValue(typeof(T), out HashSet<Component>? Pool)){
-            foreach(Component Component in Pool){ return Component as T; }
-        }
-        
-        return null;
-    }
-
     internal void RegisterComponent(Component Component){
         Type ConcreteType = Component.GetType();
 
@@ -142,7 +234,6 @@ public class Scene : WLI.Packable{
             AddToTypePool(Interface, Component);
         }
     }
-
     internal void UnregisterComponent(Component Component){
         Type ConcreteType = Component.GetType();
         
@@ -165,86 +256,13 @@ public class Scene : WLI.Packable{
     }
     
     // ----------------------------------------------------------------------
-
-    public Dictionary<string, object?> __Pack() => new Dictionary<string, object?>{
-        ["Name"      ] = Name,
-        ["Entities"  ] = Roots.ToList(),
-        ["EditorInfo"] = __EditorInfo
-    };
-
-    public void __Unpack(Dictionary<string, object?> Data){
-        Clear();
-        
-        Name = WL.Packer.Get(Data, "Name", Name)!;
-
-        __EditorInfo = WL.Packer.Get<EditorInfo?>(Data, "EditorInfo");
-
-        List<Entity>? Entities = WL.Packer.Get<List<Entity>>(Data, "Entities");
-        if(Entities != null){
-            foreach(Entity Entity in Entities){ Add(Entity); }
-        }
-    }
-
-    public string ToJSON() => WL.String.ToJSON(WL.Packer.Pack(this));
-
-    public static Scene FromJSON(string JSON){
-        Dictionary<string, object?>? Data = WL.String.FromJSON(JSON) as Dictionary<string, object?>;
-        
-        Scene Result = new Scene();
-        if(Data != null){
-            WL.Packer.Unpack(Result, Data);
-        }
-        
-        return Result;
-    }
     
+    private readonly HashSet<Entity>                      __Registry   = [];
+    private readonly List<Entity>                         __Roots      = [];
+    private readonly Dictionary<Type, HashSet<Component>> __Components = [];
+
     // ----------------------------------------------------------------------
-
-    public void FixedUpdate(DeltaTimeInfo DTI){
-        if(!DoUpdate){ return; }
-        
-        foreach(Component C in GetComponents<Component>()){
-            if(WE.Editor.IsEditor && C.Owner.IsPartOfPrefab){ continue; }
-
-            C.__FixedUpdate(DTI);
-        }
-    }
     
-    /// TODO, ВЫЗЫВАТЬ В RENDER ПОТОКЕ! А FIXEDUPDATE В ОБЫЧНОМ!
-    public void Update(DeltaTimeInfo DTI){
-        if(!DoUpdate){ return; }
-        
-        foreach(Component C in GetComponents<Component>()){
-            if(WE.Editor.IsEditor && C.Owner.IsPartOfPrefab){ continue; }
-
-            C.__Update(DTI);
-        }
-    }
-    
-    public void UpdateEngine(DeltaTimeInfo DTI){
-        if(!DoEngineUpdate){ return; }
-
-        foreach(EngineComponent C in GetComponents<EngineComponent>()){
-            C.OnEngineUpdate(DTI, false /* todo */);
-        }
-    }
-    
-    public void Render(DeltaTimeInfo DTI, Vector3F CameraPosition){
-        if(!DoRender){ return; }
-        
-        foreach(RenderComponent C in GetComponents<RenderComponent>()){
-            C.OnRender(DTI, CameraPosition);
-        }
-
-        if(WE.Editor.IsEditor){
-            foreach(EngineComponent C in GetComponents<EngineComponent>()){
-                C.OnEngineRender(DTI, CameraPosition, false /* todo */);
-            }
-        }
-    }
-    
-    // ----------------------------------------------------------------------
-
     public struct EditorInfo : WLI.Packable{
         public Color4B  BackgroundColor;
         public Vector3F CameraPosition;
