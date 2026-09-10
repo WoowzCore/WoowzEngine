@@ -10,6 +10,7 @@ public class Entity : WLI.Packable, WLI.Hierarchical<Entity>{
         public string Name = "New Entity";
         public uint ID{ get; internal set; }
         public Scene? Scene{ get; internal set; }
+        public uint NetID{ get; set; } = 0;
         
     #endregion
 
