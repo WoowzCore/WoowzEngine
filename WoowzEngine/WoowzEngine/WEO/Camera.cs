@@ -23,13 +23,13 @@ public class Camera{
                 (float)(System.Math.Sin(Yaw) * System.Math.Cos(Pitch)),
                 (float)(-System.Math.Sin(Pitch)),
                 (float)(-System.Math.Cos(Yaw) * System.Math.Cos(Pitch))
-            ).Normalized;
+            ).Normalize;
         }
     }
 
-    public Vector3F Right => Vector3F.Cross(Forward, new Vector3F(0, 1, 0)).Normalized;
+    public Vector3F Right => Vector3F.Cross(Forward, new Vector3F(0, 1, 0)).Normalize;
     
-    public Vector3F Up => Vector3F.Cross(Right, Forward).Normalized;
+    public Vector3F Up => Vector3F.Cross(Right, Forward).Normalize;
 
     public Matrix4F GetViewMatrix() => Matrix4F.CreateRotation(Rotation) *
                                        Matrix4F.CreatePosition(Position.Negative);

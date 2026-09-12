@@ -1,4 +1,5 @@
-﻿using WEO;
+﻿using System.Globalization;
+using WEO;
 using WLO;
 
 namespace WE;
@@ -8,7 +9,7 @@ public struct Engine{
         try{
             if(__Started){ throw new Exception("WoowzEngine и так был запущен!"); } __Started = true;
 
-            WL.Core.Arguments = Arguments;
+            WL.Core.Start(Arguments);
             
             WL.Core.EngineInfo = new ProjectInfo("WoowzEngine", Author: "Woowz11", License: "Look at Repo (WIP)"); //todo
             

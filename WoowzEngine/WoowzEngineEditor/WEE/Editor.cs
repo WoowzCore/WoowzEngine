@@ -48,7 +48,7 @@ public static class Editor{
         if(K.IsKeyDown(Keyboard.Key.ShiftL)){ CameraSpeed__ *= 5; }
 
         if(MoveDirection.Length > 0){
-            WEE.D.View.Camera.Position += MoveDirection.Normalized * CameraSpeed__ * 5 * DT;
+            WEE.D.View.Camera.Position += MoveDirection.Normalize * CameraSpeed__ * 5 * DT;
         }
     }
 }
